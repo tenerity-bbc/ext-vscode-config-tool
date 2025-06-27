@@ -21,18 +21,25 @@ async function handleEncryptCommand() {
 		return;
 	}
 
+	const edits = await processEncryption(editor, selections);
+	await applyEdits(editor.document, edits);
+}
+
+async function processEncryption(editor: vscode.TextEditor, selections: vscode.Selection[]): Promise<vscode.TextEdit[]> {
+	const document = editor.document;
+	const edits: vscode.TextEdit[] = [];
+
 	for (const selection of selections) {
-		const selectedText = editor.document.getText(selection);
+		const selectedText = document.getText(selection);
 		try {
 			const encrypted = await encrypt(selectedText);
-			await editor.edit(editBuilder => {
-				editBuilder.replace(selection, `'{cipher}${encrypted}'`);
-			});
+			const range = new vscode.Range(selection.start, selection.end);
+			edits.push(vscode.TextEdit.replace(range, `'{cipher}${encrypted}'`));
 		} catch (error) {
-			logError(error, editor.document, selection.start);
+			logError(error, document, selection.start);
 		}
 	}
-	vscode.window.showInformationMessage(`Encrypted ${selections.length} values(s)`);
+	return edits;
 }
 
 async function handleDecryptCommand() {
@@ -74,9 +81,24 @@ async function applyEdits(document: vscode.TextDocument, edits: vscode.TextEdit[
 		const workspaceEdit = new vscode.WorkspaceEdit();
 		workspaceEdit.set(document.uri, edits);
 		await vscode.workspace.applyEdit(workspaceEdit);
-		vscode.window.showInformationMessage(`Decrypted ${edits.length} value(s)`);
+		updateSelections(document, edits);
+		vscode.window.showInformationMessage(`Processed ${edits.length} value(s)`);
 	} else {
-		vscode.window.showInformationMessage('No {cipher} values found');
+		vscode.window.showInformationMessage('No values found');
+	}
+}
+
+function updateSelections(document: vscode.TextDocument, edits: vscode.TextEdit[]) {
+	const editor = vscode.window.activeTextEditor;
+	if (editor) {
+		const newSelections = edits.map(edit => {
+			const start = edit.range.start;
+			const end = document.positionAt(
+				document.offsetAt(start) + edit.newText.length
+			);
+			return new vscode.Selection(start, end);
+		});
+		editor.selections = newSelections;
 	}
 }
 
