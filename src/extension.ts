@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { decrypt, encrypt } from './configService';
 
-const CIPHER_REGEX = /(['"]?)\{cipher\}([^\s\n\r}]+)\1/g;
+const CIPHER_REGEX = /(['"]?)\{cipher\}([A-Za-z0-9+/]+=*)\1/g;
 
 export function activate(context: vscode.ExtensionContext) {
 	const encryptCommand = vscode.commands.registerCommand('config-tool.encrypt', handleEncryptCommand);
