@@ -14,8 +14,12 @@
   "contributes": {
     "commands": [
       {
-        "command": "config-tool.helloWorld",
-        "title": "Hello World"
+        "command": "config-tool.decrypt",
+        "title": "Config Tool: Decrypt"
+      },
+      {
+        "command": "config-tool.encrypt",
+        "title": "Config Tool: Encrypt"
       }
     ]
   },
