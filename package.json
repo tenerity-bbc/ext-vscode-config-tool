@@ -20,6 +20,18 @@
       {
         "command": "config-tool.encrypt",
         "title": "Config Tool: Encrypt"
+      },
+      {
+        "command": "config-tool.selectServer",
+        "title": "Config Tool: Select Server"
+      },
+      {
+        "command": "config-tool.pinServer",
+        "title": "Config Tool: Pin Current Server"
+      },
+      {
+        "command": "config-tool.unpinServer",
+        "title": "Config Tool: Unpin Server"
       }
     ],
     "configuration": {
