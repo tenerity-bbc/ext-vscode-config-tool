@@ -13,7 +13,7 @@ export function deactivate() {}
 
 async function handleEncryptCommand() {
 	const editor = vscode.window.activeTextEditor;
-	if (!editor) return;
+	if (!editor) {return;}
 
 	const selections = editor.selections.filter(s => !s.isEmpty);
 	if (selections.length === 0) {
@@ -44,7 +44,7 @@ async function processEncryption(editor: vscode.TextEditor, selections: vscode.S
 
 async function handleDecryptCommand() {
 	const editor = vscode.window.activeTextEditor;
-	if (!editor) return;
+	if (!editor) {return;}
 
 	const edits = await processDecryption(editor);
 	await applyEdits(editor.document, edits);
