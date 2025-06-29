@@ -6,7 +6,7 @@ function getConfigServerUrl(): string {
 	const config = vscode.workspace.getConfiguration('configTool');
 	const servers = config.get('servers') as Record<string, string>;
 	const serverKey = ConfigServerManager.getInstance().getCurrentServer();
-	return servers[serverKey] || Object.values(servers)[0];
+	return servers[serverKey];
 }
 
 export async function decrypt(ciphertext: string): Promise<string> {
