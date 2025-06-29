@@ -50,6 +50,48 @@ suite('DecryptCommand Test Suite', () => {
 		assert.strictEqual(edits[0].newText, 'decrypted');
 	});
 
+	test('decrypts cipher text with various quote patterns', async () => {
+		const testCases = [
+			// Can replace cipher with or without quotes
+			{ input: '{cipher}encrypted', expected: 'decrypted' },
+			{ input: "'{cipher}encrypted'", expected: 'decrypted' },
+			{ input: '"{cipher}encrypted"', expected: 'decrypted' },
+			
+			// Immune to stray quote
+			{ input: "{cipher}encrypted'", expected: 'decrypted' },
+			{ input: "'{cipher}encrypted", expected: 'decrypted' },
+			{ input: '{cipher}encrypted"', expected: 'decrypted' },
+			{ input: '"{cipher}encrypted', expected: 'decrypted' },
+		];
+
+		for (const testCase of testCases) {
+			const mockSelection = new vscode.Selection(0, 0, 0, 0);
+			Object.defineProperty(mockSelection, 'isEmpty', { value: true });
+			const mockDocument = {
+				getText: sandbox.stub().returns(testCase.input),
+				offsetAt: sandbox.stub().returns(0),
+				positionAt: sandbox.stub().returns(new vscode.Position(0, 0))
+			};
+			const mockEditor = {
+				document: mockDocument,
+				selection: mockSelection,
+				selections: [mockSelection]
+			};
+			sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
+			sandbox.stub(configService, 'decrypt').resolves('decrypted');
+			const applyEditsStub = sandbox.stub(commonUtils, 'applyEdits');
+
+			await handleDecryptCommand();
+
+			assert.strictEqual(applyEditsStub.calledOnce, true, `Failed for case: ${testCase.input}`);
+			const edits = applyEditsStub.firstCall.args[1];
+			assert.strictEqual(edits.length, 1, `Expected 1 edit for case: ${testCase.input}`);
+			assert.strictEqual(edits[0].newText, testCase.expected, `Wrong replacement for: ${testCase.input}`);
+			sandbox.restore();
+			sandbox = sinon.createSandbox();
+		}
+	});
+
 	test('handles decryption error', async () => {
 		const mockSelection = new vscode.Selection(0, 0, 0, 0);
 		Object.defineProperty(mockSelection, 'isEmpty', { value: true });
