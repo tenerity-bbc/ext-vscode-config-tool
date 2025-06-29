@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { decrypt } from '../../service/configService';
+import { decrypt } from '../../service/configClient';
 import { applyEdits, logError } from './commonUtils';
 
 const CIPHER_REGEX = /(['"]?)\{cipher\}([A-Za-z0-9+/]+=*)\1/g;

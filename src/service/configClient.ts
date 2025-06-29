@@ -1,13 +1,12 @@
 import * as https from 'https';
 import * as vscode from 'vscode';
+import { ConfigServerManager } from './configServerManager';
 
 function getConfigServerUrl(): string {
 	const config = vscode.workspace.getConfiguration('configTool');
 	const servers = config.get('servers') as Record<string, string>;
-	
-	// TODO: Implement logic to determine server based on filepath and branch
-	// For now, return ng-us-stage as default
-	return servers['ng-us-stage'] || Object.values(servers)[0];
+	const serverKey = ConfigServerManager.getInstance().getCurrentServer();
+	return servers[serverKey] || Object.values(servers)[0];
 }
 
 export async function decrypt(ciphertext: string): Promise<string> {

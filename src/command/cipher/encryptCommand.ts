@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { encrypt } from '../../service/configService';
+import { encrypt } from '../../service/configClient';
 import { applyEdits, logError } from './commonUtils';
 
 export async function handleEncryptCommand() {

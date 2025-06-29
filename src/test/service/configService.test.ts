@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import * as sinon from 'sinon';
-import * as configService from '../../service/configService';
+import * as configService from '../../service/configClient';
 
 suite('ConfigService Test Suite', () => {
 	let sandbox: sinon.SinonSandbox;
