@@ -21,7 +21,30 @@
         "command": "config-tool.encrypt",
         "title": "Config Tool: Encrypt"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Config Tool",
+      "properties": {
+        "configTool.servers": {
+          "type": "object",
+          "default": {
+            "ng-dev": "https://ng-config-server.int.dev.ffinionservices.com/config-server",
+            "ng-qa": "https://ng-config-server.int.qa.ffinionservices.com/config-server",
+            "ng-stage": "https://ng-config-server.int.stage-affinionservices.com/config-server",
+            "ng-us-stage": "https://ng-config-server-us.int.stage-affinionservices.com/config-server",
+            "ng-prod": "https://ng-config-server.int.affinionservices.com/config-server",
+            "ng-us-prod": "https://ng-config-server-us.int.affinionservices.com/config-server",
+            "apg-dev": "https://apg-config-server.int.dev.affinionservices.com/configserver",
+            "apg-qa": "https://apg-config-server.int.qa.affinionservices.com/configserver",
+            "apg-stage": "https://apg-config-server.int.stage-affinionservices.com/configserver",
+            "apg-us-stage": "https://apg-config-server-us.int.stage-affinionservices.com/configserver",
+            "apg-prod": "https://apg-config-server.int.affinionservices.com/configserver",
+            "apg-us-prod": "https://apg-config-server-us.int.affinionservices.com/configserver"
+          },
+          "description": "Config server URLs for all environments"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

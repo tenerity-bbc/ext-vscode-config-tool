@@ -1,6 +1,14 @@
 import * as https from 'https';
+import * as vscode from 'vscode';
 
-const CONFIG_SERVER_URL = 'https://ng-config-server-us.int.stage-affinionservices.com/config-server';
+function getConfigServerUrl(): string {
+	const config = vscode.workspace.getConfiguration('configTool');
+	const servers = config.get('servers') as Record<string, string>;
+	
+	// TODO: Implement logic to determine server based on filepath and branch
+	// For now, return ng-us-stage as default
+	return servers['ng-us-stage'] || Object.values(servers)[0];
+}
 
 export async function decrypt(ciphertext: string): Promise<string> {
 	return makeRequest('/decrypt', ciphertext);
@@ -17,7 +25,7 @@ function makeRequest(endpoint: string, data: string): Promise<string> {
 			headers: { 'Content-Type': 'text/plain' }
 		};
 
-		const req = https.request(`${CONFIG_SERVER_URL}${endpoint}`, options, (res) => {
+		const req = https.request(`${getConfigServerUrl()}${endpoint}`, options, (res) => {
 			let responseData = '';
 			res.on('data', chunk => responseData += chunk);
 			res.on('end', () => {
