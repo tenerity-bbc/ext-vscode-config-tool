@@ -6,6 +6,7 @@ function getConfigServerUrl(): string {
 	const config = vscode.workspace.getConfiguration('configTool');
 	const servers = config.get('servers') as Record<string, string>;
 	const serverKey = ConfigServerManager.getInstance().getCurrentServer();
+	if(!serverKey) {throw new Error('No server selected');}
 	return servers[serverKey];
 }
 

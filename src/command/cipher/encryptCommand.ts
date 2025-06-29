@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
 import { encrypt } from '../../service/configClient';
 import { applyEdits, logError } from './commonUtils';
+import { ConfigServerManager } from '../../service/configServerManager';
 
 export async function handleEncryptCommand() {
 	const editor = vscode.window.activeTextEditor;
-	if (!editor) {return;}
+	if (!editor || !ConfigServerManager.getInstance().getCurrentServer()) { return; }
 
 	const selections = editor.selections.filter(s => !s.isEmpty);
 	if (selections.length === 0) {

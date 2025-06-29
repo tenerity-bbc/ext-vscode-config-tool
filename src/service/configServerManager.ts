@@ -22,7 +22,7 @@ export class ConfigServerManager {
 		}
 		return ConfigServerManager.instance;
 	}
-	public getCurrentServer(): string {
+	public getCurrentServer(): string | null {
 		if (!this.currentServer) {
 			vscode.window.showErrorMessage('Server is not selected');
 			return 'Unknown';
