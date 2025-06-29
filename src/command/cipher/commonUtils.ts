@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 
+const outputChannel = vscode.window.createOutputChannel('config-tool-output');
+
 export async function applyEdits(document: vscode.TextDocument, edits: vscode.TextEdit[]) {
 	if (edits.length > 0) {
 		const workspaceEdit = new vscode.WorkspaceEdit();
@@ -28,5 +30,6 @@ export function updateSelections(document: vscode.TextDocument, edits: vscode.Te
 
 export function logError(error: any, document: vscode.TextDocument, position: vscode.Position) {
 	const lineNumber = position.line + 1;
-	console.error(`${error} - ${document.fileName}:${lineNumber}:${position.character + 1}`);
+	outputChannel.appendLine(`${error} - ${document.fileName}:${lineNumber}:${position.character + 1}`);
+	outputChannel.show();
 }

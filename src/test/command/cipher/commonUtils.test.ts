@@ -51,13 +51,24 @@ suite('CommonUtils Test Suite', () => {
 		assert.strictEqual(mockEditor.selections.length, 1);
 	});
 
-	test('logError logs error with file location', () => {
+	test('logError logs error with correct format', () => {
+		const appendLineStub = sandbox.stub();
+		const showStub = sandbox.stub();
+		const mockOutputChannel = { appendLine: appendLineStub, show: showStub };
+		
+		// Stub createOutputChannel to return our mock
+		sandbox.stub(vscode.window, 'createOutputChannel').returns(mockOutputChannel as any);
+		
+		// Re-import to get fresh module with stubbed createOutputChannel
+		delete require.cache[require.resolve('../../../command/cipher/commonUtils')];
+		const { logError: freshLogError } = require('../../../command/cipher/commonUtils');
+		
 		const mockDocument = { fileName: 'test.ts' };
 		const position = new vscode.Position(5, 10);
 
-		// Test that the function doesn't throw an error
-		assert.doesNotThrow(() => {
-			logError('Test error', mockDocument as any, position);
-		});
+		freshLogError('Test error', mockDocument as any, position);
+
+		assert.strictEqual(appendLineStub.calledWith('Test error - test.ts:6:11'), true);
+		assert.strictEqual(showStub.calledOnce, true);
 	});
 });
