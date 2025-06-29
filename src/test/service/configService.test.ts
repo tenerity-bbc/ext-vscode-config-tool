@@ -28,6 +28,7 @@ suite('ConfigService Test Suite', () => {
 		const [url, options] = httpsStub.firstCall.args;
 		assert.strictEqual(url.includes('/encrypt'), true);
 		assert.strictEqual(options.method, 'POST');
+		assert.strictEqual(options.headers['Content-Type'], 'text/plain');
 	});
 
 	test('decrypt makes POST request to /decrypt', async () => {
@@ -42,8 +43,9 @@ suite('ConfigService Test Suite', () => {
 		configService.decrypt('test');
 
 		assert.strictEqual(httpsStub.calledOnce, true);
-		const [url] = httpsStub.firstCall.args;
+		const [url, options] = httpsStub.firstCall.args;
 		assert.strictEqual(url.includes('/decrypt'), true);
+		assert.strictEqual(options.headers['Content-Type'], 'text/plain');
 	});
 
 	test('handles HTTP error with JSON response', async () => {
