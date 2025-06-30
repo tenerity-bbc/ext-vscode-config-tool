@@ -70,30 +70,28 @@ export class ConfigServerManager {
 		}
 	}
 
-	private determineRelevantServer(): string {
+	private determineRelevantServer(): string | null{
 		const config = vscode.workspace.getConfiguration('configTool');
 		const servers = config.get('servers') as Record<string, string>;
-
 		const activeEditor = vscode.window.activeTextEditor;
-		if (activeEditor) {
-			const filePath = activeEditor.document.fileName;
-			const match = filePath.match(/[/\\]([^/\\]+-([^/\\]+))\.ya?ml$/i);
-			if (match) {
-				const environment = match[2];
-				let configServer: string | null = null;
-				if (filePath.includes('gce-ng-config-store')) {
-					configServer = `ng-${this.region(filePath)}${environment}`;
-				} else if (filePath.includes('gce-apg-config-store')) {
-					configServer = `apg-${environment}`;
-				}
 
-				if (configServer && servers[configServer]) {
-					return configServer;
-				}
-			}
+		if (!activeEditor) { return null; }
 
+		const filePath = activeEditor.document.fileName;
+		const storeMatch = filePath.match(/[/\\](gce-(apg|ng)-config-store)[/\\]/i);
+		const storeType = storeMatch?.[2];
+
+		let configServer: string | null = null;
+
+		if (storeType === 'apg') {
+			const apgMatch = filePath.match(/[/\\]gce-apg-config-store[/\\]([^/\\]+)[/\\][^/\\]+\.ya?ml$/i);
+			if (apgMatch) { configServer = `apg-${apgMatch[1]}`; }
+		} else if (storeType === 'ng') {
+			const ngMatch = filePath.match(/[/\\]gce-ng-config-store[/\\][^/\\]+[/\\][^/\\]+-(\w+)\.ya?ml$/i);
+			if (ngMatch) { configServer = `ng-${this.region(filePath)}${ngMatch[1]}`; }
 		}
-		return servers[0];
+
+		return (configServer && servers[configServer]) ? configServer : null;
 	}
 
 	private updateStatusBar(): void {
@@ -101,7 +99,7 @@ export class ConfigServerManager {
 			this.currentServer = this.determineRelevantServer();
 		}
 		const serverKey = this.currentServer ? this.currentServer : 'Unknown';
-		const pinIcon = this.isPinned ? '$(lock-small)' : this.currentServer? '$(sparkle)': '$(warning)';
+		const pinIcon = this.isPinned ? '$(lock-small)' : this.currentServer ? '$(sparkle)' : '$(warning)';
 		this.statusBarItem.text = `${pinIcon} ${serverKey}`;
 		this.statusBarItem.tooltip = this.isPinned ?
 			`Config server pinned to: ${serverKey}` :
