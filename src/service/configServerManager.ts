@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { getConfigBranch } from './branchRegionUtil';
+import { outputChannel } from '../shared/outputChannel';
 
 export class ConfigServerManager {
 	private static instance: ConfigServerManager;
@@ -109,7 +110,7 @@ export class ConfigServerManager {
 					const region = await this.region(filePath);
 					configServer = `ng-${region}${ngMatch[1]}`;
 				} catch (error) {
-					console.error('Failed to determine region:', error);
+					outputChannel.appendLine(`Failed to determine region: ${error}`);
 					configServer = null;
 				}
 			}

@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
-
-const outputChannel = vscode.window.createOutputChannel('config-tool-output');
+import { outputChannel } from '../../shared/outputChannel';
 
 export async function applyEdits(document: vscode.TextDocument, edits: vscode.TextEdit[]) {
 	if (edits.length > 0) {
