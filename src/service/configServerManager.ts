@@ -111,6 +111,7 @@ export class ConfigServerManager {
 					configServer = `ng-${region}${ngMatch[1]}`;
 				} catch (error) {
 					outputChannel.appendLine(`Failed to determine region: ${error}`);
+					outputChannel.show();
 					configServer = null;
 				}
 			}
