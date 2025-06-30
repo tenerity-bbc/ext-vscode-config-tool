@@ -1,13 +1,19 @@
 {
   "name": "config-tool",
   "displayName": "Config Tool",
-  "description": "Decrypt {cipher} using spring boot config server",
+  "description": "Encrypt/decrypt configuration values using Spring Boot Config Server with intelligent server management",
   "version": "0.0.1",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tenerity-bbc/config-tool"
+  },
   "engines": {
     "vscode": "^1.54.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Formatters"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
