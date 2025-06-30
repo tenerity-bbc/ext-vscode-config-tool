@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import * as path from 'path';
+import { getConfigBranch } from './branchRegionUtil';
 
 export class ConfigServerManager {
 	private static instance: ConfigServerManager;
@@ -70,7 +70,23 @@ export class ConfigServerManager {
 		}
 	}
 
-	private determineRelevantServer(): string | null{
+	private async updateStatusBar(): Promise<void> {
+		if (!this.isPinned) {
+			this.currentServer = await this.determineRelevantServer();
+		}
+		const serverKey = this.currentServer ? this.currentServer : 'Unknown';
+		const pinIcon = this.isPinned ? '$(lock-small)' : this.currentServer ? '$(sparkle)' : '$(warning)';
+		this.statusBarItem.text = `${pinIcon} ${serverKey}`;
+		this.statusBarItem.tooltip = this.isPinned ?
+			`Config server pinned to: ${serverKey}` :
+			`Current config server: ${serverKey} (auto-determined)`;
+	}
+
+	public dispose(): void {
+		this.statusBarItem.dispose();
+	}
+
+	private async determineRelevantServer(): Promise<string | null>{
 		const config = vscode.workspace.getConfiguration('configTool');
 		const servers = config.get('servers') as Record<string, string>;
 		const activeEditor = vscode.window.activeTextEditor;
@@ -88,42 +104,23 @@ export class ConfigServerManager {
 			if (apgMatch) { configServer = `apg-${apgMatch[1]}`; }
 		} else if (storeType === 'ng') {
 			const ngMatch = filePath.match(/[/\\]gce-ng-config-store[/\\][^/\\]+[/\\][^/\\]+-(\w+)\.ya?ml$/i);
-			if (ngMatch) { configServer = `ng-${this.region(filePath)}${ngMatch[1]}`; }
+			if (ngMatch) { 
+				try {
+					const region = await this.region(filePath);
+					configServer = `ng-${region}${ngMatch[1]}`;
+				} catch (error) {
+					console.error('Failed to determine region:', error);
+					configServer = null;
+				}
+			}
 		}
 
 		return (configServer && servers[configServer]) ? configServer : null;
 	}
 
-	private updateStatusBar(): void {
-		if (!this.isPinned) {
-			this.currentServer = this.determineRelevantServer();
-		}
-		const serverKey = this.currentServer ? this.currentServer : 'Unknown';
-		const pinIcon = this.isPinned ? '$(lock-small)' : this.currentServer ? '$(sparkle)' : '$(warning)';
-		this.statusBarItem.text = `${pinIcon} ${serverKey}`;
-		this.statusBarItem.tooltip = this.isPinned ?
-			`Config server pinned to: ${serverKey}` :
-			`Current config server: ${serverKey} (auto-determined)`;
-	}
-
-	public dispose(): void {
-		this.statusBarItem.dispose();
-	}
-
-	private region(filePath: string): string {
-		const branch = this.getCurrentGitBranch(filePath);
-		return branch ? branch.endsWith('-US') ? 'us-' : '' : '';
-	}
-
-	private getCurrentGitBranch(filePath: string): string | null {
-		try {
-			const rootPath = path.dirname(path.dirname(filePath));
-			const gitDir = path.join(rootPath, '.git');
-			const headFile = path.join(gitDir, 'HEAD');
-			const head = fs.readFileSync(headFile, 'utf8').trim();
-			return head.startsWith('ref: refs/heads/') ? head.slice(16) : null;
-		} catch {
-			return null;
-		}
+	private async region(filePath: string): Promise<string> {
+		const rootPath = path.dirname(path.dirname(filePath));
+		const configBranch = await getConfigBranch(rootPath);
+		return configBranch === 'develop-US' ? 'us-' : '';
 	}
 }

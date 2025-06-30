@@ -84,5 +84,8 @@
     "eslint": "^9.25.1",
     "sinon": "^19.0.5",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "isomorphic-git": "^1.32.1"
   }
 }
