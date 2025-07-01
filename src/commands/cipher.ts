@@ -9,84 +9,132 @@ export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
 	const editor = vscode.window.activeTextEditor;
 	if (!editor || !ServerManager.getInstance().getCurrentServer()) { return; }
 
-	const edits = operation === 'encrypt' 
-		? await processEncryption(editor) 
-		: await processDecryption(editor);
-	
-	await applyEdits(editor.document, edits);
+	const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+	const eligibleDecorationType = vscode.window.createTextEditorDecorationType({
+		backgroundColor: new vscode.ThemeColor('editor.wordHighlightBackground'),
+		border: '2px solid',
+		borderColor: new vscode.ThemeColor('editor.wordHighlightBorder')
+	});
+	const selectionDecorationType = vscode.window.createTextEditorDecorationType({
+		backgroundColor: new vscode.ThemeColor('editor.findMatchHighlightBackground'),
+		border: '1px solid',
+		borderColor: new vscode.ThemeColor('editor.findMatchBorder')
+	});
+	statusBarItem.show();
+
+	try {
+		const processedCount = operation === 'encrypt' 
+			? await processEncryption(editor, statusBarItem, eligibleDecorationType) 
+			: await processDecryption(editor, statusBarItem, eligibleDecorationType, selectionDecorationType);
+		
+		if (processedCount > 0) {
+			vscode.window.showInformationMessage(`Successfully processed ${processedCount} value(s)`);
+		}
+	} finally {
+		statusBarItem.dispose();
+		eligibleDecorationType.dispose();
+		selectionDecorationType.dispose();
+	}
 }
 
-async function processEncryption(editor: vscode.TextEditor): Promise<vscode.TextEdit[]> {
+async function processEncryption(editor: vscode.TextEditor, statusBarItem: vscode.StatusBarItem, decorationType: vscode.TextEditorDecorationType): Promise<number> {
 	const selections = editor.selections.filter(s => !s.isEmpty);
 	if (selections.length === 0) {
 		vscode.window.showWarningMessage('Please select text to encrypt');
-		return [];
+		return 0;
 	}
 
-	const edits: vscode.TextEdit[] = [];
-	for (const selection of selections) {
+	const eligibleSelections = selections.filter(s => editor.document.getText(s).trim());
+	if (eligibleSelections.length === 0) {
+		vscode.window.showInformationMessage('No eligible text found for encryption');
+		return 0;
+	}
+
+	// Sort selections by position in descending order
+	eligibleSelections.sort((a, b) => editor.document.offsetAt(b.start) - editor.document.offsetAt(a.start));
+
+	let processedCount = 0;
+	for (let i = 0; i < eligibleSelections.length; i++) {
+		statusBarItem.text = `$(sync~spin) Encrypting ${i + 1}/${eligibleSelections.length}`;
+		
+		const selection = eligibleSelections[i];
+		const range = new vscode.Range(selection.start, selection.end);
+		editor.setDecorations(decorationType, [range]);
+		
 		const selectedText = editor.document.getText(selection);
 		try {
 			const encrypted = await encrypt(selectedText);
-			const range = new vscode.Range(selection.start, selection.end);
-			edits.push(vscode.TextEdit.replace(range, `'{cipher}${encrypted}'`));
+			await applyEdit(editor.document, range, `'{cipher}${encrypted}'`);
+			processedCount++;
 		} catch (error) {
 			logError(error, editor.document, selection.start);
+		} finally {
+			editor.setDecorations(decorationType, []);
 		}
 	}
-	return edits;
+	return processedCount;
 }
 
-async function processDecryption(editor: vscode.TextEditor): Promise<vscode.TextEdit[]> {
+async function processDecryption(editor: vscode.TextEditor, statusBarItem: vscode.StatusBarItem, decorationType: vscode.TextEditorDecorationType, cipherDecorationType: vscode.TextEditorDecorationType): Promise<number> {
 	const document = editor.document;
 	const selections = editor.selections.length > 1 ? editor.selections : [editor.selection];
-	const edits: vscode.TextEdit[] = [];
+	const matches: Array<{match: RegExpExecArray, offset: number}> = [];
 
+	// Find all cipher matches first
 	for (const selection of selections) {
 		const text = selection.isEmpty ? document.getText() : document.getText(selection);
 		const offset = selection.isEmpty ? 0 : document.offsetAt(selection.start);
 		let match;
+		CIPHER_REGEX.lastIndex = 0;
 
 		while ((match = CIPHER_REGEX.exec(text)) !== null) {
-			try {
-				const decrypted = await decrypt(match[2]);
-				const range = new vscode.Range(
-					document.positionAt(offset + match.index),
-					document.positionAt(offset + match.index + match[0].length)
-				);
-				edits.push(vscode.TextEdit.replace(range, decrypted));
-			} catch (error) {
-				logError(error, document, document.positionAt(offset + match.index));
-			}
+			matches.push({match, offset});
 		}
 	}
-	return edits;
+
+	if (matches.length === 0) {
+		vscode.window.showInformationMessage('No eligible cipher text found for decryption');
+		return 0;
+	}
+
+	// Sort matches by position in descending order
+	matches.sort((a, b) => (b.offset + b.match.index) - (a.offset + a.match.index));
+
+	let processedCount = 0;
+	for (let i = 0; i < matches.length; i++) {
+		statusBarItem.text = `$(sync~spin) Decrypting ${i + 1}/${matches.length}`;
+		
+		const {match, offset} = matches[i];
+		const fullRange = new vscode.Range(
+			document.positionAt(offset + match.index),
+			document.positionAt(offset + match.index + match[0].length)
+		);
+		const cipherTextStart = offset + match.index + match[0].indexOf(match[2]);
+		const cipherRange = new vscode.Range(
+			document.positionAt(cipherTextStart),
+			document.positionAt(cipherTextStart + match[2].length)
+		);
+		editor.setDecorations(decorationType, [fullRange]);
+		editor.setDecorations(cipherDecorationType, [cipherRange]);
+		
+		try {
+			const decrypted = await decrypt(match[2]);
+			await applyEdit(document, fullRange, decrypted);
+			processedCount++;
+		} catch (error) {
+			logError(error, document, document.positionAt(offset + match.index));
+		} finally {
+			editor.setDecorations(decorationType, []);
+			editor.setDecorations(cipherDecorationType, []);
+		}
+	}
+	return processedCount;
 }
 
-async function applyEdits(document: vscode.TextDocument, edits: vscode.TextEdit[]) {
-	if (edits.length > 0) {
-		const workspaceEdit = new vscode.WorkspaceEdit();
-		workspaceEdit.set(document.uri, edits);
-		await vscode.workspace.applyEdit(workspaceEdit);
-		updateSelections(document, edits);
-		vscode.window.showInformationMessage(`Processed ${edits.length} value(s)`);
-	} else {
-		vscode.window.showInformationMessage('No values found');
-	}
-}
-
-function updateSelections(document: vscode.TextDocument, edits: vscode.TextEdit[]) {
-	const editor = vscode.window.activeTextEditor;
-	if (editor) {
-		const newSelections = edits.map(edit => {
-			const start = edit.range.start;
-			const end = document.positionAt(
-				document.offsetAt(start) + edit.newText.length
-			);
-			return new vscode.Selection(start, end);
-		});
-		editor.selections = newSelections;
-	}
+async function applyEdit(document: vscode.TextDocument, range: vscode.Range, newText: string) {
+	const workspaceEdit = new vscode.WorkspaceEdit();
+	workspaceEdit.replace(document.uri, range, newText);
+	await vscode.workspace.applyEdit(workspaceEdit);
 }
 
 function logError(error: any, document: vscode.TextDocument, position: vscode.Position) {
