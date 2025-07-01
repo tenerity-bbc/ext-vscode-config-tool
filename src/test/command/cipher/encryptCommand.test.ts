@@ -2,7 +2,7 @@ import * as assert from 'assert';
 import * as sinon from 'sinon';
 import * as vscode from 'vscode';
 import { handleEncryptCommand } from '../../../command/cipher/encryptCommand';
-import * as configService from '../../../service/configClient';
+import * as configService from '../../../service/configService';
 import * as commonUtils from '../../../command/cipher/commonUtils';
 
 suite('EncryptCommand Test Suite', () => {

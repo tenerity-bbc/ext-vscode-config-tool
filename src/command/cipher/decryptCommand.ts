@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { decrypt } from '../../service/configClient';
+import { decrypt } from '../../service/configService';
 import { applyEdits, logError } from './commonUtils';
 import { ConfigServerManager } from '../../service/configServerManager';
 

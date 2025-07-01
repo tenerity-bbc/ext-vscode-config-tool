@@ -2,7 +2,7 @@ import * as assert from 'assert';
 import * as sinon from 'sinon';
 import * as vscode from 'vscode';
 import { handleDecryptCommand } from '../../../command/cipher/decryptCommand';
-import * as configService from '../../../service/configClient';
+import * as configService from '../../../service/configService';
 import * as commonUtils from '../../../command/cipher/commonUtils';
 
 suite('DecryptCommand Test Suite', () => {
