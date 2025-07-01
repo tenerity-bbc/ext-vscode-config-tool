@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { handleCipherCommand } from './cipher';
+import { handleCipherCommand, cancelCipherOperation } from './cipher';
 import { ServerManager } from '../service/serverManager';
 
 export interface CommandDefinition {
@@ -12,6 +12,7 @@ const configServerManager = ServerManager.getInstance();
 export const commands: CommandDefinition[] = [
 	{ id: 'config-tool.encrypt', handler: () => handleCipherCommand('encrypt') },
 	{ id: 'config-tool.decrypt', handler: () => handleCipherCommand('decrypt') },
+	{ id: 'config-tool.cancel', handler: cancelCipherOperation },
 	{ id: 'config-tool.selectServer', handler: () => configServerManager.selectServer() },
 	{ id: 'config-tool.pinServer', handler: () => configServerManager.pinCurrentServer() },
 	{ id: 'config-tool.unpinServer', handler: () => configServerManager.unpinServer() }

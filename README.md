@@ -25,6 +25,7 @@ A VS Code extension for encrypting and decrypting configuration values using Spr
 - **Encrypt plain text**: Select text and encrypt it using the config server
 - **Progress tracking**: Real-time status bar progress indicator during operations
 - **Visual feedback**: Text highlighting shows what's being processed with dual decorations for decryption
+- **Cancellation support**: Press ESC to cancel ongoing operations at any time
 - **Smart server detection**: Automatically determines the appropriate config server based on file path and Git branch
 - **Server management**: Pin/unpin servers, manual server selection with status bar integration
 - **Multi-environment support**: Pre-configured servers for NG and APG environments (dev, qa, stage, prod)
@@ -53,12 +54,14 @@ The status bar shows the current server with icons:
 2. Run the command **Config Tool: Decrypt** or press `Ctrl+Shift+D` (`Cmd+Shift+D` on Mac)
 3. Watch the progress in the status bar as cipher values are highlighted and decrypted
 4. Full cipher patterns and encrypted text are highlighted with different decorations
+5. Press `ESC` to cancel the operation if needed
 
 ### Encrypting Values
 
 1. Select the plain text you want to encrypt
 2. Run the command **Config Tool: Encrypt** or press `Ctrl+Shift+E` (`Cmd+Shift+E` on Mac)
 3. Watch the progress as selected text is highlighted and replaced with `{cipher}EncryptedValue`
+4. Press `ESC` to cancel the operation if needed
 
 ## Commands
 
@@ -69,6 +72,7 @@ The status bar shows the current server with icons:
 | `Config Tool: Select Server` | `Ctrl+Shift+S` / `Cmd+Shift+S` | Manually choose a config server |
 | `Config Tool: Pin Current Server` | `Ctrl+Shift+P` / `Cmd+Shift+P` | Pin the current server to prevent auto-switching |
 | `Config Tool: Unpin Server` | `Ctrl+Shift+U` / `Cmd+Shift+U` | Allow automatic server detection |
+| `Config Tool: Cancel Operation` | `ESC` | Cancel ongoing encrypt/decrypt operations |
 
 ## Settings
 
@@ -104,6 +108,7 @@ The status bar shows the current server with icons:
 - Real-time visual feedback with text highlighting
 - Dual decorations for decryption (full pattern + cipher text)
 - Keyboard shortcuts for all commands
+- Operation cancellation with ESC key
 - Immediate edit application for better user experience
 - Reverse processing to prevent range invalidation
 - Consolidated command registration

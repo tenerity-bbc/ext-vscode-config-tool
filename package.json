@@ -42,6 +42,10 @@
       {
         "command": "config-tool.unpinServer",
         "title": "Config Tool: Unpin Server"
+      },
+      {
+        "command": "config-tool.cancel",
+        "title": "Config Tool: Cancel Operation"
       }
     ],
     "keybindings": [
@@ -71,6 +75,11 @@
         "command": "config-tool.unpinServer",
         "key": "ctrl+shift+u",
         "mac": "cmd+shift+u"
+      },
+      {
+        "command": "config-tool.cancel",
+        "key": "escape",
+        "when": "editorTextFocus"
       }
     ],
     "configuration": {
