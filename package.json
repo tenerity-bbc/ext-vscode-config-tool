@@ -44,6 +44,35 @@
         "title": "Config Tool: Unpin Server"
       }
     ],
+    "keybindings": [
+      {
+        "command": "config-tool.encrypt",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "config-tool.decrypt",
+        "key": "ctrl+shift+d",
+        "mac": "cmd+shift+d",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "config-tool.selectServer",
+        "key": "ctrl+shift+s",
+        "mac": "cmd+shift+s"
+      },
+      {
+        "command": "config-tool.pinServer",
+        "key": "ctrl+shift+p",
+        "mac": "cmd+shift+p"
+      },
+      {
+        "command": "config-tool.unpinServer",
+        "key": "ctrl+shift+u",
+        "mac": "cmd+shift+u"
+      }
+    ],
     "configuration": {
       "title": "Config Tool",
       "properties": {

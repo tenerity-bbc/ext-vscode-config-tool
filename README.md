@@ -23,12 +23,15 @@ A VS Code extension for encrypting and decrypting configuration values using Spr
 
 - **Decrypt cipher values**: Automatically finds and decrypts `{cipher}` encrypted values in your configuration files
 - **Encrypt plain text**: Select text and encrypt it using the config server
+- **Progress tracking**: Real-time status bar progress indicator during operations
+- **Visual feedback**: Text highlighting shows what's being processed with dual decorations for decryption
 - **Smart server detection**: Automatically determines the appropriate config server based on file path and Git branch
 - **Server management**: Pin/unpin servers, manual server selection with status bar integration
 - **Multi-environment support**: Pre-configured servers for NG and APG environments (dev, qa, stage, prod)
 - **Regional support**: Automatic US region detection based on Git branch naming
 - **Batch processing**: Process multiple selections or entire documents at once
 - **Smart selection**: Works with selected text or entire document
+- **Keyboard shortcuts**: Quick access to all commands via customizable key bindings
 
 ## Usage
 
@@ -47,22 +50,25 @@ The status bar shows the current server with icons:
 ### Decrypting Values
 
 1. Open a file containing encrypted values in the format `{cipher}EncryptedValue`
-2. Run the command **Config Tool: Decrypt** (Ctrl+Shift+P)
-3. All cipher values in the document will be decrypted automatically
+2. Run the command **Config Tool: Decrypt** or press `Ctrl+Shift+D` (`Cmd+Shift+D` on Mac)
+3. Watch the progress in the status bar as cipher values are highlighted and decrypted
+4. Full cipher patterns and encrypted text are highlighted with different decorations
 
 ### Encrypting Values
 
 1. Select the plain text you want to encrypt
-2. Run the command **Config Tool: Encrypt** (Ctrl+Shift+P)
-3. The selected text will be replaced with `{cipher}EncryptedValue`
+2. Run the command **Config Tool: Encrypt** or press `Ctrl+Shift+E` (`Cmd+Shift+E` on Mac)
+3. Watch the progress as selected text is highlighted and replaced with `{cipher}EncryptedValue`
 
 ## Commands
 
-- `Config Tool: Decrypt` - Decrypt all {cipher} values in the current document or selection
-- `Config Tool: Encrypt` - Encrypt selected text using the config server
-- `Config Tool: Select Server` - Manually choose a config server
-- `Config Tool: Pin Current Server` - Pin the current server to prevent auto-switching
-- `Config Tool: Unpin Server` - Allow automatic server detection
+| Command | Keyboard Shortcut | Description |
+|---------|-------------------|-------------|
+| `Config Tool: Decrypt` | `Ctrl+Shift+D` / `Cmd+Shift+D` | Decrypt all {cipher} values in the current document or selection |
+| `Config Tool: Encrypt` | `Ctrl+Shift+E` / `Cmd+Shift+E` | Encrypt selected text using the config server |
+| `Config Tool: Select Server` | `Ctrl+Shift+S` / `Cmd+Shift+S` | Manually choose a config server |
+| `Config Tool: Pin Current Server` | `Ctrl+Shift+P` / `Cmd+Shift+P` | Pin the current server to prevent auto-switching |
+| `Config Tool: Unpin Server` | `Ctrl+Shift+U` / `Cmd+Shift+U` | Allow automatic server detection |
 
 ## Settings
 
@@ -93,4 +99,16 @@ The status bar shows the current server with icons:
 
 ### 0.0.1
 
-Initial release with encrypt/decrypt functionality for Spring Boot Config Server.
+**New Features:**
+- Progress tracking with status bar indicators
+- Real-time visual feedback with text highlighting
+- Dual decorations for decryption (full pattern + cipher text)
+- Keyboard shortcuts for all commands
+- Immediate edit application for better user experience
+- Reverse processing to prevent range invalidation
+- Consolidated command registration
+
+**Initial Features:**
+- Encrypt/decrypt functionality for Spring Boot Config Server
+- Smart server detection and management
+- Multi-environment and regional support
