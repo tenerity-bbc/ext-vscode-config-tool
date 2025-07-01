@@ -1,17 +1,12 @@
 import * as vscode from 'vscode';
-import { handleCipherCommand } from './commands/cipher';
-import { ConfigServerManager } from './service/configServerManager';
+import { registerCommands } from './commands';
+import { ServerManager } from './service/serverManager';
 
 export function activate(context: vscode.ExtensionContext) {
-	const configServerManager = ConfigServerManager.getInstance();
+	const serverManager = ServerManager.getInstance();
 	
-	const encryptCommand = vscode.commands.registerCommand('config-tool.encrypt', () => handleCipherCommand('encrypt'));
-	const decryptCommand = vscode.commands.registerCommand('config-tool.decrypt', () => handleCipherCommand('decrypt'));
-	const selectServerCommand = vscode.commands.registerCommand('config-tool.selectServer', () => configServerManager.selectServer());
-	const pinServerCommand = vscode.commands.registerCommand('config-tool.pinServer', () => configServerManager.pinCurrentServer());
-	const unpinServerCommand = vscode.commands.registerCommand('config-tool.unpinServer', () => configServerManager.unpinServer());
-
-	context.subscriptions.push(encryptCommand, decryptCommand, selectServerCommand, pinServerCommand, unpinServerCommand, configServerManager);
+	registerCommands(context);
+	context.subscriptions.push(serverManager);
 }
 
 export function deactivate() {}

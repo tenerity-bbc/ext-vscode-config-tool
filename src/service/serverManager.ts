@@ -3,8 +3,8 @@ import * as path from 'path';
 import { getConfigBranch } from '../utils/git';
 import { outputChannel } from '../shared/outputChannel';
 
-export class ConfigServerManager {
-	private static instance: ConfigServerManager;
+export class ServerManager {
+	private static instance: ServerManager;
 	private statusBarItem: vscode.StatusBarItem;
 	private currentServer: string | null = null;
 	private isPinned: boolean = false;
@@ -17,11 +17,11 @@ export class ConfigServerManager {
 		vscode.window.onDidChangeActiveTextEditor(() => this.updateStatusBar());
 	}
 
-	public static getInstance(): ConfigServerManager {
-		if (!ConfigServerManager.instance) {
-			ConfigServerManager.instance = new ConfigServerManager();
+	public static getInstance(): ServerManager {
+		if (!ServerManager.instance) {
+			ServerManager.instance = new ServerManager();
 		}
-		return ConfigServerManager.instance;
+		return ServerManager.instance;
 	}
 	public getCurrentServer(): string | null {
 		if (!this.currentServer) {

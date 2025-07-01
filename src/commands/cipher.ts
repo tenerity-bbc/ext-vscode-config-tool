@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
 import { encrypt, decrypt } from '../service/configService';
-import { ConfigServerManager } from '../service/configServerManager';
+import { ServerManager } from '../service/serverManager';
 import { outputChannel } from '../shared/outputChannel';
 
 const CIPHER_REGEX = /(['\"]?)\{cipher\}([A-Za-z0-9+/]+=*)\1/g;
 
 export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
 	const editor = vscode.window.activeTextEditor;
-	if (!editor || !ConfigServerManager.getInstance().getCurrentServer()) { return; }
+	if (!editor || !ServerManager.getInstance().getCurrentServer()) { return; }
 
 	const edits = operation === 'encrypt' 
 		? await processEncryption(editor) 

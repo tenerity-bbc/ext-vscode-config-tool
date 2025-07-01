@@ -1,11 +1,11 @@
 import * as https from 'https';
 import * as vscode from 'vscode';
-import { ConfigServerManager } from './configServerManager';
+import { ServerManager } from './serverManager';
 
 function getConfigServerUrl(): string {
 	const config = vscode.workspace.getConfiguration('configTool');
 	const servers = config.get('servers') as Record<string, string>;
-	const serverKey = ConfigServerManager.getInstance().getCurrentServer();
+	const serverKey = ServerManager.getInstance().getCurrentServer();
 	if(!serverKey) {throw new Error('No server selected');}
 	return servers[serverKey];
 }

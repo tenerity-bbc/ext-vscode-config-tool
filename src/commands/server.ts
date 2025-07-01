@@ -1,13 +1,13 @@
-import { ConfigServerManager } from '../service/configServerManager';
+import { ServerManager } from '../service/serverManager';
 
 export function handleSelectServer() {
-	return ConfigServerManager.getInstance().selectServer();
+	return ServerManager.getInstance().selectServer();
 }
 
 export function handlePinServer() {
-	return ConfigServerManager.getInstance().pinCurrentServer();
+	return ServerManager.getInstance().pinCurrentServer();
 }
 
 export function handleUnpinServer() {
-	return ConfigServerManager.getInstance().unpinServer();
+	return ServerManager.getInstance().unpinServer();
 }

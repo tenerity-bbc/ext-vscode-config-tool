@@ -3,7 +3,7 @@ import * as sinon from 'sinon';
 import * as vscode from 'vscode';
 import { handleCipherCommand } from '../../commands/cipher';
 import * as configClient from '../../service/configService';
-import { ConfigServerManager } from '../../service/configServerManager';
+import { ServerManager } from '../../service/serverManager';
 import { outputChannel } from '../../shared/outputChannel';
 
 suite('Cipher Command Test Suite', () => {
@@ -19,7 +19,7 @@ suite('Cipher Command Test Suite', () => {
 
     test('returns early when no active editor', async () => {
         sandbox.stub(vscode.window, 'activeTextEditor').value(undefined);
-        sandbox.stub(ConfigServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
 
         await handleCipherCommand('encrypt');
 
@@ -29,7 +29,7 @@ suite('Cipher Command Test Suite', () => {
     test('returns early when no server selected', async () => {
         const mockEditor = { selections: [] };
         sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ConfigServerManager.getInstance(), 'getCurrentServer').returns(null);
+        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns(null);
 
         await handleCipherCommand('encrypt');
 
@@ -42,7 +42,7 @@ suite('Cipher Command Test Suite', () => {
             selections: [new vscode.Selection(0, 0, 0, 0)]
         };
         sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ConfigServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
         const showWarningStub = sandbox.stub(vscode.window, 'showWarningMessage');
         const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
 
@@ -64,7 +64,7 @@ suite('Cipher Command Test Suite', () => {
             selections: [new vscode.Selection(0, 0, 0, 9)]
         };
         sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ConfigServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
         sandbox.stub(configClient, 'encrypt').resolves('encrypted123');
         const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
         const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
@@ -88,7 +88,7 @@ suite('Cipher Command Test Suite', () => {
             selections: [new vscode.Selection(0, 0, 0, 9)]
         };
         sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ConfigServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
         sandbox.stub(configClient, 'encrypt').rejects(new Error('Encryption failed'));
         const appendLineStub = sandbox.stub(outputChannel, 'appendLine');
         const showStub = sandbox.stub(outputChannel, 'show');
@@ -114,7 +114,7 @@ suite('Cipher Command Test Suite', () => {
             selections: [new vscode.Selection(0, 0, 0, 0)]
         };
         sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ConfigServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
         sandbox.stub(configClient, 'decrypt').resolves('decrypted');
         const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
         const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
@@ -145,7 +145,7 @@ suite('Cipher Command Test Suite', () => {
                 selections: [new vscode.Selection(0, 0, 0, 0)]
             };
             sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-            sandbox.stub(ConfigServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+            sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
             sandbox.stub(configClient, 'decrypt').resolves('decrypted');
             const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
             const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
@@ -172,7 +172,7 @@ suite('Cipher Command Test Suite', () => {
             selections: [new vscode.Selection(0, 0, 0, 0)]
         };
         sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ConfigServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
         sandbox.stub(configClient, 'decrypt').resolves('decrypted');
         const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
         const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
@@ -197,7 +197,7 @@ suite('Cipher Command Test Suite', () => {
             selections: [new vscode.Selection(0, 0, 0, 0)]
         };
         sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ConfigServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
         sandbox.stub(configClient, 'decrypt').rejects(new Error('Decryption failed'));
         const appendLineStub = sandbox.stub(outputChannel, 'appendLine');
         const showStub = sandbox.stub(outputChannel, 'show');
@@ -223,7 +223,7 @@ suite('Cipher Command Test Suite', () => {
             selections: [new vscode.Selection(0, 5, 0, 25)]
         };
         sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ConfigServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
         sandbox.stub(configClient, 'decrypt').resolves('decrypted');
         const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
         const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
@@ -246,7 +246,7 @@ suite('Cipher Command Test Suite', () => {
             selections: [new vscode.Selection(0, 0, 0, 9)]
         };
         sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ConfigServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
         sandbox.stub(configClient, 'encrypt').resolves('encrypted123');
         sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
         sandbox.stub(vscode.window, 'showInformationMessage');
