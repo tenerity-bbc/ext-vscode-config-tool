@@ -51,7 +51,7 @@ The status bar shows the current server with icons:
 ### Decrypting Values
 
 1. Open a file containing encrypted values in the format `{cipher}EncryptedValue`
-2. Run the command **Config Tool: Decrypt** or press `Ctrl+Shift+D` (`Cmd+Shift+D` on Mac)
+2. Run the command **Config Tool: Decrypt** or press `Ctrl+Alt+D` (`Cmd+Alt+D` on Mac)
 3. Watch the progress in the status bar as cipher values are highlighted and decrypted
 4. Full cipher patterns and encrypted text are highlighted with different decorations
 5. Press `ESC` to cancel the operation if needed
@@ -59,7 +59,7 @@ The status bar shows the current server with icons:
 ### Encrypting Values
 
 1. Select the plain text you want to encrypt
-2. Run the command **Config Tool: Encrypt** or press `Ctrl+Shift+E` (`Cmd+Shift+E` on Mac)
+2. Run the command **Config Tool: Encrypt** or press `Ctrl+Alt+E` (`Cmd+Alt+E` on Mac)
 3. Watch the progress as selected text is highlighted and replaced with `{cipher}EncryptedValue`
 4. Press `ESC` to cancel the operation if needed
 
@@ -67,11 +67,11 @@ The status bar shows the current server with icons:
 
 | Command | Keyboard Shortcut | Description |
 |---------|-------------------|-------------|
-| `Config Tool: Decrypt` | `Ctrl+Shift+D` / `Cmd+Shift+D` | Decrypt all {cipher} values in the current document or selection |
-| `Config Tool: Encrypt` | `Ctrl+Shift+E` / `Cmd+Shift+E` | Encrypt selected text using the config server |
-| `Config Tool: Select Server` | `Ctrl+Shift+S` / `Cmd+Shift+S` | Manually choose a config server |
-| `Config Tool: Pin Current Server` | `Ctrl+Shift+P` / `Cmd+Shift+P` | Pin the current server to prevent auto-switching |
-| `Config Tool: Unpin Server` | `Ctrl+Shift+U` / `Cmd+Shift+U` | Allow automatic server detection |
+| `Config Tool: Decrypt` | `Ctrl+Alt+D` / `Cmd+Alt+D` | Decrypt all {cipher} values in the current document or selection |
+| `Config Tool: Encrypt` | `Ctrl+Alt+E` / `Cmd+Alt+E` | Encrypt selected text using the config server |
+| `Config Tool: Select Server` | `Ctrl+Alt+S` / `Cmd+Alt+S` | Manually choose a config server |
+| `Config Tool: Pin Current Server` | `Ctrl+Alt+P` / `Cmd+Alt+P` | Pin the current server to prevent auto-switching |
+| `Config Tool: Unpin Server` | `Ctrl+Alt+U` / `Cmd+Alt+U` | Allow automatic server detection |
 | `Config Tool: Cancel Operation` | `ESC` | Cancel ongoing encrypt/decrypt operations |
 
 ## Settings

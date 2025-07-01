@@ -51,35 +51,35 @@
     "keybindings": [
       {
         "command": "config-tool.encrypt",
-        "key": "ctrl+shift+e",
-        "mac": "cmd+shift+e",
+        "key": "ctrl+alt+e",
+        "mac": "cmd+alt+e",
         "when": "editorTextFocus"
       },
       {
         "command": "config-tool.decrypt",
-        "key": "ctrl+shift+d",
-        "mac": "cmd+shift+d",
+        "key": "ctrl+alt+d",
+        "mac": "cmd+alt+d",
         "when": "editorTextFocus"
       },
       {
         "command": "config-tool.selectServer",
-        "key": "ctrl+shift+s",
-        "mac": "cmd+shift+s"
+        "key": "ctrl+alt+s",
+        "mac": "cmd+alt+s"
       },
       {
         "command": "config-tool.pinServer",
-        "key": "ctrl+shift+p",
-        "mac": "cmd+shift+p"
+        "key": "ctrl+alt+p",
+        "mac": "cmd+alt+p"
       },
       {
         "command": "config-tool.unpinServer",
-        "key": "ctrl+shift+u",
-        "mac": "cmd+shift+u"
+        "key": "ctrl+alt+u",
+        "mac": "cmd+alt+u"
       },
       {
         "command": "config-tool.cancel",
         "key": "escape",
-        "when": "editorTextFocus"
+        "when": "editorTextFocus && !suggestWidgetVisible && !findWidgetVisible && !inQuickOpen && !quickInputVisible"
       }
     ],
     "configuration": {
