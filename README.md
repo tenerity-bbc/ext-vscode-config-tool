@@ -26,7 +26,7 @@ A VS Code extension for encrypting and decrypting configuration values using Spr
 - **Progress tracking**: Real-time status bar progress indicator during operations
 - **Visual feedback**: Text highlighting shows what's being processed with dual decorations for decryption
 - **Cancellation support**: Press ESC to cancel ongoing operations at any time
-- **Smart server detection**: Automatically determines the appropriate config server based on file path and Git branch
+- **Smart server selection**: Automatically selects the appropriate config server based on file path and Git branch
 - **Server management**: Pin/unpin servers, manual server selection with status bar integration
 - **Multi-environment support**: Pre-configured servers for NG and APG environments (dev, qa, stage, prod)
 - **Regional support**: Automatic US region detection based on Git branch naming
@@ -38,7 +38,7 @@ A VS Code extension for encrypting and decrypting configuration values using Spr
 
 ### Server Management
 
-The extension automatically detects the appropriate config server based on:
+The extension automatically selects the appropriate config server based on:
 - File path patterns (e.g., `gce-ng-config-store`, `gce-apg-config-store`)
 - Environment from filename (e.g., `application-dev.yml`)
 - Git branch ancestry and regional detection (checks if current branch is descendant of `develop` or `develop-US`)
@@ -46,8 +46,8 @@ The extension automatically detects the appropriate config server based on:
 The status bar shows the current server with icons:
 - 🔒 (lock): Server is pinned
 - ✅ (check): Only one server configured (auto-selected)
-- ✨ (sparkle): Server auto-determined from multiple options
-- ⚠️ (warning): No server selected (auto-determination disabled)
+- ✨ (sparkle): Server auto-selected from multiple options
+- ⚠️ (warning): No server selected (auto-selection disabled)
 
 ### Decrypting Values
 
@@ -92,13 +92,13 @@ The status bar shows the current server with icons:
     "ng-us-stage": "https://ng-us.example-server/config-server",
     "apg-dev": "https://apg.example-server/configserver"
   },
-  "configTool.enableAutoDetermination": true
+  "configTool.enableAutoSelection": true
 }
 ```
 
 **Settings:**
 - `configTool.servers`: Object mapping server keys to URLs
-- `configTool.enableAutoDetermination`: Enable/disable automatic server detection (default: true)
+- `configTool.enableAutoSelection`: Enable/disable automatic server selection (default: true)
 
 ## Requirements
 

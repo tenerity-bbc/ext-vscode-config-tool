@@ -75,17 +75,17 @@ export class ServerManager {
 		const config = vscode.workspace.getConfiguration('configTool');
 		const servers = config.get('servers') as Record<string, string> || {};
 		const serverKeys = Object.keys(servers);
-		const enableAutoDetermination = config.get('enableAutoDetermination', true);
+		const enableAutoSelection = config.get('enableAutoSelection', true);
 
 		if (!this.isPinned) {
 			if (serverKeys.length === 1) {
 				// Single server - use it directly
 				this.currentServer = serverKeys[0];
-			} else if (enableAutoDetermination) {
-				// Multiple servers with auto-determination enabled
+			} else if (enableAutoSelection) {
+				// Multiple servers with auto-selection enabled
 				this.currentServer = await this.determineRelevantServer();
 			} else {
-				// Multiple servers with auto-determination disabled
+				// Multiple servers with auto-selection disabled
 				this.currentServer = null;
 			}
 		}
@@ -105,11 +105,11 @@ export class ServerManager {
 		} else if (this.currentServer) {
 			serverKey = this.currentServer;
 			pinIcon = '$(sparkle)';
-			tooltip = `Current config server: ${serverKey} (auto-determined)`;
+			tooltip = `Current config server: ${serverKey} (auto-selected)`;
 		} else {
 			serverKey = 'Not selected';
 			pinIcon = '$(warning)';
-			tooltip = 'No config server selected - auto-determination disabled';
+			tooltip = 'No config server selected - auto-selection disabled';
 		}
 
 		this.statusBarItem.text = `${pinIcon} ${serverKey}`;

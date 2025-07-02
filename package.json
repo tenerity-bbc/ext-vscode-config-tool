@@ -103,10 +103,10 @@
           },
           "description": "Config server URLs for all environments"
         },
-        "configTool.enableAutoDetermination": {
+        "configTool.enableAutoSelection": {
           "type": "boolean",
           "default": true,
-          "description": "Enable automatic server determination based on file path and git branch"
+          "description": "Enable automatic server selection based on file path and git branch"
         }
       }
     }
