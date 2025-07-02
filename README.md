@@ -107,6 +107,32 @@ The status bar shows the current server with icons:
 
 ## Release Notes
 
+### 0.1.0
+
+**Enhanced Server Management:**
+- Added `enableAutoSelection` setting to control automatic server selection
+- Improved status bar with better icons and tooltips for different server states
+- Enhanced server selection logic with single server auto-selection
+- Renamed terminology from "auto-determination" to "auto-selection" for clarity
+
+**User Experience Improvements:**
+- Added operation cancellation support with ESC key
+- Implemented progress tracking with status bar indicators
+- Added real-time visual feedback with text highlighting
+- Improved selection retention after cipher operations
+- Enhanced view restoration after operations
+
+**Keyboard Shortcuts:**
+- Added comprehensive keyboard shortcuts for all commands
+- Updated shortcuts to avoid VS Code conflicts
+- ESC key cancellation for ongoing operations
+
+**Code Quality & Structure:**
+- Refactored code organization and structure
+- Improved git utility placement
+- Enhanced service naming conventions
+- Better activation events for YAML files
+
 ### 0.0.1
 
 **New Features:**
