@@ -18,6 +18,9 @@ export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
 	const editor = vscode.window.activeTextEditor;
 	if (!editor || !ServerManager.getInstance().getCurrentServer()) { return; }
 
+	// Save original view state
+	const originalVisibleRange = editor.visibleRanges[0];
+
 	const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 	const eligibleDecorationType = vscode.window.createTextEditorDecorationType({
 		backgroundColor: new vscode.ThemeColor('editor.wordHighlightBackground'),
@@ -41,6 +44,11 @@ export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
 			vscode.window.showInformationMessage(`Successfully processed ${processedCount} value(s)`);
 		}
 	} finally {
+		// Restore original view state
+		if (originalVisibleRange) {
+			editor.revealRange(originalVisibleRange, vscode.TextEditorRevealType.InCenter);
+		}
+		
 		currentCancellationTokenSource?.dispose();
 		currentCancellationTokenSource = null;
 		statusBarItem.dispose();
@@ -152,6 +160,11 @@ async function processDecryption(editor: vscode.TextEditor, statusBarItem: vscod
 }
 
 async function applyEdit(document: vscode.TextDocument, range: vscode.Range, newText: string) {
+	const editor = vscode.window.activeTextEditor;
+	if (editor) {
+		editor.revealRange(range);
+	}
+	
 	const workspaceEdit = new vscode.WorkspaceEdit();
 	workspaceEdit.replace(document.uri, range, newText);
 	await vscode.workspace.applyEdit(workspaceEdit);
