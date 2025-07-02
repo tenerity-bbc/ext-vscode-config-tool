@@ -1,9 +1,35 @@
 # Change Log
 
-All notable changes to the "config-tool" extension will be documented in this file.
+All notable changes to the Config Tool extension will be documented in this file. This extension provides encrypt/decrypt functionality for Spring Boot Config Server with intelligent server management.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## [Unreleased]
+## [0.1.0] - 2024-12-19
 
-- Initial release
+### Added
+- `enableAutoSelection` setting to control automatic server selection
+- Operation cancellation support with ESC key
+- Progress tracking with status bar indicators
+- Real-time visual feedback with text highlighting
+- Comprehensive keyboard shortcuts for all commands
+- Enhanced status bar with better icons and tooltips
+- Selection retention after cipher operations
+- View restoration after operations
+
+### Changed
+- Renamed terminology from "auto-determination" to "auto-selection" for clarity
+- Improved server selection logic with single server auto-selection
+- Updated keyboard shortcuts to avoid VS Code conflicts
+- Enhanced service naming conventions and code organization
+
+### Fixed
+- Better git utility placement and structure
+- Improved activation events for YAML files
+
+## [0.0.1] - 2024-12-18
+
+### Added
+- Initial release with encrypt/decrypt functionality
+- Smart server detection and management
+- Multi-environment and regional support
+- Spring Boot Config Server integration
