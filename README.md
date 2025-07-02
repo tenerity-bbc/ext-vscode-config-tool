@@ -45,8 +45,9 @@ The extension automatically detects the appropriate config server based on:
 
 The status bar shows the current server with icons:
 - 🔒 (lock): Server is pinned
-- ✨ (sparkle): Server auto-determined
-- ⚠️ (warning): No server selected
+- ✅ (check): Only one server configured (auto-selected)
+- ✨ (sparkle): Server auto-determined from multiple options
+- ⚠️ (warning): No server selected (auto-determination disabled)
 
 ### Decrypting Values
 
@@ -90,9 +91,14 @@ The status bar shows the current server with icons:
     "ng-qa": "https://ng.example-server/config-server",
     "ng-us-stage": "https://ng-us.example-server/config-server",
     "apg-dev": "https://apg.example-server/configserver"
-  }
+  },
+  "configTool.enableAutoDetermination": true
 }
 ```
+
+**Settings:**
+- `configTool.servers`: Object mapping server keys to URLs
+- `configTool.enableAutoDetermination`: Enable/disable automatic server detection (default: true)
 
 ## Requirements
 

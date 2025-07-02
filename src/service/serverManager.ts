@@ -72,15 +72,48 @@ export class ServerManager {
 	}
 
 	private async updateStatusBar(): Promise<void> {
+		const config = vscode.workspace.getConfiguration('configTool');
+		const servers = config.get('servers') as Record<string, string> || {};
+		const serverKeys = Object.keys(servers);
+		const enableAutoDetermination = config.get('enableAutoDetermination', true);
+
 		if (!this.isPinned) {
-			this.currentServer = await this.determineRelevantServer();
+			if (serverKeys.length === 1) {
+				// Single server - use it directly
+				this.currentServer = serverKeys[0];
+			} else if (enableAutoDetermination) {
+				// Multiple servers with auto-determination enabled
+				this.currentServer = await this.determineRelevantServer();
+			} else {
+				// Multiple servers with auto-determination disabled
+				this.currentServer = null;
+			}
 		}
-		const serverKey = this.currentServer ? this.currentServer : 'Unknown';
-		const pinIcon = this.isPinned ? '$(lock-small)' : this.currentServer ? '$(sparkle)' : '$(warning)';
+
+		let serverKey: string;
+		let pinIcon: string;
+		let tooltip: string;
+
+		if (this.isPinned) {
+			serverKey = this.currentServer || 'Unknown';
+			pinIcon = '$(lock-small)';
+			tooltip = `Config server pinned to: ${serverKey}`;
+		} else if (serverKeys.length === 1) {
+			serverKey = this.currentServer || 'Unknown';
+			pinIcon = '$(check)';
+			tooltip = `Config server: ${serverKey} (only server configured)`;
+		} else if (this.currentServer) {
+			serverKey = this.currentServer;
+			pinIcon = '$(sparkle)';
+			tooltip = `Current config server: ${serverKey} (auto-determined)`;
+		} else {
+			serverKey = 'Not selected';
+			pinIcon = '$(warning)';
+			tooltip = 'No config server selected - auto-determination disabled';
+		}
+
 		this.statusBarItem.text = `${pinIcon} ${serverKey}`;
-		this.statusBarItem.tooltip = this.isPinned ?
-			`Config server pinned to: ${serverKey}` :
-			`Current config server: ${serverKey} (auto-determined)`;
+		this.statusBarItem.tooltip = tooltip;
 	}
 
 	public dispose(): void {

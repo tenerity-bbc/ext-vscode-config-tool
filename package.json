@@ -102,6 +102,11 @@
             "apg-us-prod": "https://apg-config-server-us.int.affinionservices.com/configserver"
           },
           "description": "Config server URLs for all environments"
+        },
+        "configTool.enableAutoDetermination": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic server determination based on file path and git branch"
         }
       }
     }
