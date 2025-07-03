@@ -88,8 +88,8 @@
         "configTool.servers": {
           "type": "object",
           "default": {
-            "ng-dev": "https://ng-config-server.int.dev.ffinionservices.com/config-server",
-            "ng-qa": "https://ng-config-server.int.qa.ffinionservices.com/config-server",
+            "ng-dev": "https://ng-config-server.int.dev.affinionservices.com/config-server",
+            "ng-qa": "https://ng-config-server.int.qa.affinionservices.com/config-server",
             "ng-stage": "https://ng-config-server.int.stage-affinionservices.com/config-server",
             "ng-us-stage": "https://ng-config-server-us.int.stage-affinionservices.com/config-server",
             "ng-prod": "https://ng-config-server.int.affinionservices.com/config-server",
