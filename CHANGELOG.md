@@ -1,3 +1,24 @@
+# 1.0.0 (2025-07-03)
+
+
+### Bug Fixes
+
+* add write permissions for semantic-release ([ceb94f4](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/ceb94f4c9655e3b0a3692f199ce9a7b1994c6673))
+* add xvfb for headless VS Code testing in CI ([ddd9a30](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/ddd9a30a6a36fb6558c7a8e9b7dae60ab16988f2))
+* remove hardcoded VS Code path for CI compatibility ([bed67a4](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/bed67a4b0aa8512f6e8fada0bf97deca87833ec6))
+* temporarily skip failing tests for release ([a0758a8](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/a0758a8592447603fa63234ec9db1ab2581a3a68))
+* update keyboard shortcuts to avoid VS Code conflicts ([8a4a049](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/8a4a0496df6a8052e0c7f0f17ba9f5bd7f5df072))
+* update Node.js version to 20 for vsce compatibility ([5473c94](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/5473c9407f5175989cd5abd4f6f0fde3d5c5cc2f))
+
+
+### Features
+
+* add automated release and change management system ([f7c103e](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/f7c103ebc344da26abea86f0358bcc1234914cfb))
+* add keyboard shortcuts and update documentation ([b11cffb](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/b11cffb8d28c7418ff88aa965e343a64e63ce7c5))
+* add operation cancellation support ([6b5a982](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/6b5a982c28f30c14a8e720785c568ac8eef5c3ed))
+* add progress tracking and visual feedback for cipher operations ([c31623e](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/c31623ea49b3696e1e634ce30a06f7ee6df011cf))
+* implement Git branch-based region determination using isomorphic-git ([bb7f2b5](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/bb7f2b5d36becd10e9a5bc320f8ba1e285a9ed9a))
+
 # Change Log
 
 All notable changes to the Config Tool extension will be documented in this file. This extension provides encrypt/decrypt functionality for Spring Boot Config Server with intelligent server management.
