@@ -16,8 +16,8 @@ A VS Code extension for encrypting and decrypting configuration values using Spr
     - [Key Format Rules:](#key-format-rules)
     - [Examples:](#examples)
   - [Requirements](#requirements)
-  - [Release Notes](#release-notes)
-    - [0.0.1](#001)
+  - [Contributing](#contributing)
+  - [Changelog](#changelog)
 
 ## Features
 
@@ -105,47 +105,10 @@ The status bar shows the current server with icons:
 - VS Code 1.54.0 or higher
 - Network access to the Spring Boot Config Server
 
-## Release Notes
+## Contributing
 
-### 0.1.0
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and contribution guidelines.
 
-**Enhanced Server Management:**
-- Added `enableAutoSelection` setting to control automatic server selection
-- Improved status bar with better icons and tooltips for different server states
-- Enhanced server selection logic with single server auto-selection
-- Renamed terminology from "auto-determination" to "auto-selection" for clarity
+## Changelog
 
-**User Experience Improvements:**
-- Added operation cancellation support with ESC key
-- Implemented progress tracking with status bar indicators
-- Added real-time visual feedback with text highlighting
-- Improved selection retention after cipher operations
-- Enhanced view restoration after operations
-
-**Keyboard Shortcuts:**
-- Added comprehensive keyboard shortcuts for all commands
-- Updated shortcuts to avoid VS Code conflicts
-- ESC key cancellation for ongoing operations
-
-**Code Quality & Structure:**
-- Refactored code organization and structure
-- Improved git utility placement
-- Enhanced service naming conventions
-- Better activation events for YAML files
-
-### 0.0.1
-
-**New Features:**
-- Progress tracking with status bar indicators
-- Real-time visual feedback with text highlighting
-- Dual decorations for decryption (full pattern + cipher text)
-- Keyboard shortcuts for all commands
-- Operation cancellation with ESC key
-- Immediate edit application for better user experience
-- Reverse processing to prevent range invalidation
-- Consolidated command registration
-
-**Initial Features:**
-- Encrypt/decrypt functionality for Spring Boot Config Server
-- Smart server detection and management
-- Multi-environment and regional support
+See [CHANGELOG.md](CHANGELOG.md) for detailed release history and [GitHub Releases](https://github.com/tenerity-bbc/ext-vscode-config-tool/releases) for downloadable packages.
