@@ -1,0 +1,19 @@
+name: Enforce Git Flow
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  check-source-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR source branch
+        run: |
+          if [[ "${{ github.head_ref }}" != "develop" ]]; then
+            echo "❌ PRs to master must come from develop branch only"
+            echo "Current source: ${{ github.head_ref }}"
+            echo "Expected source: develop"
+            exit 1
+          fi
+          echo "✅ PR source branch is valid: ${{ github.head_ref }}"

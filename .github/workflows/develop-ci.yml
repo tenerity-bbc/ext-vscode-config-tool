@@ -1,0 +1,26 @@
+name: Develop CI
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  pre-release:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run vscode:prepublish
+      - run: npm run package
+      
+      # Uncomment to upload pre-release artifacts for manual testing
+      # - name: Upload pre-release artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: extension-prerelease
+      #     path: "*.vsix"

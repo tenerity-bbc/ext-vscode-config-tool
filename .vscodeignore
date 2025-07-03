@@ -1,6 +1,8 @@
 .vscode/**
 .vscode-test/**
 src/**
+out/test/**
+node_modules/**
 .gitignore
 .yarnrc
 vsc-extension-quickstart.md
@@ -9,3 +11,13 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+.github/**
+.releaserc.json
+.commitlintrc.json
+CONTRIBUTING.md
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
