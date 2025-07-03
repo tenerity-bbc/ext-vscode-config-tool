@@ -90,6 +90,9 @@ export class ServerManager {
 			}
 		}
 
+		// Set context variable for menu enablement
+		vscode.commands.executeCommand('setContext', 'config-tool.serverSelected', !!this.currentServer);
+
 		let serverKey: string;
 		let pinIcon: string;
 		let tooltip: string;

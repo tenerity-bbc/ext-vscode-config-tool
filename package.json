@@ -48,6 +48,20 @@
         "title": "Config Tool: Cancel Operation"
       }
     ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "config-tool.encrypt",
+          "when": "editorHasSelection && config-tool.serverSelected",
+          "group": "config-tool@1"
+        },
+        {
+          "command": "config-tool.decrypt",
+          "when": "config-tool.serverSelected",
+          "group": "config-tool@2"
+        }
+      ]
+    },
     "keybindings": [
       {
         "command": "config-tool.encrypt",
