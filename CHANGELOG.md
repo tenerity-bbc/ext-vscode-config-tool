@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.0.0...v1.1.0) (2025-07-03)
+
+
+### Features
+
+* implement complete Git Flow automation with branch protection and release management ([9ddf6a3](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/9ddf6a3a53b7fd41b512e79a1b17856e02b07ac4))
+
 # 1.0.0 (2025-07-03)
 
 
