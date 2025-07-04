@@ -2,7 +2,7 @@
   "name": "config-tool",
   "displayName": "Config Tool",
   "description": "Encrypt/decrypt configuration values using Spring Boot Config Server with intelligent server management",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publisher": "bibekbc",
   "icon": "icon.png",
   "keywords": [

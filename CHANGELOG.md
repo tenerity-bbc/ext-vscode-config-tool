@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.1.0...v1.1.1) (2025-07-04)
+
+
+### Bug Fixes
+
+* bundle isomorphic-git dependency to resolve runtime errors ([2f0f7ff](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/2f0f7ff0e18c4ab3ace21c79d6cec188b88e97cb))
+
 # [1.1.0](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.0.0...v1.1.0) (2025-07-03)
 
 
