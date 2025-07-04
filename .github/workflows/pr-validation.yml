@@ -17,7 +17,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
       # - run: xvfb-run -a npm test  # TODO: Fix failing tests
-      - run: npm run compile
+      - run: npm run package
       
       - name: Validate commit messages
         uses: wagoid/commitlint-github-action@v5

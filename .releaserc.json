@@ -18,7 +18,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "npm run vscode:prepublish && vsce package",
+        "prepareCmd": "npm run package && vsce package",
         "publishCmd": "vsce publish --no-git-tag-version"
       }
     ],

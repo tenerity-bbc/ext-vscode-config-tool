@@ -26,7 +26,7 @@
   "activationEvents": [
     "onLanguage:yaml"
   ],
-  "main": "./out/extension.js",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -132,13 +132,14 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
+    "vscode:prepublish": "npm run package",
+    "compile": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "watch": "npm run compile -- --watch",
+    "package": "npm run compile -- --minify",
+    "pretest": "npm run package && npm run lint",
     "lint": "eslint src",
     "test": "vscode-test",
-    "package": "vsce package",
+    "build-package": "vsce package",
     "release": "semantic-release"
   },
   "devDependencies": {
@@ -163,12 +164,10 @@
     "eslint": "^9.25.1",
     "semantic-release": "^22.0.12",
     "sinon": "^19.0.5",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "esbuild": "^0.24.0"
   },
   "dependencies": {
     "isomorphic-git": "^1.32.1"
-  },
-  "bundledDependencies": [
-    "isomorphic-git"
-  ]
+  }
 }

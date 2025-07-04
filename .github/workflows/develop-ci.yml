@@ -15,8 +15,8 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci
-      - run: npm run vscode:prepublish
       - run: npm run package
+      - run: npm run build-package
       
       # Uncomment to upload pre-release artifacts for manual testing
       # - name: Upload pre-release artifact

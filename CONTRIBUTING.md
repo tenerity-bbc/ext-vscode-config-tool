@@ -4,7 +4,8 @@
 
 1. Clone the repository
 2. Run `npm install` to install dependencies
-3. Open in VS Code and press F5 to launch extension development host
+3. Run `npm run package` to build the extension
+4. Open in VS Code and press F5 to launch extension development host
 
 ## Git Flow Branching Strategy
 
@@ -97,6 +98,18 @@ Releases are **fully automated** using semantic-release:
 2. Fix the critical issue
 3. Submit PR to `master` (triggers immediate release)
 4. Also merge back to `develop`
+
+## Building
+
+Build the extension with:
+```bash
+npm run package
+```
+
+For development with auto-rebuild:
+```bash
+npm run watch
+```
 
 ## Testing
 
