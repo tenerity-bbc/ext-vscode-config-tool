@@ -133,7 +133,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
-    "compile": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "compile": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap",
     "watch": "npm run compile -- --watch",
     "package": "npm run compile -- --minify",
     "pretest": "npm run package && npm run lint",
