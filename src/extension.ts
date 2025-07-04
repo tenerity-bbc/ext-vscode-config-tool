@@ -7,6 +7,8 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	registerCommands(context);
 	context.subscriptions.push(serverManager);
+	
+	vscode.window.showInformationMessage('Config Tool extension activated');
 }
 
 export function deactivate() {}
