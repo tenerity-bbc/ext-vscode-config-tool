@@ -3,6 +3,11 @@ import { encrypt, decrypt } from '../service/configService';
 import { ServerManager } from '../service/serverManager';
 import { outputChannel } from '../shared/outputChannel';
 
+type ProcessingResult = {
+	processed: number;
+	total: number;
+};
+
 const CIPHER_REGEX = /(['\"]?)\{cipher\}([A-Za-z0-9+/]+=*)\1/g;
 
 let currentCancellationTokenSource: vscode.CancellationTokenSource | null = null;
@@ -36,12 +41,13 @@ export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
 	statusBarItem.show();
 
 	try {
-		const processedCount = operation === 'encrypt' 
+		const result = operation === 'encrypt' 
 			? await processEncryption(editor, statusBarItem, eligibleDecorationType, currentCancellationTokenSource.token) 
 			: await processDecryption(editor, statusBarItem, eligibleDecorationType, selectionDecorationType, currentCancellationTokenSource.token);
 		
-		if (processedCount > 0) {
-			vscode.window.showInformationMessage(`Successfully processed ${processedCount} value(s)`);
+		if (result.total > 0) {
+			const icon = result.processed === result.total ? '✅' : '⚠️';
+			vscode.window.showInformationMessage(`${icon} Processed ${result.processed}/${result.total} value(s)`);
 		}
 	} finally {
 		// Restore original view state
@@ -57,17 +63,17 @@ export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
 	}
 }
 
-async function processEncryption(editor: vscode.TextEditor, statusBarItem: vscode.StatusBarItem, decorationType: vscode.TextEditorDecorationType, cancellationToken: vscode.CancellationToken): Promise<number> {
+async function processEncryption(editor: vscode.TextEditor, statusBarItem: vscode.StatusBarItem, decorationType: vscode.TextEditorDecorationType, cancellationToken: vscode.CancellationToken): Promise<ProcessingResult> {
 	const selections = editor.selections.filter(s => !s.isEmpty);
 	if (selections.length === 0) {
 		vscode.window.showWarningMessage('Please select text to encrypt');
-		return 0;
+		return { processed: 0, total: 0 };
 	}
 
 	const eligibleSelections = selections.filter(s => editor.document.getText(s).trim());
 	if (eligibleSelections.length === 0) {
 		vscode.window.showInformationMessage('No eligible text found for encryption');
-		return 0;
+		return { processed: 0, total: 0 };
 	}
 
 	// Sort selections by position in descending order
@@ -96,10 +102,10 @@ async function processEncryption(editor: vscode.TextEditor, statusBarItem: vscod
 			editor.setDecorations(decorationType, []);
 		}
 	}
-	return processedCount;
+	return { processed: processedCount, total: eligibleSelections.length };
 }
 
-async function processDecryption(editor: vscode.TextEditor, statusBarItem: vscode.StatusBarItem, decorationType: vscode.TextEditorDecorationType, cipherDecorationType: vscode.TextEditorDecorationType, cancellationToken: vscode.CancellationToken): Promise<number> {
+async function processDecryption(editor: vscode.TextEditor, statusBarItem: vscode.StatusBarItem, decorationType: vscode.TextEditorDecorationType, cipherDecorationType: vscode.TextEditorDecorationType, cancellationToken: vscode.CancellationToken): Promise<ProcessingResult> {
 	const document = editor.document;
 	const selections = editor.selections.length > 1 ? editor.selections : [editor.selection];
 	const matches: Array<{match: RegExpExecArray, offset: number}> = [];
@@ -118,7 +124,7 @@ async function processDecryption(editor: vscode.TextEditor, statusBarItem: vscod
 
 	if (matches.length === 0) {
 		vscode.window.showInformationMessage('No eligible cipher text found for decryption');
-		return 0;
+		return { processed: 0, total: 0 };
 	}
 
 	// Sort matches by position in descending order
@@ -156,7 +162,7 @@ async function processDecryption(editor: vscode.TextEditor, statusBarItem: vscod
 			editor.setDecorations(cipherDecorationType, []);
 		}
 	}
-	return processedCount;
+	return { processed: processedCount, total: matches.length };
 }
 
 async function applyEdit(document: vscode.TextDocument, range: vscode.Range, newText: string) {
