@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { encrypt, decrypt } from '../service/configService';
+import { encrypt, decrypt, ConfigServiceError } from '../service/configService';
 import { ServerManager } from '../service/serverManager';
 import { outputChannel } from '../shared/outputChannel';
 
@@ -46,9 +46,14 @@ export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
 			: await processDecryption(editor, statusBarItem, eligibleDecorationType, selectionDecorationType, currentCancellationTokenSource.token);
 		
 		if (result.total > 0) {
-			const icon = result.processed === result.total ? '✅' : '⚠️';
-			vscode.window.showInformationMessage(`${icon} Processed ${result.processed}/${result.total} value(s)`);
+			if (result.processed === result.total) {
+				vscode.window.showInformationMessage(`Processed ${result.processed}/${result.total} value(s)`);
+			} else {
+				vscode.window.showWarningMessage(`Processed ${result.processed}/${result.total} value(s) - some failed`);
+			}
 		}
+	} catch (error) {
+		vscode.window.showErrorMessage(`Operation failed: ${(error as Error).message}`);
 	} finally {
 		// Restore original view state
 		if (originalVisibleRange) {
@@ -98,6 +103,9 @@ async function processEncryption(editor: vscode.TextEditor, statusBarItem: vscod
 			processedCount++;
 		} catch (error) {
 			logError(error, editor.document, selection.start);
+			if (error instanceof ConfigServiceError && error.isFatal) {
+				throw error;
+			}
 		} finally {
 			editor.setDecorations(decorationType, []);
 		}
@@ -157,6 +165,9 @@ async function processDecryption(editor: vscode.TextEditor, statusBarItem: vscod
 			processedCount++;
 		} catch (error) {
 			logError(error, document, document.positionAt(offset + match.index));
+			if (error instanceof ConfigServiceError && error.isFatal) {
+				throw error;
+			}
 		} finally {
 			editor.setDecorations(decorationType, []);
 			editor.setDecorations(cipherDecorationType, []);

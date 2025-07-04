@@ -2,6 +2,13 @@ import * as https from 'https';
 import * as vscode from 'vscode';
 import { ServerManager } from './serverManager';
 
+export class ConfigServiceError extends Error {
+	constructor(message: string, public isFatal: boolean = false) {
+		super(message);
+		this.name = 'ConfigServiceError';
+	}
+}
+
 function getConfigServerUrl(): string {
 	const config = vscode.workspace.getConfiguration('configTool');
 	const servers = config.get('servers') as Record<string, string>;
@@ -29,20 +36,28 @@ function makeRequest(endpoint: string, data: string): Promise<string> {
 			let responseData = '';
 			res.on('data', chunk => responseData += chunk);
 			res.on('end', () => {
-				if (res.statusCode === 200) {
+				const statusCode = res.statusCode || 0;
+				if (statusCode === 200) {
 					resolve(responseData);
 				} else {
+					const isFatal = statusCode === 401 || statusCode === 403 || statusCode >= 500;
 					try {
 						const error = JSON.parse(responseData);
-						reject(error.description || 'Unknown error');
+						reject(new ConfigServiceError(error.description || 'Unknown error', isFatal));
 					} catch {
-						reject(`HTTP ${res.statusCode}: ${responseData}`);
+						reject(new ConfigServiceError(`HTTP ${statusCode}: ${responseData}`, isFatal));
 					}
 				}
 			});
 		});
 
-		req.on('error', reject);
+		req.on('error', (err) => {
+			// Network errors are always fatal
+			reject(new ConfigServiceError(err.message, true));
+		});
+		req.on('timeout', () => {
+			reject(new ConfigServiceError('Request timeout', true));
+		});
 		req.write(data);
 		req.end();
 	});
