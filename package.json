@@ -31,11 +31,13 @@
     "commands": [
       {
         "command": "config-tool.decrypt",
-        "title": "Config Tool: Decrypt"
+        "title": "Config Tool: Decrypt",
+        "enablement": "config-tool.serverSelected"
       },
       {
         "command": "config-tool.encrypt",
-        "title": "Config Tool: Encrypt"
+        "title": "Config Tool: Encrypt",
+        "enablement": "editorHasSelection && config-tool.serverSelected"
       },
       {
         "command": "config-tool.selectServer",
@@ -58,12 +60,10 @@
       "editor/context": [
         {
           "command": "config-tool.encrypt",
-          "when": "editorHasSelection && config-tool.serverSelected",
           "group": "config-tool@1"
         },
         {
           "command": "config-tool.decrypt",
-          "when": "config-tool.serverSelected",
           "group": "config-tool@2"
         }
       ]
