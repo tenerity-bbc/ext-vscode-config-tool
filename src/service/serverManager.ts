@@ -56,18 +56,31 @@ export class ServerManager {
 			return;
 		}
 
-		const items = Object.keys(servers).map(key => ({
-			label: key,
-			description: servers[key],
-			picked: key === this.currentServer
-		}));
+		const items = Object.keys(servers).map(key => {
+			let detail = '';
+			if (key === this.currentServer && this.isPinned) {
+				detail = '$(lock-small) Pinned - click to unpin';
+			} else if (key === this.currentServer && !this.isPinned) {
+				detail = '$(sparkle) Auto-selected';
+			}
+			return {
+				label: key,
+				description: servers[key],
+				detail,
+				picked: key === this.currentServer
+			};
+		});
 
 		const selected = await vscode.window.showQuickPick(items, {
 			placeHolder: 'Select config server'
 		});
 
 		if (selected) {
-			this.setServer(selected.label);
+			if (selected.label === this.currentServer && this.isPinned) {
+				this.unpinServer();
+			} else {
+				this.setServer(selected.label);
+			}
 		}
 	}
 
