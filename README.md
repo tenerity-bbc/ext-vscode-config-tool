@@ -24,18 +24,12 @@ A VS Code extension for encrypting and decrypting configuration values using Spr
 
 ## Features
 
-- **Decrypt cipher values**: Automatically finds and decrypts `{cipher}` encrypted values in your configuration files
-- **Encrypt plain text**: Select text and encrypt it using the config server
-- **Progress tracking**: Real-time status bar progress indicator during operations
-- **Visual feedback**: Text highlighting shows what's being processed with dual decorations for decryption
-- **Cancellation support**: Press ESC to cancel ongoing operations at any time
-- **Smart server selection**: Configurable server determination using pattern matching and hint-based substitutions
-- **Server management**: Pin/unpin servers, manual server selection with status bar integration
-- **Flexible configuration**: Define custom server selection rules with regex patterns and placeholders
-- **Git integration**: Automatic branch detection for region-specific server selection
-- **Batch processing**: Process multiple selections or entire documents at once
-- **Smart selection**: Works with selected text or entire document
-- **Keyboard shortcuts**: Quick access to all commands via customizable key bindings
+- **Encrypt/Decrypt**: Process `{cipher}` values with visual feedback and progress tracking
+- **Smart Server Selection**: Auto-select config servers using file path patterns and git branch detection
+- **Flexible Configuration**: Define custom rules with regex patterns and inline ancestor region mapping
+- **Server Management**: Pin/unpin servers with status bar integration
+- **Batch Processing**: Handle multiple selections or entire documents
+- **Keyboard Shortcuts**: Quick access with customizable key bindings and ESC cancellation
 
 ## Usage
 
