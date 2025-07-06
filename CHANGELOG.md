@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.1.1...v1.1.2) (2025-07-04)
+
+
+### Bug Fixes
+
+* switch to esbuild bundling for proper dependency inclusion ([90a031a](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/90a031a32a64b5775c3cc355d73a4d2455ebd3b4))
+
 ## [1.1.1](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.1.0...v1.1.1) (2025-07-04)
 
 
