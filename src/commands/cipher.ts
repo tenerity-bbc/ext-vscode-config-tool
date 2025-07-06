@@ -77,6 +77,7 @@ async function processEncryption(editor: vscode.TextEditor, statusBarItem: vscod
 	// Sort selections by position in descending order
 	eligibleSelections.sort((a, b) => editor.document.offsetAt(b.start) - editor.document.offsetAt(a.start));
 
+	const newSelections: vscode.Selection[] = [];
 	let processedCount = 0;
 	for (let i = 0; i < eligibleSelections.length; i++) {
 		if (cancellationToken.isCancellationRequested) {
@@ -92,7 +93,9 @@ async function processEncryption(editor: vscode.TextEditor, statusBarItem: vscod
 		const selectedText = editor.document.getText(selection);
 		try {
 			const encrypted = await encrypt(selectedText);
-			await applyEdit(editor.document, range, `'{cipher}${encrypted}'`);
+			const newText = `'{cipher}${encrypted}'`;
+			await applyEdit(editor.document, range, newText);
+			newSelections.unshift(new vscode.Selection(range.start, range.start.translate(0, newText.length)));
 			processedCount++;
 		} catch (error) {
 			logError(error, editor.document, selection.start);
@@ -102,6 +105,9 @@ async function processEncryption(editor: vscode.TextEditor, statusBarItem: vscod
 		} finally {
 			editor.setDecorations(decorationType, []);
 		}
+	}
+	if (newSelections.length > 0) {
+		editor.selections = newSelections;
 	}
 	return { processed: processedCount, total: eligibleSelections.length };
 }
@@ -130,6 +136,7 @@ async function processDecryption(editor: vscode.TextEditor, statusBarItem: vscod
 	// Sort matches by position in descending order
 	matches.sort((a, b) => (b.offset + b.match.index) - (a.offset + a.match.index));
 
+	const newSelections: vscode.Selection[] = [];
 	let processedCount = 0;
 	for (let i = 0; i < matches.length; i++) {
 		if (cancellationToken.isCancellationRequested) {
@@ -154,6 +161,7 @@ async function processDecryption(editor: vscode.TextEditor, statusBarItem: vscod
 		try {
 			const decrypted = await decrypt(match[2]);
 			await applyEdit(document, fullRange, decrypted);
+			newSelections.unshift(new vscode.Selection(fullRange.start, fullRange.start.translate(0, decrypted.length)));
 			processedCount++;
 		} catch (error) {
 			logError(error, document, document.positionAt(offset + match.index));
@@ -164,6 +172,9 @@ async function processDecryption(editor: vscode.TextEditor, statusBarItem: vscod
 			editor.setDecorations(decorationType, []);
 			editor.setDecorations(cipherDecorationType, []);
 		}
+	}
+	if (newSelections.length > 0) {
+		editor.selections = newSelections;
 	}
 	return { processed: processedCount, total: matches.length };
 }
