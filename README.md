@@ -4,9 +4,9 @@ Your friendly VS Code companion for encrypting and decrypting configuration valu
 
 ## Table of Contents
 
-- [Config Tool](#config-tool)
+- [Config Tool 🔐](#config-tool-)
   - [Table of Contents](#table-of-contents)
-  - [Features](#features)
+  - [Features ✨](#features-)
   - [Usage](#usage)
     - [Server Management](#server-management)
     - [Decrypting Values](#decrypting-values)
@@ -17,7 +17,7 @@ Your friendly VS Code companion for encrypting and decrypting configuration valu
     - [Server Selection Rules](#server-selection-rules)
     - [Placeholder Types](#placeholder-types)
     - [Settings Reference](#settings-reference)
-  - [Troubleshooting](#troubleshooting)
+  - [Troubleshooting 🔧](#troubleshooting-)
   - [Requirements](#requirements)
   - [Privacy](#privacy)
   - [Contributing](#contributing)
