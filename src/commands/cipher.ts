@@ -15,7 +15,6 @@ let currentCancellationTokenSource: vscode.CancellationTokenSource | null = null
 export function cancelCipherOperation() {
 	if (currentCancellationTokenSource) {
 		currentCancellationTokenSource.cancel();
-		vscode.window.showInformationMessage('Cipher operation cancelled');
 	}
 }
 
@@ -45,15 +44,11 @@ export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
 			? await processEncryption(editor, statusBarItem, eligibleDecorationType, currentCancellationTokenSource.token) 
 			: await processDecryption(editor, statusBarItem, eligibleDecorationType, selectionDecorationType, currentCancellationTokenSource.token);
 		
-		if (result.total > 0) {
-			if (result.processed === result.total) {
-				vscode.window.showInformationMessage(`Processed ${result.processed}/${result.total} value(s)`);
-			} else {
-				vscode.window.showWarningMessage(`Processed ${result.processed}/${result.total} value(s) - some failed`);
-			}
-		}
+		showOperationResult(result, currentCancellationTokenSource.token.isCancellationRequested);
 	} catch (error) {
-		vscode.window.showErrorMessage(`Operation failed: ${(error as Error).message}`);
+		if (!currentCancellationTokenSource.token.isCancellationRequested) {
+			vscode.window.showErrorMessage(`Operation failed: ${(error as Error).message}`);
+		}
 	} finally {
 		// Restore original view state
 		if (originalVisibleRange) {
@@ -71,13 +66,11 @@ export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
 async function processEncryption(editor: vscode.TextEditor, statusBarItem: vscode.StatusBarItem, decorationType: vscode.TextEditorDecorationType, cancellationToken: vscode.CancellationToken): Promise<ProcessingResult> {
 	const selections = editor.selections.filter(s => !s.isEmpty);
 	if (selections.length === 0) {
-		vscode.window.showWarningMessage('Please select text to encrypt');
 		return { processed: 0, total: 0 };
 	}
 
 	const eligibleSelections = selections.filter(s => editor.document.getText(s).trim());
 	if (eligibleSelections.length === 0) {
-		vscode.window.showInformationMessage('No eligible text found for encryption');
 		return { processed: 0, total: 0 };
 	}
 
@@ -131,7 +124,6 @@ async function processDecryption(editor: vscode.TextEditor, statusBarItem: vscod
 	}
 
 	if (matches.length === 0) {
-		vscode.window.showInformationMessage('No eligible cipher text found for decryption');
 		return { processed: 0, total: 0 };
 	}
 
@@ -185,6 +177,18 @@ async function applyEdit(document: vscode.TextDocument, range: vscode.Range, new
 	const workspaceEdit = new vscode.WorkspaceEdit();
 	workspaceEdit.replace(document.uri, range, newText);
 	await vscode.workspace.applyEdit(workspaceEdit);
+}
+
+function showOperationResult(result: ProcessingResult, wasCancelled: boolean) {
+	if (result.total === 0) {
+		vscode.window.showInformationMessage(wasCancelled ? 'Operation cancelled' : 'No eligible content found');
+	} else if (wasCancelled) {
+		vscode.window.showInformationMessage(`Operation cancelled - processed ${result.processed}/${result.total} value(s)`);
+	} else if (result.processed === result.total) {
+		vscode.window.showInformationMessage(`Processed ${result.processed}/${result.total} value(s)`);
+	} else {
+		vscode.window.showWarningMessage(`Processed ${result.processed}/${result.total} value(s) - some failed`);
+	}
 }
 
 function logError(error: any, document: vscode.TextDocument, position: vscode.Position) {
