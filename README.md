@@ -13,7 +13,12 @@ A VS Code extension for encrypting and decrypting configuration values using Spr
     - [Encrypting Values](#encrypting-values)
   - [Commands](#commands)
   - [Settings](#settings)
+    - [Server Configuration](#server-configuration)
+    - [Server Selection Rules](#server-selection-rules)
+    - [Placeholder Types](#placeholder-types)
+    - [Settings Reference](#settings-reference)
   - [Requirements](#requirements)
+  - [Privacy](#privacy)
   - [Contributing](#contributing)
   - [Changelog](#changelog)
 
@@ -24,23 +29,22 @@ A VS Code extension for encrypting and decrypting configuration values using Spr
 - **Progress tracking**: Real-time status bar progress indicator during operations
 - **Visual feedback**: Text highlighting shows what's being processed with dual decorations for decryption
 - **Cancellation support**: Press ESC to cancel ongoing operations at any time
-- **Smart server selection**: Automatically selects the appropriate config server based on file path and Git branch
+- **Smart server selection**: Configurable server determination using pattern matching and hint-based substitutions
 - **Server management**: Pin/unpin servers, manual server selection with status bar integration
-- **Multi-environment support**: Pre-configured servers for NG and APG environments (dev, qa, stage, prod)
-- **Regional support**: Automatic US region detection based on Git branch naming
+- **Flexible configuration**: Define custom server selection rules with regex patterns and placeholders
+- **Git integration**: Automatic branch detection for region-specific server selection
 - **Batch processing**: Process multiple selections or entire documents at once
 - **Smart selection**: Works with selected text or entire document
 - **Keyboard shortcuts**: Quick access to all commands via customizable key bindings
-- **Configurable quote wrapping**: Automatically wrap encrypted/decrypted values with single quotes (configurable)
 
 ## Usage
 
 ### Server Management
 
-The extension automatically selects the appropriate config server based on:
-- File path patterns (e.g., `gce-ng-config-store`, `gce-apg-config-store`)
-- Environment from filename (e.g., `application-dev.yml`)
-- Git branch ancestry and regional detection (checks if current branch is descendant of `develop` or `develop-US`)
+The extension automatically selects the appropriate config server using configurable rules that can match:
+- File path patterns with regex capture groups
+- Git branch information for regional server selection
+- Custom hint-based placeholders with substitution mappings
 
 The status bar shows the current server with icons:
 - 🔒 (lock): Server is pinned
@@ -76,28 +80,53 @@ The status bar shows the current server with icons:
 
 ## Settings
 
-**Quick Setup:** [Open Config Tool Settings](command:workbench.action.openSettings?%5B%22configTool%22%5D) to add or update config servers
+**Quick Setup:** [Open Config Tool Settings](command:workbench.action.openSettings?%5B%22configTool%22%5D) to configure servers and selection rules
 
-**Key Format:** `{configServerName}-{region}-{environment}`
-- `configServerName`: `ng` or `apg`
-- `region`: `us` (US only, omit for others)
-- `environment`: `dev`, `qa`, `stage`, `prod`
+### Server Configuration
 
-**Example Configuration:**
+**Basic Server Mapping:**
 ```json
 {
   "configTool.servers": {
-    "ng-qa": "https://ng.example-server/config-server",
-    "ng-us-stage": "https://ng-us.example-server/config-server",
-    "apg-dev": "https://apg.example-server/configserver"
-  },
-  "configTool.autoSelectServer": true
+    "ng-dev": "https://ng-config-server.dev.example.com/config-server",
+    "ng-us-stage": "https://ng-config-server-us.stage.example.com/config-server",
+    "apg-prod": "https://apg-config-server.prod.example.com/configserver"
+  }
 }
 ```
 
-**Settings:**
-- `configTool.servers`: Object mapping server keys to URLs
-- `configTool.autoSelectServer`: Automatically select config server based on file path and git branch
+### Server Selection Rules
+
+**Automatic Server Selection:**
+```json
+{
+  "configTool.serverSelectors": [
+  {
+    "pattern": "[/\\\\]gce-apg-config-store[/\\\\]([^/\\\\]+)[/\\\\]",
+    "serverKey": "apg-$1"
+  },
+  {
+    "pattern": "[/\\\\]gce-ng-config-store[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
+    "serverKey": "ng-{git:configBranch>develop-US}$1",
+    "substitutions": {
+      "git:configBranch.develop-US": "us-"
+    }
+  }
+]
+}
+```
+
+### Placeholder Types
+
+- **Regex Groups**: `$1`, `$2`, etc. - Captured from the pattern
+- **Direct Hints**: `{git:configBranch}` - Returns actual git branch name
+- **Substitution Hints**: `{git:configBranch>target}` - Maps branch to custom values
+
+### Settings Reference
+
+- `configTool.servers`: Server key to URL mappings
+- `configTool.autoSelectServer`: Enable automatic server selection using serverSelectors
+- `configTool.serverSelectors`: Array of selection rules with pattern matching and templating
 
 ## Requirements
 

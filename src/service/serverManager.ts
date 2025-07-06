@@ -1,17 +1,17 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
-import { getConfigBranch } from '../utils/git';
-import { outputChannel } from '../shared/outputChannel';
+import { AutoServerSelector } from './autoServerSelector';
 
 export class ServerManager {
 	private static instance: ServerManager;
 	private statusBarItem: vscode.StatusBarItem;
 	private currentServer: string | null = null;
 	private isPinned: boolean = false;
+	private autoServerSelector: AutoServerSelector;
 
 	private constructor() {
 		this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 		this.statusBarItem.command = 'config-tool.selectServer';
+		this.autoServerSelector = new AutoServerSelector();
 		this.updateStatusBar();
 		this.statusBarItem.show();
 		vscode.window.onDidChangeActiveTextEditor(() => this.updateStatusBar());
@@ -136,42 +136,10 @@ export class ServerManager {
 		this.statusBarItem.dispose();
 	}
 
-	private async determineRelevantServer(): Promise<string | null>{
-		const config = vscode.workspace.getConfiguration('configTool');
-		const servers = config.get('servers') as Record<string, string>;
+	private async determineRelevantServer(): Promise<string | null> {
 		const activeEditor = vscode.window.activeTextEditor;
-
 		if (!activeEditor) { return null; }
 
-		const filePath = activeEditor.document.fileName;
-		const storeMatch = filePath.match(/[/\\](gce-(apg|ng)-config-store)[/\\]/i);
-		const storeType = storeMatch?.[2];
-
-		let configServer: string | null = null;
-
-		if (storeType === 'apg') {
-			const apgMatch = filePath.match(/[/\\]gce-apg-config-store[/\\]([^/\\]+)[/\\][^/\\]+\.ya?ml$/i);
-			if (apgMatch) { configServer = `apg-${apgMatch[1]}`; }
-		} else if (storeType === 'ng') {
-			const ngMatch = filePath.match(/[/\\]gce-ng-config-store[/\\][^/\\]+[/\\][^/\\]+-(\w+)\.ya?ml$/i);
-			if (ngMatch) { 
-				try {
-					const region = await this.region(filePath);
-					configServer = `ng-${region}${ngMatch[1]}`;
-				} catch (error) {
-					outputChannel.appendLine(`Failed to determine region: ${error}`);
-					outputChannel.show();
-					configServer = null;
-				}
-			}
-		}
-
-		return (configServer && servers[configServer]) ? configServer : null;
-	}
-
-	private async region(filePath: string): Promise<string> {
-		const rootPath = path.dirname(path.dirname(filePath));
-		const configBranch = await getConfigBranch(rootPath);
-		return configBranch === 'develop-US' ? 'us-' : '';
+		return this.autoServerSelector.autoSelectServer(activeEditor.document.fileName);
 	}
 }
