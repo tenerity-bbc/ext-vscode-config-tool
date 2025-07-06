@@ -1,3 +1,22 @@
+# [1.2.0](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.1.2...v1.2.0) (2025-07-06)
+
+
+### Bug Fixes
+
+* enable debugging with esbuild by adding source maps and fixing output paths ([596d5ac](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/596d5ac449dde3af7c000af6106e4ca94cab7157))
+
+
+### Features
+
+* add activation notification ([6b77bc3](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/6b77bc3430d9adc8e2e356b7017e77fc5a0a07ff))
+* add error categorization and improve notifications ([7323881](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/7323881502c48b9ef2426763544f8a6cfb1d07bb))
+* adjust selections to cover replaced values after operations ([f378d78](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/f378d7800899a2f7331caaee7bc4fd312ee8b6da))
+* enhance package.json configuration and validation ([1dc59ad](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/1dc59ad12e9be77074c091ec3385c85d23eea7c9))
+* enhance processing notifications with success indicators and counts ([aeea901](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/aeea9016972af8184abad2f2ba2ac057f369b2d3))
+* enhance server selection with pin/unpin indicators ([cbfe7aa](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/cbfe7aa040c5986711c13851625b50ca30095ff4))
+* externalize server selection logic to configurable rules ([5a52b13](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/5a52b139565130f26b03b319519940dc8e6a1cf0))
+* improve context menu UX with enablement conditions ([46fdecc](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/46fdecc450a81b51ef8bc544c7d9ba7883ede64b))
+
 ## [1.1.2](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.1.1...v1.1.2) (2025-07-04)
 
 
