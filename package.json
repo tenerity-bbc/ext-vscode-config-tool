@@ -128,24 +128,31 @@
         "configTool.autoSelectServer": {
           "type": "boolean",
           "default": true,
-          "description": "Enable automatic server selection using serverSelectors rules"
+          "description": "Enable automatic server selection using serverSelectors rules (requires serverSelectors to be configured)"
         },
         "configTool.serverSelectors": {
           "type": "array",
           "default": [
             {
+              "name": "APG Config Store",
               "pattern": "[/\\\\]gce-apg-config-store[/\\\\]([^/\\\\]+)[/\\\\]",
               "serverKey": "apg-$1"
             },
             {
+              "name": "NG Config Store with Regional Support",
               "pattern": "[/\\\\]gce-ng-config-store[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
               "serverKey": "ng-{git:ancestorRegion[develop=,develop-US=us-]}$1"
             }
           ],
-          "description": "Server selector rules with pattern matching, templating, and hint-based substitutions",
+          "description": "Server selector rules with pattern matching and inline ancestor region mapping (required when autoSelectServer is true)",
+          "minItems": 1,
           "items": {
             "type": "object",
             "properties": {
+              "name": {
+                "type": "string",
+                "description": "Human-readable name for this rule (optional, for documentation and debugging)"
+              },
               "pattern": {
                 "type": "string",
                 "description": "Regex pattern to match file paths"
@@ -153,9 +160,10 @@
               "serverKey": {
                 "type": "string",
                 "description": "Server key template with $1, $2 (regex groups) and {git:ancestorRegion[branch=value]} placeholders"
-              },
-
-            }
+              }
+            },
+            "required": ["pattern", "serverKey"],
+            "additionalProperties": false
           }
         }
       }

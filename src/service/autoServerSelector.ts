@@ -60,6 +60,12 @@ export class AutoServerSelector {
 		const config = vscode.workspace.getConfiguration('configTool');
 		const servers = config.get('servers') as Record<string, string> || {};
 		const rules = config.get('serverSelectors') as ServerRule[] || [];
+		const autoSelect = config.get('autoSelectServer', true);
+
+		if (autoSelect && rules.length === 0) {
+			vscode.window.showWarningMessage('Config Tool: autoSelectServer is enabled but no serverSelectors are configured');
+			return null;
+		}
 
 		for (const rule of rules) {
 			const serverKey = await this.processor.process(rule, filePath);

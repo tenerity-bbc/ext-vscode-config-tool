@@ -101,14 +101,16 @@ The status bar shows the current server with icons:
 ```json
 {
   "configTool.serverSelectors": [
-  {
-    "pattern": "[/\\\\]gce-apg-config-store[/\\\\]([^/\\\\]+)[/\\\\]",
-    "serverKey": "apg-$1"
-  },
-  {
-    "pattern": "[/\\\\]gce-ng-config-store[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
-    "serverKey": "ng-{git:ancestorRegion[develop=,develop-US=us-]}$1"
-  }
+    {
+      "name": "APG Config Store",
+      "pattern": "[/\\\\]gce-apg-config-store[/\\\\]([^/\\\\]+)[/\\\\]",
+      "serverKey": "apg-$1"
+    },
+    {
+      "name": "NG Config Store with Regional Support",
+      "pattern": "[/\\\\]gce-ng-config-store[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
+      "serverKey": "ng-{git:ancestorRegion[develop=,develop-US=us-]}$1"
+    }
 ]
 }
 ```
