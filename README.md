@@ -107,10 +107,7 @@ The status bar shows the current server with icons:
   },
   {
     "pattern": "[/\\\\]gce-ng-config-store[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
-    "serverKey": "ng-{git:configBranch>develop-US}$1",
-    "substitutions": {
-      "git:configBranch.develop-US": "us-"
-    }
+    "serverKey": "ng-{git:ancestorRegion[develop=,develop-US=us-]}$1"
   }
 ]
 }
@@ -119,8 +116,7 @@ The status bar shows the current server with icons:
 ### Placeholder Types
 
 - **Regex Groups**: `$1`, `$2`, etc. - Captured from the pattern
-- **Direct Hints**: `{git:configBranch}` - Returns actual git branch name
-- **Substitution Hints**: `{git:configBranch>target}` - Maps branch to custom values
+- **Inline Mapping**: `{git:ancestorRegion[develop=,develop-US=us-]}` - Maps ancestor branch to region prefix
 
 ### Settings Reference
 

@@ -1,32 +1,23 @@
 import * as fs from 'fs';
 
-const DEVELOP = 'develop';
-const DEVELOP_US = 'develop-US';
 const MAX_DEPTH = 10;
 
-export async function getConfigBranch(workspacePath: string): Promise<string> {
+export async function identifyAncestor(workspacePath: string, possibleAncestors: string[]): Promise<string> {
     const git = await import('isomorphic-git');
     const currentBranch = await git.currentBranch({ fs, dir: workspacePath });
 
     if (!currentBranch) { throw new Error('Unable to determine current git branch'); }
-    if (currentBranch === DEVELOP || currentBranch === DEVELOP_US) { return currentBranch; }
+    if (possibleAncestors.includes(currentBranch)) { return currentBranch; }
 
-    let maxDepthErrors: string[] = [];
-
-    const isDevelopDescendant = await isDescendantOf(workspacePath, currentBranch, DEVELOP, maxDepthErrors);
-    if (isDevelopDescendant) { return DEVELOP; }
-
-    const isDevelopUSDescendant = await isDescendantOf(workspacePath, currentBranch, DEVELOP_US, maxDepthErrors);
-    if (isDevelopUSDescendant) { return DEVELOP_US; }
-
-    if (maxDepthErrors.length > 0) {
-        throw new Error(`Could not reach ancestor branch '${DEVELOP}' or '${DEVELOP_US}' with maximum depth ${MAX_DEPTH} from branch '${currentBranch}`);
+    for (const ancestor of possibleAncestors) {
+        const isDescendant = await isDescendantOf(workspacePath, currentBranch, ancestor);
+        if (isDescendant) { return ancestor; }
     }
 
-    throw new Error(`Unable to determine config branch from current branch: ${currentBranch}`);
+    throw new Error(`No ancestor found from current branch: ${currentBranch} (searched depth: ${MAX_DEPTH})`);
 }
 
-async function isDescendantOf(dir: string, branch: string, parentBranch: string, maxDepthErrors: string[]): Promise<boolean> {
+async function isDescendantOf(dir: string, branch: string, parentBranch: string): Promise<boolean> {
     const git = await import('isomorphic-git');
     const branchOid = await git.resolveRef({ fs, dir, ref: branch });
     const parentOid = await git.resolveRef({ fs, dir, ref: parentBranch });
@@ -35,7 +26,6 @@ async function isDescendantOf(dir: string, branch: string, parentBranch: string,
         return await git.isDescendent({ fs, dir, oid: branchOid, ancestor: parentOid, depth: MAX_DEPTH});
     } catch (error: any) {
         if (error.code === 'MaxDepthError') {
-            maxDepthErrors.push(parentBranch);
             return false;
         } else { throw error; }
     }

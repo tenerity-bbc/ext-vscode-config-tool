@@ -139,10 +139,7 @@
             },
             {
               "pattern": "[/\\\\]gce-ng-config-store[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
-              "serverKey": "ng-{git:configBranch>develop-US}$1",
-              "substitutions": {
-                "git:configBranch.develop-US": "us-"
-              }
+              "serverKey": "ng-{git:ancestorRegion[develop=,develop-US=us-]}$1"
             }
           ],
           "description": "Server selector rules with pattern matching, templating, and hint-based substitutions",
@@ -155,12 +152,9 @@
               },
               "serverKey": {
                 "type": "string",
-                "description": "Server key template with $1, $2 (regex groups) and {hint-source:data-point>target} placeholders"
+                "description": "Server key template with $1, $2 (regex groups) and {git:ancestorRegion[branch=value]} placeholders"
               },
-              "substitutions": {
-                "type": "object",
-                "description": "Hint-based substitution mappings (e.g., 'git:configBranch.develop-US': 'us-')"
-              }
+
             }
           }
         }

@@ -1,11 +1,10 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { getConfigBranch } from '../utils/git';
+import { identifyAncestor } from '../utils/git';
 
 export interface ServerRule {
 	pattern: string;
 	serverKey: string;
-	substitutions?: Record<string, string>;
 }
 
 class RuleProcessor {
@@ -25,50 +24,32 @@ class RuleProcessor {
 		let placeholderMatch;
 		while ((placeholderMatch = placeholderRegex.exec(serverKey)) !== null) {
 			const placeholder = placeholderMatch[1];
-			const value = await this.resolvePlaceholder(placeholder, rule.substitutions, filePath);
-			if (value !== null) {
+			try {
+				const value = await this.resolvePlaceholder(placeholder, filePath);
 				serverKey = serverKey.replace(placeholderMatch[0], value);
+			} catch {
+				// Skip unsupported placeholders
 			}
+
 		}
 
 		return serverKey;
 	}
 
-	private async resolvePlaceholder(placeholder: string, substitutions: Record<string, string> | undefined, filePath: string): Promise<string | null> {
-		// Two-step resolution: {hint-source:data-point}>target
-		if (placeholder.includes('>')) {
-			const [hintSpec, _] = placeholder.split('>');
+	private async resolvePlaceholder(placeholder: string, filePath: string): Promise<string> {
+		const [hintSource, dataPoint] = placeholder.split(':');
 
-			// Step 1: Resolve hint to get actual value
-			const actualValue = await this.resolveHint(hintSpec, filePath);
-			if (actualValue === null) { return ''; }
-
-			// Step 2: Apply substitution mapping
-			const substitutionKey = `${hintSpec}.${actualValue}`;
-			return substitutions?.[substitutionKey] || '';
+		if (hintSource === 'git' && dataPoint?.includes('ancestorRegion[')) {
+			const mappings = Object.fromEntries(
+				dataPoint.substring(dataPoint.indexOf('[') + 1, dataPoint.indexOf(']'))
+					.split(',').map(m => m.split('=').map(s => s.trim()))
+			);
+			const gitRoot = path.dirname(path.dirname(filePath));
+			const ancestor = await identifyAncestor(gitRoot, Object.keys(mappings));
+			return mappings[ancestor] || '';
 		}
 
-		// Direct hint resolution: {hint-source:data-point}
-		if (placeholder.includes(':')) {
-			return await this.resolveHint(placeholder, filePath) || '';
-		}
-
-		return substitutions?.[placeholder] || '';
-	}
-
-	private async resolveHint(hintSpec: string, filePath: string): Promise<string | null> {
-		const [hintSource, dataPoint] = hintSpec.split(':');
-
-		if (hintSource === 'git' && dataPoint === 'configBranch') {
-			try {
-				const rootPath = path.dirname(path.dirname(filePath));
-				return await getConfigBranch(rootPath);
-			} catch {
-				return null;
-			}
-		}
-
-		return null;
+		throw new Error(`Unsupported placeholder: ${placeholder}`);
 	}
 }
 
