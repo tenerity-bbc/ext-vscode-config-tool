@@ -13,8 +13,6 @@ A VS Code extension for encrypting and decrypting configuration values using Spr
     - [Encrypting Values](#encrypting-values)
   - [Commands](#commands)
   - [Settings](#settings)
-    - [Key Format Rules:](#key-format-rules)
-    - [Examples:](#examples)
   - [Requirements](#requirements)
   - [Contributing](#contributing)
   - [Changelog](#changelog)
@@ -33,6 +31,7 @@ A VS Code extension for encrypting and decrypting configuration values using Spr
 - **Batch processing**: Process multiple selections or entire documents at once
 - **Smart selection**: Works with selected text or entire document
 - **Keyboard shortcuts**: Quick access to all commands via customizable key bindings
+- **Configurable quote wrapping**: Automatically wrap encrypted/decrypted values with single quotes (configurable)
 
 ## Usage
 
@@ -92,13 +91,13 @@ The status bar shows the current server with icons:
     "ng-us-stage": "https://ng-us.example-server/config-server",
     "apg-dev": "https://apg.example-server/configserver"
   },
-  "configTool.enableAutoSelection": true
+  "configTool.autoSelectServer": true
 }
 ```
 
 **Settings:**
 - `configTool.servers`: Object mapping server keys to URLs
-- `configTool.enableAutoSelection`: Enable/disable automatic server selection (default: true)
+- `configTool.autoSelectServer`: Automatically select config server based on file path and git branch
 
 ## Requirements
 

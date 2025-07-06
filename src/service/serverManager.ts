@@ -88,7 +88,7 @@ export class ServerManager {
 		const config = vscode.workspace.getConfiguration('configTool');
 		const servers = config.get('servers') as Record<string, string> || {};
 		const serverKeys = Object.keys(servers);
-		const enableAutoSelection = config.get('enableAutoSelection', true);
+		const enableAutoSelection = config.get('autoSelectServer', true);
 
 		if (!this.isPinned) {
 			if (serverKeys.length === 1) {

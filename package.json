@@ -123,7 +123,7 @@
           },
           "description": "Config server URLs for all environments"
         },
-        "configTool.enableAutoSelection": {
+        "configTool.autoSelectServer": {
           "type": "boolean",
           "default": true,
           "description": "Enable automatic server selection based on file path and git branch"
