@@ -74,7 +74,7 @@ The status bar shows the current server with icons:
 
 ## Settings
 
-**Quick Setup:** [Open Config Tool Settings](command:workbench.action.openSettings?%5B%22configTool%22%5D) to configure servers and selection rules
+**Quick Setup:** Open Settings (`Ctrl+,`) and search for "Config Tool" to configure servers and selection rules
 
 ### Server Configuration
 

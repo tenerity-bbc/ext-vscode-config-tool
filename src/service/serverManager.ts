@@ -88,13 +88,13 @@ export class ServerManager {
 		const config = vscode.workspace.getConfiguration('configTool');
 		const servers = config.get('servers') as Record<string, string> || {};
 		const serverKeys = Object.keys(servers);
-		const enableAutoSelection = config.get('autoSelectServer', true);
+		const autoSelectServer = config.get('autoSelectServer', true);
 
 		if (!this.isPinned) {
 			if (serverKeys.length === 1) {
 				// Single server - use it directly
 				this.currentServer = serverKeys[0];
-			} else if (enableAutoSelection) {
+			} else if (autoSelectServer) {
 				// Multiple servers with auto-selection enabled
 				this.currentServer = await this.determineRelevantServer();
 			} else {
