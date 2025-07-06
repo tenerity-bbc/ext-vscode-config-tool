@@ -104,6 +104,10 @@ The status bar shows the current server with icons:
 - VS Code 1.54.0 or higher
 - Network access to the Spring Boot Config Server
 
+## Privacy
+
+This extension respects your privacy and operates entirely locally. See [PRIVACY.md](PRIVACY.md) for detailed information about data handling and privacy practices.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and contribution guidelines.
