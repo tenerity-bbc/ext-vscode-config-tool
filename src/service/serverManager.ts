@@ -1,13 +1,12 @@
 import * as vscode from 'vscode';
 import { AutoServerSelector } from './autoServerSelector';
-import { outputChannel } from '../shared/outputChannel';
 
 export class ServerManager {
 	private static instance: ServerManager;
 	private statusBarItem: vscode.StatusBarItem;
 	private currentServer: string | null = null;
 	private isPinned: boolean = false;
-	private autoSelectionFailed: boolean = false;
+	private autoSelectionError: string | null = null;
 	private autoServerSelector: AutoServerSelector;
 
 	private constructor() {
@@ -61,7 +60,7 @@ export class ServerManager {
 		const items = Object.keys(servers).map(key => {
 			let detail = '';
 			if (key === this.currentServer && this.isPinned) {
-				detail = '$(lock-small) Pinned - click to unpin';
+				detail = '$(lock-small) Pinned - Click to unpin';
 			} else if (key === this.currentServer && !this.isPinned) {
 				detail = '$(sparkle) Auto-selected';
 			}
@@ -93,7 +92,7 @@ export class ServerManager {
 		const autoSelectServer = config.get('autoSelectServer', true);
 
 		if (!this.isPinned) {
-			this.autoSelectionFailed = false;
+			this.autoSelectionError = null;
 			if (serverKeys.length === 1) {
 				// Single server - use it directly
 				this.currentServer = serverKeys[0];
@@ -101,13 +100,14 @@ export class ServerManager {
 				// Multiple servers with auto-selection enabled
 				try {
 					this.currentServer = await this.determineRelevantServer();
-				} catch {
+				} catch (error) {
 					this.currentServer = null;
-					this.autoSelectionFailed = true;
+					this.autoSelectionError = error instanceof Error ? error.message : 'Unknown error';
 				}
 			} else {
 				// Multiple servers with auto-selection disabled
 				this.currentServer = null;
+				this.autoSelectionError = 'Auto-selection disabled';
 			}
 		}
 
@@ -133,8 +133,7 @@ export class ServerManager {
 		} else {
 			serverKey = 'Not selected';
 			pinIcon = '$(warning)';
-			const status = !autoSelectServer ? 'disabled' : this.autoSelectionFailed ? 'failed' : null;
-			tooltip = `No config server selected${status ? ` (auto-selection ${status})` : ''}`;
+			tooltip = `No config server selected${this.autoSelectionError ? ` - ${this.autoSelectionError}` : ''}`;
 		}
 
 		this.statusBarItem.text = `${pinIcon} ${serverKey}`;
