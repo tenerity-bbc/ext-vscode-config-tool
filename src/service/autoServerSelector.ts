@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { identifyAncestor } from '../utils/git';
 
+const LOG_PREFIX = '[Config Tool]';
+
 export interface ServerRule {
 	pattern: string;
 	serverKey: string;
@@ -55,6 +57,7 @@ export class AutoServerSelector {
 		const config = vscode.workspace.getConfiguration('configTool');
 		const servers = config.get('servers') as Record<string, string> || {};
 		const rules = config.get('serverSelectors') as ServerRule[] || [];
+		const debugRules = vscode.env.logLevel <= vscode.LogLevel.Debug;
 
 		if (rules.length === 0) {
 			throw new Error('No serverSelectors are configured');
@@ -66,8 +69,12 @@ export class AutoServerSelector {
 				if (servers[serverKey]) {
 					return serverKey;
 				}
-			} catch {
-				// Rule didn't match, continue to next rule
+			} catch (error) {
+				if (debugRules) {
+					const message = error instanceof Error ? error.message : 'Unknown error';
+					const logMessage = `Server selection: Rule failed - pattern: '${rule.pattern}', error: ${message}`;
+				console.log(`${LOG_PREFIX} ${logMessage}`);
+				}
 			}
 		}
 
