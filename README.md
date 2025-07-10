@@ -40,11 +40,11 @@ The extension automatically selects the appropriate config server using configur
 - Git branch information for regional server selection
 - Custom hint-based placeholders with substitution mappings
 
-The status bar shows the current server with icons:
-- 🔒 (lock): Server is pinned
-- ✅ (check): Only one server configured (auto-selected)
-- ✨ (sparkle): Server auto-selected from multiple options
-- ⚠️ (warning): No server selected (auto-selection disabled)
+The status bar shows the current server with icons and detailed tooltips:
+- 🔒 (lock): Server is pinned - "Current config server: [name] (pinned)"
+- ✅ (check): Only one server configured - "Current config server: [name] (only server configured)"
+- ✨ (sparkle): Server auto-selected - "Current config server: [name] (auto-selected)"
+- ⚠️ (warning): No server selected - "No config server selected - [reason]"
 
 ### Decrypting Values
 
