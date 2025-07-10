@@ -8,9 +8,9 @@ export interface ServerRule {
 }
 
 class RuleProcessor {
-	async process(rule: ServerRule, filePath: string): Promise<string | null> {
+	async process(rule: ServerRule, filePath: string): Promise<string> {
 		const match = filePath.match(new RegExp(rule.pattern, 'i'));
-		if (!match) { return null; }
+		if (!match) { throw new Error(`file path does not match pattern '${rule.pattern}'`); }
 
 		let serverKey = rule.serverKey;
 
@@ -24,13 +24,8 @@ class RuleProcessor {
 		let placeholderMatch;
 		while ((placeholderMatch = placeholderRegex.exec(serverKey)) !== null) {
 			const placeholder = placeholderMatch[1];
-			try {
-				const value = await this.resolvePlaceholder(placeholder, filePath);
-				serverKey = serverKey.replace(placeholderMatch[0], value);
-			} catch {
-				// Skip unsupported placeholders
-			}
-
+			const value = await this.resolvePlaceholder(placeholder, filePath);
+			serverKey = serverKey.replace(placeholderMatch[0], value);
 		}
 
 		return serverKey;
@@ -56,24 +51,26 @@ class RuleProcessor {
 export class AutoServerSelector {
 	private processor = new RuleProcessor();
 
-	public async autoSelectServer(filePath: string): Promise<string | null> {
+	public async autoSelectServer(filePath: string): Promise<string> {
 		const config = vscode.workspace.getConfiguration('configTool');
 		const servers = config.get('servers') as Record<string, string> || {};
 		const rules = config.get('serverSelectors') as ServerRule[] || [];
-		const autoSelect = config.get('autoSelectServer', true);
 
-		if (autoSelect && rules.length === 0) {
-			vscode.window.showWarningMessage('Config Tool: autoSelectServer is enabled but no serverSelectors are configured');
-			return null;
+		if (rules.length === 0) {
+			throw new Error('No serverSelectors are configured');
 		}
 
 		for (const rule of rules) {
-			const serverKey = await this.processor.process(rule, filePath);
-			if (serverKey && servers[serverKey]) {
-				return serverKey;
+			try {
+				const serverKey = await this.processor.process(rule, filePath);
+				if (servers[serverKey]) {
+					return serverKey;
+				}
+			} catch {
+				// Rule didn't match, continue to next rule
 			}
 		}
 
-		return null;
+		throw new Error('No server selector rules matched the file path');
 	}
 }

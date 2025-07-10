@@ -1,11 +1,13 @@
 import * as vscode from 'vscode';
 import { AutoServerSelector } from './autoServerSelector';
+import { outputChannel } from '../shared/outputChannel';
 
 export class ServerManager {
 	private static instance: ServerManager;
 	private statusBarItem: vscode.StatusBarItem;
 	private currentServer: string | null = null;
 	private isPinned: boolean = false;
+	private autoSelectionFailed: boolean = false;
 	private autoServerSelector: AutoServerSelector;
 
 	private constructor() {
@@ -91,12 +93,18 @@ export class ServerManager {
 		const autoSelectServer = config.get('autoSelectServer', true);
 
 		if (!this.isPinned) {
+			this.autoSelectionFailed = false;
 			if (serverKeys.length === 1) {
 				// Single server - use it directly
 				this.currentServer = serverKeys[0];
 			} else if (autoSelectServer) {
 				// Multiple servers with auto-selection enabled
-				this.currentServer = await this.determineRelevantServer();
+				try {
+					this.currentServer = await this.determineRelevantServer();
+				} catch {
+					this.currentServer = null;
+					this.autoSelectionFailed = true;
+				}
 			} else {
 				// Multiple servers with auto-selection disabled
 				this.currentServer = null;
@@ -111,13 +119,13 @@ export class ServerManager {
 		let tooltip: string;
 
 		if (this.isPinned) {
-			serverKey = this.currentServer || 'Unknown';
+			serverKey = this.currentServer || 'Impossible';
 			pinIcon = '$(lock-small)';
-			tooltip = `Config server pinned to: ${serverKey}`;
+			tooltip = `Current config server: ${serverKey} (pinned)`;
 		} else if (serverKeys.length === 1) {
-			serverKey = this.currentServer || 'Unknown';
+			serverKey = this.currentServer || 'Impossible';
 			pinIcon = '$(check)';
-			tooltip = `Config server: ${serverKey} (only server configured)`;
+			tooltip = `Current config server: ${serverKey} (only server configured)`;
 		} else if (this.currentServer) {
 			serverKey = this.currentServer;
 			pinIcon = '$(sparkle)';
@@ -125,7 +133,8 @@ export class ServerManager {
 		} else {
 			serverKey = 'Not selected';
 			pinIcon = '$(warning)';
-			tooltip = 'No config server selected - auto-selection disabled';
+			const status = !autoSelectServer ? 'disabled' : this.autoSelectionFailed ? 'failed' : null;
+			tooltip = `No config server selected${status ? ` (auto-selection ${status})` : ''}`;
 		}
 
 		this.statusBarItem.text = `${pinIcon} ${serverKey}`;
@@ -136,9 +145,9 @@ export class ServerManager {
 		this.statusBarItem.dispose();
 	}
 
-	private async determineRelevantServer(): Promise<string | null> {
+	private async determineRelevantServer(): Promise<string> {
 		const activeEditor = vscode.window.activeTextEditor;
-		if (!activeEditor) { return null; }
+		if (!activeEditor) { throw new Error('No active editor available'); }
 
 		return this.autoServerSelector.autoSelectServer(activeEditor.document.fileName);
 	}
