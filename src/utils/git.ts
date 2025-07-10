@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { outputChannel } from '../shared/outputChannel';
 
 const MAX_DEPTH = 10;
 
@@ -6,15 +7,24 @@ export async function identifyAncestor(workspacePath: string, possibleAncestors:
     const git = await import('isomorphic-git');
     const currentBranch = await git.currentBranch({ fs, dir: workspacePath });
 
+    outputChannel.appendLine(`Git: Current branch '${currentBranch}', searching ancestors: [${possibleAncestors.join(', ')}]`);
     if (!currentBranch) { throw new Error('Unable to determine current git branch'); }
-    if (possibleAncestors.includes(currentBranch)) { return currentBranch; }
+    if (possibleAncestors.includes(currentBranch)) { 
+        outputChannel.appendLine(`Git: Current branch '${currentBranch}' matches ancestor`);
+        return currentBranch; 
+    }
 
     for (const ancestor of possibleAncestors) {
         const isDescendant = await isDescendantOf(workspacePath, currentBranch, ancestor);
-        if (isDescendant) { return ancestor; }
+        if (isDescendant) { 
+            outputChannel.appendLine(`Git: Found ancestor '${ancestor}' for branch '${currentBranch}'`);
+            return ancestor; 
+        }
     }
 
-    throw new Error(`No ancestor found from current branch: ${currentBranch} (searched depth: ${MAX_DEPTH})`);
+    const error = `No ancestor found from current branch: ${currentBranch} (searched depth: ${MAX_DEPTH})`;
+    outputChannel.appendLine(`Git: ${error}`);
+    throw new Error(error);
 }
 
 async function isDescendantOf(dir: string, branch: string, parentBranch: string): Promise<boolean> {
