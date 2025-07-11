@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.2.0...v1.3.0) (2025-07-11)
+
+
+### Bug Fixes
+
+* correct debug logging in server selector rule processing ([2fc0c24](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/2fc0c24c6253b81b2c7b4514037cdcf8270bf456))
+
+
+### Features
+
+* add comprehensive logging for debugging and monitoring ([331f8c3](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/331f8c301550878d4cf03b0d1401d898824db80c))
+
 # [1.2.0](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.1.2...v1.2.0) (2025-07-06)
 
 
