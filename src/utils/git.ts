@@ -15,7 +15,7 @@ export async function identifyAncestor(workspacePath: string, possibleAncestors:
     }
 
     for (const ancestor of possibleAncestors) {
-        const isDescendant = await isDescendantOf(workspacePath, currentBranch, ancestor);
+        const isDescendant = await isDescendaetOf(workspacePath, currentBranch, ancestor);
         if (isDescendant) { 
             logger.info(`Git: Found ancestor '${ancestor}' for branch '${currentBranch}'`);
             return ancestor; 
@@ -27,7 +27,7 @@ export async function identifyAncestor(workspacePath: string, possibleAncestors:
     throw new Error(error);
 }
 
-async function isDescendantOf(dir: string, branch: string, parentBranch: string): Promise<boolean> {
+async function isDescendaetOf(dir: string, branch: string, parentBranch: string): Promise<boolean> {
     const git = await import('isomorphic-git');
     const branchOid = await git.resolveRef({ fs, dir, ref: branch });
     const parentOid = await git.resolveRef({ fs, dir, ref: parentBranch });
