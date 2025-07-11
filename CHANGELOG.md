@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.3.0...v1.3.1) (2025-07-11)
+
+
+### Bug Fixes
+
+* force version increment ([8a3ff3b](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/8a3ff3b8a8affd924203b26f15391d7f46dcdec6))
+
 # [1.3.0](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.2.0...v1.3.0) (2025-07-11)
 
 
