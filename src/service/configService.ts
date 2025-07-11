@@ -1,7 +1,7 @@
 import * as https from 'https';
 import * as vscode from 'vscode';
 import { ServerManager } from './serverManager';
-import { outputChannel } from '../shared/outputChannel';
+import { logger } from '../shared/logger';
 
 export class ConfigServiceError extends Error {
 	constructor(message: string, public isFatal: boolean = false) {
@@ -34,17 +34,17 @@ function makeRequest(endpoint: string, data: string): Promise<string> {
 		};
 
 		const url = `${getConfigServerUrl()}${endpoint}`;
-		outputChannel.appendLine(`HTTP ${options.method} ${url}`);
+		logger.info(`HTTP ${options.method} ${url}`);
 		const req = https.request(url, options, (res) => {
 			let responseData = '';
 			res.on('data', chunk => responseData += chunk);
 			res.on('end', () => {
 				const statusCode = res.statusCode || 0;
 				if (statusCode === 200) {
-					outputChannel.appendLine(`HTTP ${statusCode} - Success`);
+					logger.info(`HTTP ${statusCode} - Success`);
 					resolve(responseData);
 				} else {
-					outputChannel.appendLine(`HTTP ${statusCode} - Error: ${responseData}`);
+					logger.error(`HTTP ${statusCode} - Error: ${responseData}`);
 					const isFatal = statusCode === 401 || statusCode === 403 || statusCode >= 500;
 					try {
 						const error = JSON.parse(responseData);

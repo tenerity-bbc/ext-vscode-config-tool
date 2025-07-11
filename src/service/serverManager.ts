@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { AutoServerSelector } from './autoServerSelector';
-import { outputChannel } from '../shared/outputChannel';
+import { logger } from '../shared/logger';
 
 export class ServerManager {
 	private static instance: ServerManager;
@@ -33,7 +33,7 @@ export class ServerManager {
 		return this.currentServer;
 	}
 	public setServer(serverKey: string, pin: boolean = true): void {
-		outputChannel.appendLine(`Server ${pin ? 'pinned' : 'selected'}: ${serverKey}`);
+		logger.info(`Server ${pin ? 'pinned' : 'selected'}: ${serverKey}`);
 		this.currentServer = serverKey;
 		this.isPinned = pin;
 		this.updateStatusBar();
@@ -41,13 +41,13 @@ export class ServerManager {
 
 	public pinCurrentServer(): void {
 		this.getCurrentServer();
-		outputChannel.appendLine(`Server pinned: ${this.currentServer}`);
+		logger.info(`Server pinned: ${this.currentServer}`);
 		this.isPinned = true;
 		this.updateStatusBar();
 	}
 
 	public unpinServer(): void {
-		outputChannel.appendLine('Server unpinned - auto-selection enabled');
+		logger.info('Server unpinned - auto-selection enabled');
 		this.isPinned = false;
 		this.updateStatusBar();
 	}

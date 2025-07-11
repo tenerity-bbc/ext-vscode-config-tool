@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { identifyAncestor } from '../utils/git';
-import { outputChannel } from '../shared/outputChannel';
+import { logger } from '../shared/logger';
 
 export interface ServerRule {
 	pattern: string;
@@ -71,7 +71,7 @@ export class AutoServerSelector {
 			} catch (error) {
 				if (debugRules) {
 					const message = error instanceof Error ? error.message : 'Unknown error';
-					outputChannel.appendLine(`Server selection: Rule failed - pattern: '${rule.pattern}', error: ${message}`);
+					logger.warn(`Server selection: Rule failed - pattern: '${rule.pattern}', error: ${message}`);
 				}
 			}
 		}

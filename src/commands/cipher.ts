@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { encrypt, decrypt, ConfigServiceError } from '../service/configService';
 import { ServerManager } from '../service/serverManager';
-import { outputChannel } from '../shared/outputChannel';
+import { logger } from '../shared/logger';
 
 type ProcessingResult = {
 	processed: number;
@@ -19,8 +19,12 @@ export function cancelCipherOperation() {
 }
 
 export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
+	logger.info(`Starting ${operation} operation...`);
 	const editor = vscode.window.activeTextEditor;
-	if (!editor || !ServerManager.getInstance().getCurrentServer()) { return; }
+	if (!editor || !ServerManager.getInstance().getCurrentServer()) { 
+		logger.error(`${operation} failed - no editor or server`);
+		return; 
+	}
 
 	// Save original view state
 	const originalVisibleRange = editor.visibleRanges[0];
@@ -44,6 +48,7 @@ export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
 			? await processEncryption(editor, statusBarItem, eligibleDecorationType, currentCancellationTokenSource.token) 
 			: await processDecryption(editor, statusBarItem, eligibleDecorationType, selectionDecorationType, currentCancellationTokenSource.token);
 		
+		logger.info(`${operation} completed: ${result.processed}/${result.total}`);
 		showOperationResult(result, currentCancellationTokenSource.token.isCancellationRequested);
 	} catch (error) {
 		if (!currentCancellationTokenSource.token.isCancellationRequested) {
@@ -204,6 +209,6 @@ function showOperationResult(result: ProcessingResult, wasCancelled: boolean) {
 
 function logError(error: any, document: vscode.TextDocument, position: vscode.Position) {
 	const lineNumber = position.line + 1;
-	outputChannel.appendLine(`${error} - ${document.fileName}:${lineNumber}:${position.character + 1}`);
-	outputChannel.show();
+	logger.error(`${error} - ${document.fileName}:${lineNumber}:${position.character + 1}`);
+	logger.show();
 }
