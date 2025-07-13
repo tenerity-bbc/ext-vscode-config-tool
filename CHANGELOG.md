@@ -1,3 +1,19 @@
+# [1.4.0](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.3.1...v1.4.0) (2025-07-13)
+
+
+### Bug Fixes
+
+* improve git utilities and repository detection ([25ea8ef](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/25ea8ef8e73c7ec1776b712b800cb0b911460c82))
+
+
+### Features
+
+* centralize configuration access with effective config handling ([aacde2c](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/aacde2cfb3ed7339dd7168dc4fb7602739d78ea9))
+* **config:** add HTTP protocol support to configService ([0daa5aa](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/0daa5aab75be3d90647d113f05f70b17edf45dbb))
+* improve error messages and logs with helpful, engaging content ([5942aa5](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/5942aa56c4e747efd74650b48dad0268a53bc364))
+* **local-dev:** add complete local development environment ([e8a671c](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/e8a671cb3474966a36465317556dda53f641abe5))
+* streamline development workflow with auto-workspace loading ([695085c](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/695085c99b608708ae97939de19539c9be63e25a))
+
 ## [1.3.1](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.3.0...v1.3.1) (2025-07-11)
 
 
