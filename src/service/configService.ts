@@ -3,6 +3,7 @@ import * as http from 'http';
 import * as vscode from 'vscode';
 import { ServerManager } from './serverManager';
 import { logger } from '../shared/logger';
+import { getServers } from '../utils/config';
 
 export class ConfigServiceError extends Error {
 	constructor(message: string, public isFatal: boolean = false) {
@@ -12,8 +13,7 @@ export class ConfigServiceError extends Error {
 }
 
 function getConfigServerUrl(): string {
-	const config = vscode.workspace.getConfiguration('configTool');
-	const servers = config.get('servers') as Record<string, string>;
+	const servers = getServers();
 	const serverKey = ServerManager.getInstance().getCurrentServer();
 	if(!serverKey) {throw new Error('No server selected - pick one from the status bar! 🎯');}
 	return servers[serverKey];

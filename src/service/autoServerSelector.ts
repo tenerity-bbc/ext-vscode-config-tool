@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { identifyAncestor, findGitRoot } from '../utils/git';
 import { logger } from '../shared/logger';
+import { getServers, getServerSelectors } from '../utils/config';
 
 export interface ServerRule {
 	pattern: string;
@@ -52,9 +53,8 @@ export class AutoServerSelector {
 	private processor = new RuleProcessor();
 
 	public async autoSelectServer(filePath: string): Promise<string> {
-		const config = vscode.workspace.getConfiguration('configTool');
-		const servers = config.get('servers') as Record<string, string> || {};
-		const rules = config.get('serverSelectors') as ServerRule[] || [];
+		const servers = getServers();
+		const rules = getServerSelectors() as ServerRule[];
 		const debugRules = vscode.env.logLevel <= vscode.LogLevel.Debug;
 
 		if (rules.length === 0) {

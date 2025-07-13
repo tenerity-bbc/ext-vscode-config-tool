@@ -121,7 +121,6 @@
           "type": "array",
           "default": [],
           "description": "Server selector rules with pattern matching and inline ancestor region mapping (required when autoSelectServer is true)",
-          "minItems": 1,
           "items": {
             "type": "object",
             "properties": {

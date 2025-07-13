@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { AutoServerSelector } from './autoServerSelector';
 import { logger } from '../shared/logger';
+import { getServers, getServerSelectors, getAutoSelectServer } from '../utils/config';
 
 export class ServerManager {
 	private static instance: ServerManager;
@@ -17,6 +18,11 @@ export class ServerManager {
 		this.updateStatusBar();
 		this.statusBarItem.show();
 		vscode.window.onDidChangeActiveTextEditor(() => this.updateStatusBar());
+		vscode.workspace.onDidChangeConfiguration(e => {
+			if (e.affectsConfiguration('configTool')) {
+				this.updateStatusBar();
+			}
+		});
 	}
 
 	public static getInstance(): ServerManager {
@@ -53,53 +59,95 @@ export class ServerManager {
 	}
 
 	public async selectServer(): Promise<void> {
-		const config = vscode.workspace.getConfiguration('configTool');
-		const servers = config.get('servers') as Record<string, string> || {};
+		const servers = getServers();
+		const serverSelectors = getServerSelectors();
+		const autoSelectServer = getAutoSelectServer();
+		const serverKeys = Object.keys(servers);
+		const items: vscode.QuickPickItem[] = [];
 
-		if (Object.keys(servers).length === 0) {
-			vscode.window.showErrorMessage('Add servers in settings first 📝');
-			return;
+		// Add server options if any exist
+		if (serverKeys.length > 0) {
+			serverKeys.forEach(key => {
+				let detail = '';
+				if (key === this.currentServer && this.isPinned) {
+					detail = '$(lock-small) Pinned - Click to unpin';
+				} else if (key === this.currentServer && !this.isPinned) {
+					detail = '$(sparkle) Auto-selected';
+				}
+				items.push({
+					label: key,
+					description: servers[key],
+					detail,
+					picked: key === this.currentServer
+				});
+			});
 		}
 
-		const items = Object.keys(servers).map(key => {
-			let detail = '';
-			if (key === this.currentServer && this.isPinned) {
-				detail = '$(lock-small) Pinned - Click to unpin';
-			} else if (key === this.currentServer && !this.isPinned) {
-				detail = '$(sparkle) Auto-selected';
-			}
-			return {
-				label: key,
-				description: servers[key],
-				detail,
-				picked: key === this.currentServer
-			};
+		// Add configuration options
+		if (serverKeys.length === 0) {
+			items.push({
+				label: '$(gear) Add Servers',
+				description: 'Configure config server URLs',
+				detail: 'Required: Add at least one server to get started'
+			});
+		} else if (serverKeys.length > 1 && autoSelectServer && serverSelectors.length === 0) {
+			items.push({
+				label: '$(list-selection) Add Server Selectors',
+				description: 'Configure auto-selection rules',
+				detail: 'Recommended: Auto-select servers based on file paths'
+			});
+		}
+
+		// Always show settings option
+		if (items.length > 0) {
+			items.push({ label: '', kind: vscode.QuickPickItemKind.Separator });
+		}
+		items.push({
+			label: '$(settings-gear) Open Settings',
+			description: 'Configure all Config Tool settings'
 		});
 
 		const selected = await vscode.window.showQuickPick(items, {
-			placeHolder: 'Select config server'
+			placeHolder: serverKeys.length === 0 ? 'Setup Config Tool' : 'Select config server or configure settings'
 		});
 
 		if (selected) {
-			if (selected.label === this.currentServer && this.isPinned) {
-				this.unpinServer();
+			if (selected.label.includes('Add Servers')) {
+				vscode.commands.executeCommand('workbench.action.openSettings', 'configTool.servers');
+			} else if (selected.label.includes('Add Server Selectors')) {
+				vscode.commands.executeCommand('workbench.action.openSettings', 'configTool.serverSelectors');
+			} else if (selected.label.includes('Open Settings')) {
+				vscode.commands.executeCommand('workbench.action.openSettings', 'configTool');
 			} else {
-				this.setServer(selected.label);
+				// Regular server selection
+				if (selected.label === this.currentServer && this.isPinned) {
+					this.unpinServer();
+				} else {
+					this.setServer(selected.label);
+				}
 			}
 		}
 	}
 
 	private async updateStatusBar(): Promise<void> {
-		const config = vscode.workspace.getConfiguration('configTool');
-		const servers = config.get('servers') as Record<string, string> || {};
+		const servers = getServers();
 		const serverKeys = Object.keys(servers);
-		const autoSelectServer = config.get('autoSelectServer', true);
-
-		if (!this.isPinned) {
+		const serverSelectors = getServerSelectors();
+		const autoSelectServer = getAutoSelectServer();
+		// Handle configuration states
+		if (serverKeys.length === 0) {
+			// No servers configured
+			this.currentServer = null;
+			this.autoSelectionError = 'No servers configured';
+		} else if (!this.isPinned) {
 			this.autoSelectionError = null;
 			if (serverKeys.length === 1) {
 				// Single server - use it directly
 				this.currentServer = serverKeys[0];
+			} else if (autoSelectServer && serverSelectors.length === 0) {
+				// Multiple servers but no selectors
+				this.currentServer = null;
+				this.autoSelectionError = 'Server selectors needed';
 			} else if (autoSelectServer) {
 				// Multiple servers with auto-selection enabled
 				try {
@@ -122,14 +170,22 @@ export class ServerManager {
 		let pinIcon: string;
 		let tooltip: string;
 
-		if (this.isPinned) {
-			serverKey = this.currentServer || 'Impossible';
+		if (this.isPinned && this.currentServer) {
+			serverKey = this.currentServer;
 			pinIcon = '$(lock-small)';
 			tooltip = `Current config server: ${serverKey} (pinned)`;
+		} else if (serverKeys.length === 0) {
+			serverKey = 'Add servers';
+			pinIcon = '$(gear)';
+			tooltip = 'Click to add config servers in settings';
 		} else if (serverKeys.length === 1) {
-			serverKey = this.currentServer || 'Impossible';
+			serverKey = this.currentServer || 'Error';
 			pinIcon = '$(check)';
 			tooltip = `Current config server: ${serverKey} (only server configured)`;
+		} else if (autoSelectServer && serverSelectors.length === 0) {
+			serverKey = 'Add selectors';
+			pinIcon = '$(list-selection)';
+			tooltip = 'Click to add server selectors for auto-selection';
 		} else if (this.currentServer) {
 			serverKey = this.currentServer;
 			pinIcon = '$(sparkle)';
