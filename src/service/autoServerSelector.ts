@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
-import { identifyAncestor } from '../utils/git';
+import { identifyAncestor, findGitRoot } from '../utils/git';
 import { logger } from '../shared/logger';
 
 export interface ServerRule {
@@ -40,7 +39,7 @@ class RuleProcessor {
 				dataPoint.substring(dataPoint.indexOf('[') + 1, dataPoint.indexOf(']'))
 					.split(',').map(m => m.split('=').map(s => s.trim()))
 			);
-			const gitRoot = path.dirname(path.dirname(filePath));
+			const gitRoot = await findGitRoot(filePath);
 			const ancestor = await identifyAncestor(gitRoot, Object.keys(mappings));
 			return mappings[ancestor] || '';
 		}

@@ -1,7 +1,19 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { logger } from '../shared/logger';
 
 const MAX_DEPTH = 10;
+
+export async function findGitRoot(filePath: string): Promise<string> {
+	let currentDir = path.dirname(filePath);
+	while (currentDir !== path.dirname(currentDir)) {
+		if (fs.existsSync(path.join(currentDir, '.git'))) {
+			return currentDir;
+		}
+		currentDir = path.dirname(currentDir);
+	}
+	throw new Error('Git repository not found - are you in a git project? 🤔');
+}
 
 export async function identifyAncestor(workspacePath: string, possibleAncestors: string[]): Promise<string> {
     const git = await import('isomorphic-git');
@@ -15,7 +27,7 @@ export async function identifyAncestor(workspacePath: string, possibleAncestors:
     }
 
     for (const ancestor of possibleAncestors) {
-        const isDescendant = await isDescendaetOf(workspacePath, currentBranch, ancestor);
+        const isDescendant = await isDescendantOf(workspacePath, currentBranch, ancestor);
         if (isDescendant) { 
             logger.info(`🔍 Git: Eureka! Found ancestor '${ancestor}' for branch '${currentBranch}' - family tree complete!`);
             return ancestor; 
@@ -27,7 +39,7 @@ export async function identifyAncestor(workspacePath: string, possibleAncestors:
     throw new Error(error);
 }
 
-async function isDescendaetOf(dir: string, branch: string, parentBranch: string): Promise<boolean> {
+async function isDescendantOf(dir: string, branch: string, parentBranch: string): Promise<boolean> {
     const git = await import('isomorphic-git');
     const branchOid = await git.resolveRef({ fs, dir, ref: branch });
     const parentOid = await git.resolveRef({ fs, dir, ref: parentBranch });
