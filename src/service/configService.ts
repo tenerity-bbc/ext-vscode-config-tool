@@ -14,7 +14,7 @@ function getConfigServerUrl(): string {
 	const config = vscode.workspace.getConfiguration('configTool');
 	const servers = config.get('servers') as Record<string, string>;
 	const serverKey = ServerManager.getInstance().getCurrentServer();
-	if(!serverKey) {throw new Error('No server selected');}
+	if(!serverKey) {throw new Error('No server selected - pick one from the status bar! 🎯');}
 	return servers[serverKey];
 }
 
@@ -34,21 +34,21 @@ function makeRequest(endpoint: string, data: string): Promise<string> {
 		};
 
 		const url = `${getConfigServerUrl()}${endpoint}`;
-		logger.info(`HTTP ${options.method} ${url}`);
+		logger.info(`🌐 Making ${options.method} request to ${url} - crossing fingers for success!`);
 		const req = https.request(url, options, (res) => {
 			let responseData = '';
 			res.on('data', chunk => responseData += chunk);
 			res.on('end', () => {
 				const statusCode = res.statusCode || 0;
 				if (statusCode === 200) {
-					logger.info(`HTTP ${statusCode} - Success`);
+					logger.info(`✅ HTTP ${statusCode} - Server delivered the goods!`);
 					resolve(responseData);
 				} else {
-					logger.error(`HTTP ${statusCode} - Error: ${responseData}`);
+					logger.error(`❌ HTTP ${statusCode} - Server said no: ${responseData}`);
 					const isFatal = statusCode === 401 || statusCode === 403 || statusCode >= 500;
 					try {
 						const error = JSON.parse(responseData);
-						reject(new ConfigServiceError(error.description || 'Unknown error', isFatal));
+						reject(new ConfigServiceError(error.description || 'Server gave us a mystery error 🤔', isFatal));
 					} catch {
 						reject(new ConfigServiceError(`HTTP ${statusCode}: ${responseData}`, isFatal));
 					}
@@ -61,7 +61,7 @@ function makeRequest(endpoint: string, data: string): Promise<string> {
 			reject(new ConfigServiceError(err.message, true));
 		});
 		req.on('timeout', () => {
-			reject(new ConfigServiceError('Request timeout', true));
+			reject(new ConfigServiceError('Server took too long to respond - maybe it\'s having a coffee break? ☕', true));
 		});
 		req.write(data);
 		req.end();

@@ -11,7 +11,7 @@ export interface ServerRule {
 class RuleProcessor {
 	async process(rule: ServerRule, filePath: string): Promise<string> {
 		const match = filePath.match(new RegExp(rule.pattern, 'i'));
-		if (!match) { throw new Error(`file path does not match pattern '${rule.pattern}'`); }
+		if (!match) { throw new Error(`File path doesn't match pattern '${rule.pattern}' - this rule isn't for this file 🕵️`); }
 
 		let serverKey = rule.serverKey;
 
@@ -45,7 +45,7 @@ class RuleProcessor {
 			return mappings[ancestor] || '';
 		}
 
-		throw new Error(`Unsupported placeholder: ${placeholder}`);
+		throw new Error(`Unknown placeholder '${placeholder}' - I don't know how to handle this one yet 🤷`);
 	}
 }
 
@@ -59,7 +59,7 @@ export class AutoServerSelector {
 		const debugRules = vscode.env.logLevel <= vscode.LogLevel.Debug;
 
 		if (rules.length === 0) {
-			throw new Error('No serverSelectors are configured');
+			throw new Error('No server selection rules configured - add some serverSelectors in settings 📝');
 		}
 
 		for (const rule of rules) {
@@ -71,11 +71,11 @@ export class AutoServerSelector {
 			} catch (error) {
 				if (debugRules) {
 					const message = error instanceof Error ? error.message : 'Unknown error';
-					logger.warn(`Server selection: Rule failed - pattern: '${rule.pattern}', error: ${message}`);
+					logger.warn(`🔍 Server selection debug: Rule '${rule.pattern}' didn't match - ${message}`);
 				}
 			}
 		}
 
-		throw new Error('No server selector rules matched the file path');
+		throw new Error('None of your server rules matched this file - maybe add a new rule? 🤔');
 	}
 }

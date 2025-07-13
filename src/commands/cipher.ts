@@ -19,10 +19,10 @@ export function cancelCipherOperation() {
 }
 
 export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
-	logger.info(`Starting ${operation} operation...`);
+	logger.info(`🚀 Starting ${operation} operation - let's transform some secrets!`);
 	const editor = vscode.window.activeTextEditor;
 	if (!editor || !ServerManager.getInstance().getCurrentServer()) { 
-		logger.error(`${operation} failed - no editor or server`);
+		logger.error(`❌ ${operation} operation aborted - missing editor or server (need both to work magic!)`);
 		return; 
 	}
 
@@ -48,7 +48,7 @@ export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
 			? await processEncryption(editor, statusBarItem, eligibleDecorationType, currentCancellationTokenSource.token) 
 			: await processDecryption(editor, statusBarItem, eligibleDecorationType, selectionDecorationType, currentCancellationTokenSource.token);
 		
-		logger.info(`${operation} completed: ${result.processed}/${result.total}`);
+		logger.info(`✨ ${operation} mission accomplished: ${result.processed}/${result.total} secrets transformed!`);
 		showOperationResult(result, currentCancellationTokenSource.token.isCancellationRequested);
 	} catch (error) {
 		if (!currentCancellationTokenSource.token.isCancellationRequested) {
@@ -197,18 +197,18 @@ async function applyEdit(document: vscode.TextDocument, range: vscode.Range, new
 
 function showOperationResult(result: ProcessingResult, wasCancelled: boolean) {
 	if (result.total === 0) {
-		vscode.window.showInformationMessage(wasCancelled ? 'Operation cancelled' : 'No eligible content found');
+		vscode.window.showInformationMessage(wasCancelled ? 'Cancelled 👍' : 'Nothing to process 🤷');
 	} else if (wasCancelled) {
-		vscode.window.showInformationMessage(`Operation cancelled - processed ${result.processed}/${result.total} value(s)`);
+		vscode.window.showInformationMessage(`Cancelled (${result.processed}/${result.total} done) 😅`);
 	} else if (result.processed === result.total) {
-		vscode.window.showInformationMessage(`Processed ${result.processed}/${result.total} value(s)`);
+		vscode.window.showInformationMessage(`Done! ${result.processed}/${result.total} ✨`);
 	} else {
-		vscode.window.showWarningMessage(`Processed ${result.processed}/${result.total} value(s) - some failed`);
+		vscode.window.showWarningMessage(`${result.processed}/${result.total} (${result.total - result.processed} failed) 😅`);
 	}
 }
 
 function logError(error: any, document: vscode.TextDocument, position: vscode.Position) {
 	const lineNumber = position.line + 1;
-	logger.error(`${error} - ${document.fileName}:${lineNumber}:${position.character + 1}`);
+	logger.error(`🚨 Oops! ${error} at ${document.fileName}:${lineNumber}:${position.character + 1} - check this spot for issues`);
 	logger.show();
 }

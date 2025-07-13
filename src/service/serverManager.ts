@@ -27,13 +27,13 @@ export class ServerManager {
 	}
 	public getCurrentServer(): string | null {
 		if (!this.currentServer) {
-			vscode.window.showErrorMessage('Server is not selected');
+			vscode.window.showErrorMessage('No server selected 🎯');
 			return 'Unknown';
 		}
 		return this.currentServer;
 	}
 	public setServer(serverKey: string, pin: boolean = true): void {
-		logger.info(`Server ${pin ? 'pinned' : 'selected'}: ${serverKey}`);
+		logger.info(`📌 Server ${pin ? 'pinned' : 'selected'}: ${serverKey} - ${pin ? 'locked and loaded!' : 'ready to roll!'}`);
 		this.currentServer = serverKey;
 		this.isPinned = pin;
 		this.updateStatusBar();
@@ -57,7 +57,7 @@ export class ServerManager {
 		const servers = config.get('servers') as Record<string, string> || {};
 
 		if (Object.keys(servers).length === 0) {
-			vscode.window.showErrorMessage('No config servers configured');
+			vscode.window.showErrorMessage('Add servers in settings first 📝');
 			return;
 		}
 
@@ -150,7 +150,7 @@ export class ServerManager {
 
 	private async determineRelevantServer(): Promise<string> {
 		const activeEditor = vscode.window.activeTextEditor;
-		if (!activeEditor) { throw new Error('No active editor available'); }
+		if (!activeEditor) { throw new Error('Open a file first 📄'); }
 
 		return this.autoServerSelector.autoSelectServer(activeEditor.document.fileName);
 	}

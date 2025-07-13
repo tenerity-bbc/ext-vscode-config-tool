@@ -7,23 +7,23 @@ export async function identifyAncestor(workspacePath: string, possibleAncestors:
     const git = await import('isomorphic-git');
     const currentBranch = await git.currentBranch({ fs, dir: workspacePath });
 
-    logger.info(`Git: Current branch '${currentBranch}', searching ancestors: [${possibleAncestors.join(', ')}]`);
-    if (!currentBranch) { throw new Error('Unable to determine current git branch'); }
+    logger.info(`🌳 Git detective work: On branch '${currentBranch}', hunting for ancestors: [${possibleAncestors.join(', ')}]`);
+    if (!currentBranch) { throw new Error('Git is being mysterious - can\'t figure out which branch we\'re on 🕵️'); }
     if (possibleAncestors.includes(currentBranch)) { 
-        logger.info(`Git: Current branch '${currentBranch}' matches ancestor`);
+        logger.info(`🎯 Git: Bingo! Current branch '${currentBranch}' is exactly what we're looking for`);
         return currentBranch; 
     }
 
     for (const ancestor of possibleAncestors) {
         const isDescendant = await isDescendaetOf(workspacePath, currentBranch, ancestor);
         if (isDescendant) { 
-            logger.info(`Git: Found ancestor '${ancestor}' for branch '${currentBranch}'`);
+            logger.info(`🔍 Git: Eureka! Found ancestor '${ancestor}' for branch '${currentBranch}' - family tree complete!`);
             return ancestor; 
         }
     }
 
-    const error = `No ancestor found from current branch: ${currentBranch} (searched depth: ${MAX_DEPTH})`;
-    logger.error(`Git: ${error}`);
+    const error = `Branch '${currentBranch}' seems to be an orphan - no family connections found after searching ${MAX_DEPTH} levels deep 👻`;
+    logger.error(`😱 Git family tree mystery: ${error}`);
     throw new Error(error);
 }
 
