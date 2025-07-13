@@ -17,6 +17,7 @@ Your friendly VS Code companion for encrypting and decrypting configuration valu
     - [Server Selection Rules](#server-selection-rules)
     - [Placeholder Types](#placeholder-types)
     - [Settings Reference](#settings-reference)
+  - [Troubleshooting](#troubleshooting)
   - [Requirements](#requirements)
   - [Privacy](#privacy)
   - [Contributing](#contributing)
@@ -120,6 +121,17 @@ The status bar shows the current server with icons and detailed tooltips:
 - `configTool.servers`: Server key to URL mappings
 - `configTool.autoSelectServer`: Enable automatic server selection using serverSelectors
 - `configTool.serverSelectors`: Array of selection rules with pattern matching and templating
+
+## Troubleshooting 🔧
+
+**Check the Logs:** If something goes wrong, check the **Output** panel (`View > Output`) and select **"Config Tool - Encrypt/Decrypt"** from the dropdown. The extension logs all operations, errors, and debug information there - it's like a detective's notebook! 🕵️
+
+**Need More Details?** Set VS Code's log level to Debug (`Developer > Set Log Level > Debug`) for extra verbose logging.
+
+**Common Issues:**
+- **"No server selected"** - Click the status bar to pick a server
+- **Network errors** - Check your config server URL and network connection
+- **Auto-selection not working** - Verify your `serverSelectors` patterns match your file paths
 
 ## Requirements
 
