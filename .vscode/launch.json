@@ -10,7 +10,8 @@
 			"type": "extensionHost",
 			"request": "launch",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}"
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"${workspaceFolder}/local-dev/config-tool-dev.code-workspace"
 			],
 			"outFiles": [
 				"${workspaceFolder}/dist/**/*.js"

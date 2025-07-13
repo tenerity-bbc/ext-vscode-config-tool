@@ -1,0 +1,34 @@
+{
+	"folders": [
+		{
+			"name": "Config Stores",
+			"path": "./config-stores"
+		}
+	],
+	"settings": {
+		"configTool.servers": {
+			"stark-stage": "http://localhost:8081",
+			"stark-prod": "http://localhost:8081",
+			"shield-stage": "http://localhost:8080",
+			"shield-prod": "http://localhost:8080"
+		},
+		"configTool.autoSelectServer": true,
+		"configTool.serverSelectors": [
+			{
+				"name": "Stark Industries",
+				"pattern": "[/\\\\]stark-industries[/\\\\]([^/\\\\]+)[/\\\\]",
+				"serverKey": "stark-$1"
+			},
+			{
+				"name": "SHIELD Tech",
+				"pattern": "[/\\\\]shield-tech[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
+				"serverKey": "shield-$1"
+			}
+		]
+	},
+	"extensions": {
+		"recommendations": [
+			"bibekbc.config-tool"
+		]
+	}
+}

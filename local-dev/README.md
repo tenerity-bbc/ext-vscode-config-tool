@@ -8,12 +8,19 @@ Your local playground for testing the Config Tool extension! Complete with Sprin
 
 1. **Fire up the Config Servers**:
    ```bash
-   docker-compose up -d
+   # From the project root (super convenient!)
+   npm run dev:up
+   
+   # Or from local-dev folder
+   cd local-dev && docker-compose up -d
    ```
 
-2. **Configure VS Code**:
-   - Copy settings from `vscode-settings.json` to your VS Code settings
-   - Or use: `Ctrl+Shift+P` → "Preferences: Open Settings (JSON)"
+2. **Start Debugging**:
+   ```bash
+   # Press F5 to debug - workspace opens automatically!
+   # Or manually open the workspace:
+   code local-dev/config-tool-dev.code-workspace
+   ```
 
 3. **Watch the Magic Happen** ✨:
    - Open files in `config-stores/` folders
@@ -22,8 +29,23 @@ Your local playground for testing the Config Tool extension! Complete with Sprin
 
 ## Available Servers
 
-- **SHIELD Tech**: https://localhost:8443 (encrypt key: `Hail-Hydra`)
-- **Stark Industries**: https://localhost:8444 (encrypt key: `LoveYou3000`)
+### 🎯 Recommended: HTTP Endpoints (No SSL hassles!)
+
+| Server | URL | Encrypt Key |
+|--------|-----|-------------|
+| **SHIELD Tech** | `http://localhost:8080` | `Hail-Hydra` |
+| **Stark Industries** | `http://localhost:8081` | `LoveYou3000` |
+
+### 🔒 Alternative: HTTPS Endpoints (Self-signed certificates)
+
+| Server | URL | Encrypt Key |
+|--------|-----|-------------|
+| **SHIELD Tech** | `https://localhost:8443` | `Hail-Hydra` |
+| **Stark Industries** | `https://localhost:8444` | `LoveYou3000` |
+
+**For HTTPS**: If you get SSL certificate errors, set `NODE_TLS_REJECT_UNAUTHORIZED=0` and restart VS Code.
+
+**🎉 Ready to Go**: The extension comes pre-configured with HTTP endpoints! Just start the Docker containers and press F5 to debug - the workspace opens automatically with everything set up! 🚀
 
 ## Config Stores Structure
 
@@ -56,5 +78,15 @@ config-stores/
 
 **All done testing?** Clean up with:
 ```bash
-docker-compose down
+# From the project root (super convenient!)
+npm run dev:down
+
+# Or from local-dev folder
+cd local-dev && docker-compose down
 ```
+
+## Bonus Scripts 🎁
+
+- `npm run dev:up` - Start the config servers
+- `npm run dev:down` - Stop and clean up
+- `npm run dev:logs` - Watch server logs in real-time

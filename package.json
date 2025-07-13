@@ -109,12 +109,7 @@
       "properties": {
         "configTool.servers": {
           "type": "object",
-          "default": {
-            "stark-stage": "https://localhost:8443",
-            "stark-prod": "https://localhost:8444",
-            "shield-stage": "https://localhost:8443",
-            "shield-prod": "https://localhost:8444"
-          },
+          "default": {},
           "description": "Config server URLs for all environments"
         },
         "configTool.autoSelectServer": {
@@ -124,18 +119,7 @@
         },
         "configTool.serverSelectors": {
           "type": "array",
-          "default": [
-            {
-              "name": "Stark Industries",
-              "pattern": "[/\\\\]stark-industries[/\\\\]([^/\\\\]+)[/\\\\]",
-              "serverKey": "stark-$1"
-            },
-            {
-              "name": "SHIELD Tech", 
-              "pattern": "[/\\\\]shield-tech[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
-              "serverKey": "shield-$1"
-            }
-          ],
+          "default": [],
           "description": "Server selector rules with pattern matching and inline ancestor region mapping (required when autoSelectServer is true)",
           "minItems": 1,
           "items": {
@@ -173,7 +157,10 @@
     "lint": "eslint src",
     "test": "vscode-test",
     "build-package": "vsce package",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "dev:up": "cd local-dev && docker-compose up -d",
+    "dev:down": "cd local-dev && docker-compose down",
+    "dev:logs": "cd local-dev && docker-compose logs -f"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.4",
