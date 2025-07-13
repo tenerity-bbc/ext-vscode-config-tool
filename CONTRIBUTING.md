@@ -8,6 +8,7 @@ Thanks for wanting to make Config Tool even better! Here's how to get started wi
 2. Run `npm install` to install dependencies (grab a coffee ☕)
 3. Run `npm run package` to build the extension
 4. Open in VS Code and press F5 to launch extension development host (the magic happens here!)
+5. For testing with real config servers, see [local-dev/README.md](local-dev/README.md) for Docker setup
 
 ## Git Flow Branching Strategy
 

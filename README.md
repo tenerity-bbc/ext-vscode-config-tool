@@ -84,9 +84,10 @@ The status bar shows the current server with icons and detailed tooltips:
 ```json
 {
   "configTool.servers": {
-    "ng-dev": "https://ng-config-server.dev.example.com/config-server",
-    "ng-us-stage": "https://ng-config-server-us.stage.example.com/config-server",
-    "apg-prod": "https://apg-config-server.prod.example.com/configserver"
+    "stark-stage": "https://localhost:8443",
+    "stark-prod": "https://localhost:8444",
+    "shield-stage": "https://localhost:8443",
+    "shield-prod": "https://localhost:8444"
   }
 }
 ```
@@ -98,16 +99,16 @@ The status bar shows the current server with icons and detailed tooltips:
 {
   "configTool.serverSelectors": [
     {
-      "name": "APG Config Store",
-      "pattern": "[/\\\\]gce-apg-config-store[/\\\\]([^/\\\\]+)[/\\\\]",
-      "serverKey": "apg-$1"
+      "name": "Stark Industries",
+      "pattern": "[/\\\\]stark-industries[/\\\\]([^/\\\\]+)[/\\\\]",
+      "serverKey": "stark-$1"
     },
     {
-      "name": "NG Config Store with Regional Support",
-      "pattern": "[/\\\\]gce-ng-config-store[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
-      "serverKey": "ng-{git:ancestorRegion[develop=,develop-US=us-]}$1"
+      "name": "SHIELD Tech",
+      "pattern": "[/\\\\]shield-tech[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
+      "serverKey": "shield-$1"
     }
-]
+  ]
 }
 ```
 
@@ -141,6 +142,12 @@ The status bar shows the current server with icons and detailed tooltips:
 ## Privacy
 
 This extension respects your privacy and operates entirely locally. See [PRIVACY.md](PRIVACY.md) for detailed information about data handling and privacy practices.
+
+## Local Development
+
+Want to test the extension locally? The `local-dev/` folder contains a complete Docker setup with Spring Boot Config Servers and sample configurations.
+
+See [local-dev/README.md](local-dev/README.md) for setup instructions and demo scenarios.
 
 ## Contributing
 

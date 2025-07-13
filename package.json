@@ -110,18 +110,10 @@
         "configTool.servers": {
           "type": "object",
           "default": {
-            "ng-dev": "https://ng-config-server.int.dev.affinionservices.com/config-server",
-            "ng-qa": "https://ng-config-server.int.qa.affinionservices.com/config-server",
-            "ng-stage": "https://ng-config-server.int.stage-affinionservices.com/config-server",
-            "ng-us-stage": "https://ng-config-server-us.int.stage-affinionservices.com/config-server",
-            "ng-prod": "https://ng-config-server.int.affinionservices.com/config-server",
-            "ng-us-prod": "https://ng-config-server-us.int.affinionservices.com/config-server",
-            "apg-dev": "https://apg-config-server.int.dev.affinionservices.com/configserver",
-            "apg-qa": "https://apg-config-server.int.qa.affinionservices.com/configserver",
-            "apg-stage": "https://apg-config-server.int.stage-affinionservices.com/configserver",
-            "apg-us-stage": "https://apg-config-server-us.int.stage-affinionservices.com/configserver",
-            "apg-prod": "https://apg-config-server.int.affinionservices.com/configserver",
-            "apg-us-prod": "https://apg-config-server-us.int.affinionservices.com/configserver"
+            "stark-stage": "https://localhost:8443",
+            "stark-prod": "https://localhost:8444",
+            "shield-stage": "https://localhost:8443",
+            "shield-prod": "https://localhost:8444"
           },
           "description": "Config server URLs for all environments"
         },
@@ -134,14 +126,14 @@
           "type": "array",
           "default": [
             {
-              "name": "APG Config Store",
-              "pattern": "[/\\\\]gce-apg-config-store[/\\\\]([^/\\\\]+)[/\\\\]",
-              "serverKey": "apg-$1"
+              "name": "Stark Industries",
+              "pattern": "[/\\\\]stark-industries[/\\\\]([^/\\\\]+)[/\\\\]",
+              "serverKey": "stark-$1"
             },
             {
-              "name": "NG Config Store with Regional Support",
-              "pattern": "[/\\\\]gce-ng-config-store[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
-              "serverKey": "ng-{git:ancestorRegion[develop=,develop-US=us-]}$1"
+              "name": "SHIELD Tech", 
+              "pattern": "[/\\\\]shield-tech[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
+              "serverKey": "shield-$1"
             }
           ],
           "description": "Server selector rules with pattern matching and inline ancestor region mapping (required when autoSelectServer is true)",

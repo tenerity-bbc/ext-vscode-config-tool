@@ -1,0 +1,29 @@
+service:
+  name: arc-reactor
+  port: 8081
+
+database:
+  host: stark-tower.db
+  port: 5432
+  name: arc_reactor_stage
+  username: jarvis
+  password: stark_tower_secret
+
+power_core:
+  palladium:
+    core_key: palladium_mk1_stage_key
+    output_key: arc_reactor_output_key
+    
+  vibranium:
+    client_id: wakanda_vibranium_client
+    client_secret: black_panther_secret
+
+security:
+  api_keys:
+    internal: friday_api_key
+    webhook: edith_webhook_key
+
+monitoring:
+  stark_tech:
+    api_key: stark_monitoring_key
+    app_key: pepper_analytics_key

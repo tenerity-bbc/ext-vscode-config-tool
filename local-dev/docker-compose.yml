@@ -1,0 +1,49 @@
+services:
+  config-gateway:
+    image: nginx:alpine
+    container_name: config-gateway
+    ports:
+      - "8443:443"
+      - "8444:444"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ssl-certs:/etc/nginx/ssl
+    command: |
+      sh -c '
+        echo "http://dl-cdn.alpinelinux.org/alpine/v3.22/main" > /etc/apk/repositories &&
+        echo "http://dl-cdn.alpinelinux.org/alpine/v3.22/community" >> /etc/apk/repositories &&
+        apk update &&
+        apk add --no-cache openssl &&
+        mkdir -p /etc/nginx/ssl &&
+        openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+          -keyout /etc/nginx/ssl/key.pem \
+          -out /etc/nginx/ssl/cert.pem \
+          -subj "/C=US/ST=Stark/L=Malibu/O=StarkIndustries/CN=localhost" &&
+        nginx -g "daemon off;"
+      '
+    depends_on:
+      - shield-tech
+      - stark-industries
+
+  shield-tech:
+    image: hyness/spring-cloud-config-server:4.1.0
+    container_name: shield-tech
+    environment:
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=file:///config-stores/shield-tech
+      - SPRING_PROFILES_ACTIVE=native
+      - ENCRYPT_KEY=Hail-Hydra
+    volumes:
+      - ./config-stores:/config-stores
+
+  stark-industries:
+    image: hyness/spring-cloud-config-server:4.1.0
+    container_name: stark-industries
+    environment:
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=file:///config-stores/stark-industries
+      - SPRING_PROFILES_ACTIVE=native
+      - ENCRYPT_KEY=LoveYou3000
+    volumes:
+      - ./config-stores:/config-stores
+
+volumes:
+  ssl-certs:
