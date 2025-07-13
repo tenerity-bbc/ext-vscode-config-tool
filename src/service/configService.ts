@@ -1,4 +1,5 @@
 import * as https from 'https';
+import * as http from 'http';
 import * as vscode from 'vscode';
 import { ServerManager } from './serverManager';
 import { logger } from '../shared/logger';
@@ -35,7 +36,10 @@ function makeRequest(endpoint: string, data: string): Promise<string> {
 
 		const url = `${getConfigServerUrl()}${endpoint}`;
 		logger.info(`🌐 Making ${options.method} request to ${url} - crossing fingers for success!`);
-		const req = https.request(url, options, (res) => {
+		
+		// Use http or https based on URL protocol
+		const requestLib = url.startsWith('https:') ? https : http;
+		const req = requestLib.request(url, options, (res) => {
 			let responseData = '';
 			res.on('data', chunk => responseData += chunk);
 			res.on('end', () => {
