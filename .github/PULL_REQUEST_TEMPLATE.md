@@ -1,31 +1,33 @@
-# Pull Request
+# Pull Request 🚀
 
-## Description
-Brief description of the changes made.
+Thanks for contributing! Help us understand what awesome changes you've made.
 
-## Type of Change
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
-- [ ] Code refactoring
-- [ ] Performance improvement
+## What's Changed? 📝
+Tell us what you built, fixed, or improved (keep it simple!).
 
-## Testing
-- [ ] Tests pass locally
+## What Kind of Magic? ✨
+- [ ] 🐛 Bug fix (squashed a pesky bug)
+- [ ] ⭐ New feature (added something cool)
+- [ ] 💥 Breaking change (might break existing stuff - heads up!)
+- [ ] 📚 Documentation update (made things clearer)
+- [ ] 🧹 Code refactoring (cleaned things up)
+- [ ] ⚡ Performance improvement (made it faster)
+
+## Did You Test It? 🧪
+- [ ] Tests pass locally (no red squiggles!)
 - [ ] New tests added for new functionality
-- [ ] Manual testing completed
+- [ ] Manual testing completed (clicked all the buttons)
 
-## Checklist
-- [ ] Code follows the project's style guidelines
-- [ ] Self-review of code completed
-- [ ] Code is commented where necessary
+## Final Checks ✅
+- [ ] Code follows the project's style (looks pretty)
+- [ ] Self-review completed (gave it a once-over)
+- [ ] Code is commented where needed (future you will thank you)
 - [ ] Documentation updated if needed
-- [ ] No new warnings introduced
-- [ ] Commit messages follow conventional commit format
+- [ ] No new warnings (kept it clean)
+- [ ] Commit messages follow conventional format (feat:, fix:, etc.)
 
-## Related Issues
+## Fixes Issues 🎯
 Closes #(issue number)
 
-## Screenshots (if applicable)
-Add screenshots to help explain your changes.
+## Screenshots 📸
+Show us the goods! (if there's something visual to see)

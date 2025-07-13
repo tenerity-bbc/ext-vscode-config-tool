@@ -1,6 +1,6 @@
-# Config Tool
+# Config Tool 🔐
 
-A VS Code extension for encrypting and decrypting configuration values using Spring Boot Config Server with intelligent server management.
+Your friendly VS Code companion for encrypting and decrypting configuration values! Works seamlessly with Spring Boot Config Server and features smart server management that actually makes sense.
 
 ## Table of Contents
 
@@ -22,14 +22,15 @@ A VS Code extension for encrypting and decrypting configuration values using Spr
   - [Contributing](#contributing)
   - [Changelog](#changelog)
 
-## Features
+## Features ✨
 
-- **Encrypt/Decrypt**: Process `{cipher}` values with visual feedback and progress tracking
-- **Smart Server Selection**: Auto-select config servers using file path patterns and git branch detection
-- **Flexible Configuration**: Define custom rules with regex patterns and inline ancestor region mapping
-- **Server Management**: Pin/unpin servers with status bar integration
-- **Batch Processing**: Handle multiple selections or entire documents
-- **Keyboard Shortcuts**: Quick access with customizable key bindings and ESC cancellation
+- **Encrypt**: Turn plain text into secure `{cipher}` values with visual feedback
+- **Decrypt**: Transform `{cipher}` values back to readable text with progress tracking
+- **Smart Server Selection**: Automatically picks the right config server using file paths and git branches (it's like magic! 🪄)
+- **Flexible Configuration**: Create custom rules with regex patterns - as simple or complex as you need
+- **Server Management**: Pin servers to lock them in place or let the extension auto-select for you
+- **Batch Processing**: Handle one value, hundreds, or entire files - we don't judge
+- **Keyboard Shortcuts**: Lightning-fast access with customizable shortcuts, plus ESC to cancel anytime
 
 ## Usage
 
@@ -74,7 +75,7 @@ The status bar shows the current server with icons and detailed tooltips:
 
 ## Settings
 
-**Quick Setup:** Open Settings (`Ctrl+,`) and search for "Config Tool" to configure servers and selection rules
+**Quick Setup:** Open Settings (`Ctrl+,`) and search for "Config Tool" to get started - it's easier than you think! 🚀
 
 ### Server Configuration
 

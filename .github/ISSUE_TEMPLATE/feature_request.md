@@ -6,17 +6,17 @@ labels: enhancement
 assignees: ''
 ---
 
-## Feature Description
-A clear and concise description of what you want to happen.
+## What Cool Thing Do You Want? ✨
+Describe your awesome idea!
 
-## Problem Statement
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+## What's the Problem? 🤔
+What's bugging you or missing? (We've all been there!)
 
-## Proposed Solution
-A clear and concise description of what you want to happen.
+## How Should It Work? 💡
+Paint us a picture of your ideal solution.
 
-## Alternatives Considered
-A clear and concise description of any alternative solutions or features you've considered.
+## Other Ideas You Considered 🤷
+Did you think of other ways to solve this?
 
-## Additional Context
-Add any other context or screenshots about the feature request here.
+## Anything Else? 📝
+Mockups, examples, or wild dreams welcome!

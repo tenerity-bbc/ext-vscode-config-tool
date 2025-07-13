@@ -1,4 +1,4 @@
-# Privacy Policy
+# Privacy Policy 🔒
 
 **Effective Date:** January 2025  
 **Extension:** Config Tool for VS Code  
@@ -6,13 +6,13 @@
 
 ## Overview
 
-The Config Tool extension helps developers encrypt and decrypt configuration values using Spring Boot Config Server. This privacy policy explains how the extension handles data and protects user privacy.
+The Config Tool extension helps developers encrypt and decrypt configuration values using Spring Boot Config Server. This privacy policy explains how we handle your data (spoiler: we barely touch it! 🙌).
 
 ## Data Collection
 
-### What We Don't Collect
+### What We Don't Collect 🙅‍♂️
 - **No personal information** is collected or transmitted
-- **No usage analytics** or telemetry data is gathered
+- **No usage analytics** or telemetry data is gathered (we're not watching you!)
 - **No user accounts** or authentication data is stored
 - **No data is sent to Tenerity BBC** or any third-party services
 
@@ -95,4 +95,4 @@ This extension:
 
 ---
 
-**Summary**: Config Tool operates entirely locally and only communicates with config servers you specify. No personal data is collected, stored, or transmitted to any third parties.
+**TL;DR**: Config Tool works entirely on your machine and only talks to servers you tell it to. We don't collect, store, or share your data with anyone. Your secrets stay secret! 🤐

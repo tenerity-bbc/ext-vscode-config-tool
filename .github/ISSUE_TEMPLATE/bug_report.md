@@ -6,25 +6,24 @@ labels: bug
 assignees: ''
 ---
 
-## Bug Description
-A clear and concise description of what the bug is.
+## What's Broken? 🐛
+Tell us what went wrong (we promise not to judge your workflow!).
 
-## Steps to Reproduce
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## How to Break It Again 🔄
+1. Do this...
+2. Then this...
+3. Watch it explode 💥
 
-## Expected Behavior
-A clear and concise description of what you expected to happen.
+## What Should Happen ✅
+What did you expect to see?
 
-## Actual Behavior
-A clear and concise description of what actually happened.
+## What Actually Happened 😅
+What did you get instead? (screenshots help!)
 
-## Environment
+## Your Setup 💻
 - VS Code Version: [e.g. 1.85.0]
-- Extension Version: [e.g. 0.1.0]
+- Extension Version: [e.g. 0.1.0] 
 - OS: [e.g. Windows 11, macOS 14, Ubuntu 22.04]
 
-## Additional Context
-Add any other context about the problem here, including screenshots if applicable.
+## Anything Else? 🤔
+Error messages, screenshots, or other clues that might help us fix this!
