@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 import { identifyAncestor, findGitRoot } from '../utils/git';
 import { logger } from '../shared/logger';
 import { getServers, getServerSelectors } from '../utils/config';

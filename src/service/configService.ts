@@ -1,6 +1,5 @@
 import * as https from 'https';
 import * as http from 'http';
-import * as vscode from 'vscode';
 import { ServerManager } from './serverManager';
 import { logger } from '../shared/logger';
 import { getServers } from '../utils/config';
