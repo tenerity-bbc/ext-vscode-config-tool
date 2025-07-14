@@ -55,7 +55,6 @@ export class AutoServerSelector {
 	public async autoSelectServer(filePath: string): Promise<string> {
 		const servers = getServers();
 		const rules = getServerSelectors() as ServerRule[];
-		const debugRules = vscode.env.logLevel <= vscode.LogLevel.Debug;
 
 		if (rules.length === 0) {
 			throw new Error('No server selection rules configured - add some serverSelectors in settings 📝');
@@ -68,10 +67,8 @@ export class AutoServerSelector {
 					return serverKey;
 				}
 			} catch (error) {
-				if (debugRules) {
-					const message = error instanceof Error ? error.message : 'Unknown error';
-					logger.warn(`🔍 Server selection debug: Rule '${rule.pattern}' didn't match - ${message}`);
-				}
+				const message = error instanceof Error ? error.message : 'Unknown error';
+				logger.debug(`Server selection debug: Rule '${rule.pattern}' didn't match - ${message}`);
 			}
 		}
 

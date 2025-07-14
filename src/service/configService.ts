@@ -35,7 +35,7 @@ function makeRequest(endpoint: string, data: string): Promise<string> {
 		};
 
 		const url = `${getConfigServerUrl()}${endpoint}`;
-		logger.info(`🌐 Making ${options.method} request to ${url} - crossing fingers for success!`);
+		logger.debug(`Making ${options.method} request to ${url} - crossing fingers for success!`);
 		
 		// Use http or https based on URL protocol
 		const requestLib = url.startsWith('https:') ? https : http;
@@ -45,10 +45,10 @@ function makeRequest(endpoint: string, data: string): Promise<string> {
 			res.on('end', () => {
 				const statusCode = res.statusCode || 0;
 				if (statusCode === 200) {
-					logger.info(`✅ HTTP ${statusCode} - Server delivered the goods!`);
+					logger.debug(`HTTP ${statusCode} - Server delivered the goods!`);
 					resolve(responseData);
 				} else {
-					logger.error(`❌ HTTP ${statusCode} - Server said no: ${responseData}`);
+					logger.error(`HTTP ${statusCode} - Server said no: ${responseData}`);
 					const isFatal = statusCode === 401 || statusCode === 403 || statusCode >= 500;
 					try {
 						const error = JSON.parse(responseData);

@@ -39,7 +39,7 @@ export class ServerManager {
 		return this.currentServer;
 	}
 	public setServer(serverKey: string, pin: boolean = true): void {
-		logger.info(`📌 Server ${pin ? 'pinned' : 'selected'}: ${serverKey} - ${pin ? 'locked and loaded!' : 'ready to roll!'}`);
+		logger.info(`Server ${pin ? 'pinned' : 'selected'}: ${serverKey} - ${pin ? 'locked and loaded!' : 'ready to roll!'}`);
 		this.currentServer = serverKey;
 		this.isPinned = pin;
 		this.updateStatusBar();

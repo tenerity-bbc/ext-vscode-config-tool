@@ -19,10 +19,10 @@ export function cancelCipherOperation() {
 }
 
 export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
-	logger.info(`🚀 Starting ${operation} operation - let's transform some secrets!`);
+	logger.info(`Starting ${operation} operation - let's transform some secrets!`);
 	const editor = vscode.window.activeTextEditor;
 	if (!editor || !ServerManager.getInstance().getCurrentServer()) { 
-		logger.error(`❌ ${operation} operation aborted - missing editor or server (need both to work magic!)`);
+		logger.error(`${operation} operation aborted - missing editor or server (need both to work magic!)`);
 		return; 
 	}
 
@@ -48,7 +48,7 @@ export async function handleCipherCommand(operation: 'encrypt' | 'decrypt') {
 			? await processEncryption(editor, statusBarItem, eligibleDecorationType, currentCancellationTokenSource.token) 
 			: await processDecryption(editor, statusBarItem, eligibleDecorationType, selectionDecorationType, currentCancellationTokenSource.token);
 		
-		logger.info(`✨ ${operation} mission accomplished: ${result.processed}/${result.total} secrets transformed!`);
+		logger.info(`${operation} mission accomplished: ${result.processed}/${result.total} secrets transformed!`);
 		showOperationResult(result, currentCancellationTokenSource.token.isCancellationRequested);
 	} catch (error) {
 		if (!currentCancellationTokenSource.token.isCancellationRequested) {
@@ -209,6 +209,6 @@ function showOperationResult(result: ProcessingResult, wasCancelled: boolean) {
 
 function logError(error: any, document: vscode.TextDocument, position: vscode.Position) {
 	const lineNumber = position.line + 1;
-	logger.error(`🚨 Oops! ${error} at ${document.fileName}:${lineNumber}:${position.character + 1} - check this spot for issues`);
+	logger.error(`Operation failed: ${error} at ${document.fileName}:${lineNumber}:${position.character + 1} - check this spot for issues`);
 	logger.show();
 }
