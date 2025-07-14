@@ -1,10 +1,10 @@
-# Config Tool 🔐
+# Config Tool
 
-Your friendly VS Code companion for encrypting and decrypting configuration values! Works seamlessly with Spring Boot Config Server and features smart server management that actually makes sense.
+A VS Code extension for encrypting and decrypting configuration values using Spring Boot Config Server. Features automatic server selection and batch processing to help manage your configuration secrets.
 
 ## Table of Contents
 
-- [Config Tool 🔐](#config-tool-)
+- [Config Tool](#config-tool)
   - [Table of Contents](#table-of-contents)
   - [Features ✨](#features-)
   - [Usage](#usage)
@@ -20,18 +20,19 @@ Your friendly VS Code companion for encrypting and decrypting configuration valu
   - [Troubleshooting 🔧](#troubleshooting-)
   - [Requirements](#requirements)
   - [Privacy](#privacy)
+  - [Local Development](#local-development)
   - [Contributing](#contributing)
   - [Changelog](#changelog)
 
 ## Features ✨
 
-- **Encrypt**: Turn plain text into secure `{cipher}` values with visual feedback
+- **Encrypt**: Convert selected text into secure `{cipher}` values with visual feedback
 - **Decrypt**: Transform `{cipher}` values back to readable text with progress tracking
-- **Smart Server Selection**: Automatically picks the right config server using file paths and git branches (it's like magic! 🪄)
-- **Flexible Configuration**: Create custom rules with regex patterns - as simple or complex as you need
-- **Server Management**: Pin servers to lock them in place or let the extension auto-select for you
-- **Batch Processing**: Handle one value, hundreds, or entire files - we don't judge
-- **Keyboard Shortcuts**: Lightning-fast access with customizable shortcuts, plus ESC to cancel anytime
+- **Auto Server Selection**: Automatically chooses the right config server using file paths and git branches (it's like magic! 🪄)
+- **Flexible Configuration**: Create custom selection rules with regex patterns
+- **Server Management**: Pin servers to prevent auto-switching or let the extension choose for you
+- **Batch Processing**: Handle single values or entire files in one operation
+- **Keyboard Shortcuts**: Quick access with customizable shortcuts, plus ESC to cancel operations anytime
 
 ## Usage
 
@@ -42,26 +43,32 @@ The extension automatically selects the appropriate config server using configur
 - Git branch information for regional server selection
 - Custom hint-based placeholders with substitution mappings
 
-The status bar shows the current server with icons and detailed tooltips:
+The status bar shows the current server with icons, background colors, and detailed tooltips:
 - 🔒 (lock): Server is pinned - "Current config server: [name] (pinned)"
 - ✅ (check): Only one server configured - "Current config server: [name] (only server configured)"
 - ✨ (sparkle): Server auto-selected - "Current config server: [name] (auto-selected)"
-- ⚠️ (warning): No server selected - "No config server selected - [reason]"
+- ⚠️ (warning): Auto-selection issues with warning background:
+  - "No Selectors" - Auto-selection enabled but no selectors configured
+  - "Not Selected" - Auto-selection enabled but no rules matched current file
+- ❌ (error): "No Servers" with error background - No servers configured
+- 📋 (list): "Select Server" - Auto-selection disabled, manual selection needed
 
 ### Decrypting Values
 
 1. Open a file containing encrypted values in the format `{cipher}EncryptedValue`
 2. Run the command **Config Tool: Decrypt** or press `Ctrl+Alt+D` (`Cmd+Alt+D` on Mac)
-3. Watch the progress in the status bar as cipher values are highlighted and decrypted
-4. Full cipher patterns and encrypted text are highlighted with different decorations
+3. The extension will find and decrypt all cipher values in the document (or selection if text is selected)
+4. Progress is shown in the status bar with visual highlighting of values being processed
 5. Press `ESC` to cancel the operation if needed
 
 ### Encrypting Values
 
-1. Select the plain text you want to encrypt
+1. Select the plain text you want to encrypt (multiple selections supported)
 2. Run the command **Config Tool: Encrypt** or press `Ctrl+Alt+E` (`Cmd+Alt+E` on Mac)
-3. Watch the progress as selected text is highlighted and replaced with `{cipher}EncryptedValue`
+3. Selected text is highlighted and replaced with `'{cipher}EncryptedValue'` format
 4. Press `ESC` to cancel the operation if needed
+
+**Note**: The encrypt command is only available when text is selected and a server is configured.
 
 ## Commands
 
@@ -76,7 +83,7 @@ The status bar shows the current server with icons and detailed tooltips:
 
 ## Settings
 
-**Quick Setup:** Open Settings (`Ctrl+,`) and search for "Config Tool" to get started - it's easier than you think! 🚀
+**Quick Setup:** Open Settings (`Ctrl+,`) and search for "Config Tool" to configure your servers and selection rules.
 
 ### Server Configuration
 
@@ -125,14 +132,16 @@ The status bar shows the current server with icons and detailed tooltips:
 
 ## Troubleshooting 🔧
 
-**Check the Logs:** If something goes wrong, check the **Output** panel (`View > Output`) and select **"Config Tool - Encrypt/Decrypt"** from the dropdown. The extension logs all operations, errors, and debug information there - it's like a detective's notebook! 🕵️
+**Check the Logs:** If something goes wrong, check the **Output** panel (`View > Output`) and select **"Config Tool - Encrypt/Decrypt"** from the dropdown. The extension logs all operations, errors, and debug information there.
 
 **Need More Details?** Set VS Code's log level to Debug (`Developer > Set Log Level > Debug`) for extra verbose logging.
 
 **Common Issues:**
-- **"No server selected"** - Click the status bar to pick a server
+- **"No server selected"** - Click the status bar to pick a server or configure server settings
+- **Commands disabled** - Encrypt/decrypt commands are only enabled when a server is selected
 - **Network errors** - Check your config server URL and network connection
 - **Auto-selection not working** - Verify your `serverSelectors` patterns match your file paths
+- **HTTPS certificate errors** - For development, you may need to set `NODE_TLS_REJECT_UNAUTHORIZED=0`
 
 ## Requirements
 
@@ -145,9 +154,15 @@ This extension respects your privacy and operates entirely locally. See [PRIVACY
 
 ## Local Development
 
-Want to test the extension locally? The `local-dev/` folder contains a complete Docker setup with Spring Boot Config Servers and sample configurations.
+The `local-dev/` folder contains a complete Docker setup with Spring Boot Config Servers and sample configurations for testing.
 
-See [local-dev/README.md](local-dev/README.md) for setup instructions and demo scenarios.
+**Quick Start:**
+```bash
+npm run dev:up    # Start config servers
+npm run dev:down  # Stop servers
+```
+
+See [local-dev/README.md](local-dev/README.md) for detailed setup instructions and demo scenarios.
 
 ## Contributing
 

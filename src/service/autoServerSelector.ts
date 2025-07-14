@@ -71,6 +71,6 @@ export class AutoServerSelector {
 			}
 		}
 
-		throw new Error('None of your server rules matched this file - maybe add a new rule? 🤔');
+		throw new Error(`No server rules matched '${filePath}' - check your serverSelectors patterns 🤔`);
 	}
 }

@@ -147,7 +147,7 @@ export class ServerManager {
 			} else if (autoSelectServer && serverSelectors.length === 0) {
 				// Multiple servers but no selectors
 				this.currentServer = null;
-				this.autoSelectionError = 'Server selectors needed';
+				this.autoSelectionError = 'No selectors configured';
 			} else if (autoSelectServer) {
 				// Multiple servers with auto-selection enabled
 				try {
@@ -185,17 +185,21 @@ export class ServerManager {
 		} else if (serverKeys.length === 0) {
 			serverKey = 'No Servers';
 			icon = '$(error)';
-			tooltip = `No config server selected - ${this.autoSelectionError}`;
+			tooltip = `No config server selected -  ${this.autoSelectionError} (click to add server)`;
 			this.statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
-		} else if (serverSelectors.length === 0) {
-			serverKey = 'Not Selectors';
+		} else if (autoSelectServer && serverSelectors.length === 0) {
+			serverKey = 'No Selectors';
 			icon = '$(warning)';
-			tooltip = `No config server selected - ${this.autoSelectionError}`;
+			tooltip = `No config server selected - ${this.autoSelectionError} (click to add selector)`;
 			this.statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
-		} else {
+		} else if (autoSelectServer) {
 			serverKey = 'Not Selected';
 			icon = '$(warning)';
-			tooltip = `${this.autoSelectionError}`;
+			tooltip = `No config server selected - ${this.autoSelectionError}`;
+		} else {
+			serverKey = 'Select Server';
+			icon = '$(list-selection)';
+			tooltip = `No config server selected - ${this.autoSelectionError}`;
 		}
 
 		// Clear background color for normal states
