@@ -167,36 +167,43 @@ export class ServerManager {
 		vscode.commands.executeCommand('setContext', 'config-tool.serverSelected', !!this.currentServer);
 
 		let serverKey: string;
-		let pinIcon: string;
+		let icon: string;
 		let tooltip: string;
 
 		if (this.isPinned && this.currentServer) {
 			serverKey = this.currentServer;
-			pinIcon = '$(lock-small)';
+			icon = '$(lock-small)';
 			tooltip = `Current config server: ${serverKey} (pinned)`;
-		} else if (serverKeys.length === 0) {
-			serverKey = 'Add servers';
-			pinIcon = '$(gear)';
-			tooltip = 'Click to add config servers in settings';
 		} else if (serverKeys.length === 1) {
 			serverKey = this.currentServer || 'Error';
-			pinIcon = '$(check)';
+			icon = '$(check)';
 			tooltip = `Current config server: ${serverKey} (only server configured)`;
-		} else if (autoSelectServer && serverSelectors.length === 0) {
-			serverKey = 'Add selectors';
-			pinIcon = '$(list-selection)';
-			tooltip = 'Click to add server selectors for auto-selection';
 		} else if (this.currentServer) {
 			serverKey = this.currentServer;
-			pinIcon = '$(sparkle)';
+			icon = '$(sparkle)';
 			tooltip = `Current config server: ${serverKey} (auto-selected)`;
+		} else if (serverKeys.length === 0) {
+			serverKey = 'No Servers';
+			icon = '$(error)';
+			tooltip = `No config server selected - ${this.autoSelectionError}`;
+			this.statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
+		} else if (serverSelectors.length === 0) {
+			serverKey = 'Not Selectors';
+			icon = '$(warning)';
+			tooltip = `No config server selected - ${this.autoSelectionError}`;
+			this.statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
 		} else {
-			serverKey = 'Not selected';
-			pinIcon = '$(warning)';
-			tooltip = `No config server selected${this.autoSelectionError ? ` - ${this.autoSelectionError}` : ''}`;
+			serverKey = 'Not Selected';
+			icon = '$(warning)';
+			tooltip = `${this.autoSelectionError}`;
 		}
 
-		this.statusBarItem.text = `${pinIcon} ${serverKey}`;
+		// Clear background color for normal states
+		if (this.currentServer) {
+			this.statusBarItem.backgroundColor = undefined;
+		}
+
+		this.statusBarItem.text = `${icon} ${serverKey}`;
 		this.statusBarItem.tooltip = tooltip;
 	}
 
