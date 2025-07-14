@@ -67,10 +67,11 @@ export class AutoServerSelector {
 				}
 			} catch (error) {
 				const message = error instanceof Error ? error.message : 'Unknown error';
-				logger.debug(`Server selection debug: Rule '${rule.pattern}' didn't match - ${message}`);
+				const stack = error instanceof Error ? error.stack : '';
+				logger.debug(`Server selection: Rule '${rule.pattern}' failed for '${filePath}' - ${message}${stack ? '\n' + stack : ''}`);
 			}
 		}
 
-		throw new Error(`No server rules matched '${filePath}' - check your serverSelectors patterns 🤔`);
+		throw new Error('No server rules matched this file - check your serverSelectors patterns 🤔');
 	}
 }
