@@ -2,6 +2,8 @@
 
 A VS Code extension for encrypting and decrypting configuration values using Spring Boot Config Server. Features automatic server selection and batch processing to help manage your configuration secrets.
 
+![Config Tool Demo](https://github.com/tenerity-bbc/ext-vscode-config-tool/raw/master/demo.gif)
+
 ## Table of Contents
 
 - [Config Tool](#config-tool)
