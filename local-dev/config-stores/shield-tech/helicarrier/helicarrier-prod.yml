@@ -5,25 +5,3 @@ spring:
     url: jdbc:postgresql://shield-db.prod:5432/helicarrier
     username: nick_fury
     password: classified_shield_password
-
-payments:
-  api_key: shield_payment_key_prod
-  webhook_secret: avengers_webhook_secret
-
-email:
-  service:
-    api_key: shield_mail_api_key
-    from_email: noreply@shield.gov
-
-storage:
-  cloud:
-    s3:
-      bucket: shield-helicarrier-files
-      access_key: SHIELD_ACCESS_KEY
-      secret_key: fury_classified_key
-
-cache:
-  redis:
-    host: shield-cache.prod
-    port: 6379
-    password: maria_hill_cache_key

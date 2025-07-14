@@ -91,10 +91,10 @@ The status bar shows the current server with icons, background colors, and detai
 ```json
 {
   "configTool.servers": {
-    "stark-stage": "https://localhost:8443",
-    "stark-prod": "https://localhost:8444",
-    "shield-stage": "https://localhost:8443",
-    "shield-prod": "https://localhost:8444"
+    "stark-stage": "http://localhost:8081",
+    "stark-us-stage": "http://localhost:8081",
+    "shield-us-prod": "http://localhost:8080",
+    "shield-prod": "http://localhost:8080"
   }
 }
 ```
@@ -113,7 +113,7 @@ The status bar shows the current server with icons, background colors, and detai
     {
       "name": "SHIELD Tech",
       "pattern": "[/\\\\]shield-tech[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
-      "serverKey": "shield-$1"
+      "serverKey": "shield-{git:ancestorRegion[develop=,develop-US=us-]}$1"
     }
   ]
 }

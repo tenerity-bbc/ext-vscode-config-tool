@@ -1,0 +1,4 @@
+power_core:
+  vibranium:
+    client_id: wakanda_vibranium_client
+    client_secret: black_panther_secret

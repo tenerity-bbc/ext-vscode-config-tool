@@ -8,8 +8,8 @@
 	"settings": {
 		"configTool.servers": {
 			"stark-stage": "http://localhost:8081",
-			"stark-prod": "http://localhost:8081",
-			"shield-stage": "http://localhost:8080",
+			"stark-us-stage": "http://localhost:8081",
+			"shield-us-prod": "http://localhost:8080",
 			"shield-prod": "http://localhost:8080"
 		},
 		"configTool.autoSelectServer": true,
@@ -22,7 +22,7 @@
 			{
 				"name": "SHIELD Tech",
 				"pattern": "[/\\\\]shield-tech[/\\\\][^/\\\\]+[/\\\\][^/\\\\]+-(\\w+)\\.ya?ml$",
-				"serverKey": "shield-$1"
+				"serverKey": "shield-{git:ancestorRegion[develop=,develop-US=us-]}$1"
 			}
 		]
 	},
