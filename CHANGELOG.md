@@ -1,3 +1,16 @@
+# [1.5.0](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.4.0...v1.5.0) (2025-07-14)
+
+
+### Bug Fixes
+
+* improve debug logging and error messages ([0924e98](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/0924e983a9acb7149616f241f064d851eb2cbc68))
+
+
+### Features
+
+* improve error messages and status bar behavior ([5cba423](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/5cba4232f04938256e5b66fe260a403387f037bb))
+* improve status bar with error/warning states ([adc2ec1](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/adc2ec1f1bb747b1e9a19ad620d13b97b131647c))
+
 # [1.4.0](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.3.1...v1.4.0) (2025-07-13)
 
 
