@@ -11,7 +11,6 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(serverManager);
 	
 	logger.info('Config Tool extension ready to encrypt/decrypt your secrets!');
-	vscode.window.showInformationMessage('Config Tool ready! 🔐');
 }
 
 export function deactivate() {
