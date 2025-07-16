@@ -25,3 +25,22 @@ Thumbs.db
 # Exclude unwanted images
 tenerity-bbc-publisher-icon-no-bg.png
 tenerity-logo.ai
+demo.gif
+# Development and documentation
+local-dev/**
+PRIVACY.md
+CHANGELOG.md
+package-lock.json
+yarn.lock
+coverage/**
+test/**
+tests/**
+*.test.js
+*.spec.js
+jest.config.js
+.editorconfig
+.prettierrc*
+webpack.config.js
+Dockerfile*
+.travis.yml
+.circleci/**
