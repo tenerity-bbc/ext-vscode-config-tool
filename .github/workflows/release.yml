@@ -25,6 +25,8 @@ jobs:
           cache: 'npm'
       
       - run: npm ci
+      - run: npm run lint
+      - run: xvfb-run -a npm test
       - run: npm run package
       
       - name: Release

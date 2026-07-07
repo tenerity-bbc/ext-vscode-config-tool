@@ -22,12 +22,13 @@ suite('Extension Test Suite', () => {
 
 		extension.activate(mockContext);
 
-		assert.strictEqual(registerCommandStub.callCount, 5);
+		assert.strictEqual(registerCommandStub.callCount, 6);
 		assert.strictEqual(registerCommandStub.getCall(0).args[0], 'config-tool.encrypt');
 		assert.strictEqual(registerCommandStub.getCall(1).args[0], 'config-tool.decrypt');
-		assert.strictEqual(registerCommandStub.getCall(2).args[0], 'config-tool.selectServer');
-		assert.strictEqual(registerCommandStub.getCall(3).args[0], 'config-tool.pinServer');
-		assert.strictEqual(registerCommandStub.getCall(4).args[0], 'config-tool.unpinServer');
-		assert.strictEqual(mockContext.subscriptions.length, 6);
+		assert.strictEqual(registerCommandStub.getCall(2).args[0], 'config-tool.cancel');
+		assert.strictEqual(registerCommandStub.getCall(3).args[0], 'config-tool.selectServer');
+		assert.strictEqual(registerCommandStub.getCall(4).args[0], 'config-tool.pinServer');
+		assert.strictEqual(registerCommandStub.getCall(5).args[0], 'config-tool.unpinServer');
+		assert.strictEqual(mockContext.subscriptions.length, 7);
 	});
 });

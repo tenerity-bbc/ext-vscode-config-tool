@@ -1,12 +1,23 @@
 import * as assert from 'assert';
 import * as sinon from 'sinon';
+import * as vscode from 'vscode';
 import * as configService from '../../service/configService';
+import { ServerManager } from '../../service/serverManager';
+
+function stubConfigServer(sandbox: sinon.SinonSandbox) {
+	sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test');
+	sandbox.stub(vscode.workspace, 'getConfiguration').returns({
+		inspect: () => undefined,
+		get: (key: string) => key === 'servers' ? { test: 'https://localhost:8080' } : undefined
+	} as unknown as vscode.WorkspaceConfiguration);
+}
 
 suite('ConfigService Test Suite', () => {
 	let sandbox: sinon.SinonSandbox;
 
 	setup(() => {
 		sandbox = sinon.createSandbox();
+		stubConfigServer(sandbox);
 	});
 
 	teardown(() => {
@@ -67,7 +78,7 @@ suite('ConfigService Test Suite', () => {
 			await configService.encrypt('test');
 			assert.fail('Should have thrown');
 		} catch (error) {
-			assert.strictEqual(error, 'Text not encrypted with this key');
+			assert.strictEqual((error as Error).message, 'Text not encrypted with this key');
 		}
 	});
 
@@ -90,7 +101,7 @@ suite('ConfigService Test Suite', () => {
 			await configService.decrypt('test');
 			assert.fail('Should have thrown');
 		} catch (error) {
-			assert.strictEqual(error, 'HTTP 500: Server Error');
+			assert.strictEqual((error as Error).message, 'HTTP 500: Server Error');
 		}
 	});
 

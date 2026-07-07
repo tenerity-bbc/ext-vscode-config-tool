@@ -16,7 +16,7 @@ jobs:
       
       - run: npm ci
       - run: npm run lint
-      # - run: xvfb-run -a npm test  # TODO: Fix failing tests
+      - run: xvfb-run -a npm test
       - run: npm run package
       
       - name: Validate commit messages
