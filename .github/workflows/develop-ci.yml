@@ -15,6 +15,8 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci
+      - run: npm run lint
+      - run: xvfb-run -a npm test
       - run: npm run package
       - run: npm run build-package
       
