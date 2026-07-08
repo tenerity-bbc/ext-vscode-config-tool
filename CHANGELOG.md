@@ -1,3 +1,14 @@
+# [1.5.1](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.5.0...v1.5.1) (2026-07-08)
+
+
+### Bug Fixes
+
+* modernize dependencies, CI, and release pipeline ([af0c298](https://github.com/tenerity-bbc/ext-vscode-config-tool/commit/af0c298))
+* align engines.vscode with @types/vscode for vsce packaging
+* add node and mocha types to tsconfig for CI test compilation
+* use Node 22 in CI for semantic-release compatibility
+* restore semantic-release git plugin for changelog and version commits
+
 # [1.5.0](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.4.0...v1.5.0) (2025-07-14)
 
 
