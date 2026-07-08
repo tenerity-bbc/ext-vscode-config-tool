@@ -4,255 +4,235 @@ import * as vscode from 'vscode';
 import { handleCipherCommand } from '../../commands/cipher';
 import * as configClient from '../../service/configService';
 import { ServerManager } from '../../service/serverManager';
-import { outputChannel } from '../../shared/outputChannel';
+import { logger } from '../../shared/logger';
+
+function stubCipherUi(sandbox: sinon.SinonSandbox) {
+	const mockStatusBar = { show: sandbox.stub(), dispose: sandbox.stub(), text: '' };
+	const mockDecoration = { dispose: sandbox.stub() };
+	sandbox.stub(vscode.window, 'createStatusBarItem').returns(mockStatusBar as unknown as vscode.StatusBarItem);
+	sandbox.stub(vscode.window, 'createTextEditorDecorationType').returns(mockDecoration as unknown as vscode.TextEditorDecorationType);
+}
+
+function createMockEditor(sandbox: sinon.SinonSandbox, options: {
+	getText: string | sinon.SinonStub;
+	selections: vscode.Selection[];
+}) {
+	const getText = typeof options.getText === 'string'
+		? sandbox.stub().returns(options.getText)
+		: options.getText;
+
+	return {
+		document: {
+			getText,
+			uri: vscode.Uri.file('test.yml'),
+			offsetAt: sandbox.stub().returns(0),
+			positionAt: sandbox.stub().returns(new vscode.Position(0, 0)),
+			fileName: 'test.yml'
+		},
+		selection: options.selections[0],
+		selections: options.selections,
+		visibleRanges: [new vscode.Range(0, 0, 0, 0)],
+		revealRange: sandbox.stub(),
+		setDecorations: sandbox.stub()
+	};
+}
 
 suite('Cipher Command Test Suite', () => {
-    let sandbox: sinon.SinonSandbox;
+	let sandbox: sinon.SinonSandbox;
 
-    setup(() => {
-        sandbox = sinon.createSandbox();
-    });
+	setup(() => {
+		sandbox = sinon.createSandbox();
+		stubCipherUi(sandbox);
+	});
 
-    teardown(() => {
-        sandbox.restore();
-    });
+	teardown(() => {
+		sandbox.restore();
+	});
 
-    test('returns early when no active editor', async () => {
-        sandbox.stub(vscode.window, 'activeTextEditor').value(undefined);
-        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+	test('returns early when no active editor', async () => {
+		sandbox.stub(vscode.window, 'activeTextEditor').value(undefined);
+		sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
 
-        await handleCipherCommand('encrypt');
+		await handleCipherCommand('encrypt');
 
-        assert.ok(true);
-    });
+		assert.ok(true);
+	});
 
-    test('returns early when no server selected', async () => {
-        const mockEditor = { selections: [] };
-        sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns(null);
+	test('returns early when no server selected', async () => {
+		const mockEditor = createMockEditor(sandbox, {
+			getText: '',
+			selections: [new vscode.Selection(0, 0, 0, 0)]
+		});
+		sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
+		sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns(null);
 
-        await handleCipherCommand('encrypt');
+		await handleCipherCommand('encrypt');
 
-        assert.ok(true);
-    });
+		assert.ok(true);
+	});
 
-    test('shows warning when no text selected for encryption', async () => {
-        const mockEditor = {
-            document: { getText: sandbox.stub() },
-            selections: [new vscode.Selection(0, 0, 0, 0)]
-        };
-        sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
-        const showWarningStub = sandbox.stub(vscode.window, 'showWarningMessage');
-        const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
+	test('shows nothing-to-process when no text selected for encryption', async () => {
+		const mockEditor = createMockEditor(sandbox, {
+			getText: '',
+			selections: [new vscode.Selection(0, 0, 0, 0)]
+		});
+		sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
+		sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+		const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
 
-        await handleCipherCommand('encrypt');
+		await handleCipherCommand('encrypt');
 
-        assert.strictEqual(showWarningStub.calledWith('Please select text to encrypt'), true);
-        assert.strictEqual(showInfoStub.calledWith('No values found'), true);
-    });
+		assert.strictEqual(showInfoStub.calledWith('Nothing to process 🤷'), true);
+	});
 
-    test('encrypts selected text and applies edits', async () => {
-        const mockDocument = {
-            getText: sandbox.stub().returns('plaintext'),
-            uri: 'test-uri',
-            offsetAt: sandbox.stub().returns(10),
-            positionAt: sandbox.stub().returns(new vscode.Position(0, 10))
-        };
-        const mockEditor = {
-            document: mockDocument,
-            selections: [new vscode.Selection(0, 0, 0, 9)]
-        };
-        sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
-        sandbox.stub(configClient, 'encrypt').resolves('encrypted123');
-        const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
-        const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
+	test('encrypts selected text and applies edits', async () => {
+		const mockEditor = createMockEditor(sandbox, {
+			getText: sandbox.stub().returns('plaintext'),
+			selections: [new vscode.Selection(0, 0, 0, 9)]
+		});
+		sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
+		sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+		sandbox.stub(configClient, 'encrypt').resolves('encrypted123');
+		const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
+		const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
 
-        await handleCipherCommand('encrypt');
+		await handleCipherCommand('encrypt');
 
-        assert.strictEqual(applyEditStub.calledOnce, true);
-        assert.strictEqual(showInfoStub.calledWith('Processed 1 value(s)'), true);
-    });
+		assert.strictEqual(applyEditStub.calledOnce, true);
+		assert.strictEqual(showInfoStub.calledWith('Done! 1/1 ✨'), true);
+	});
 
-    test('handles encryption error', async () => {
-        const mockDocument = {
-            getText: sandbox.stub().returns('plaintext'),
-            uri: 'test-uri',
-            fileName: 'test.ts',
-            offsetAt: sandbox.stub().returns(10),
-            positionAt: sandbox.stub().returns(new vscode.Position(0, 10))
-        };
-        const mockEditor = {
-            document: mockDocument,
-            selections: [new vscode.Selection(0, 0, 0, 9)]
-        };
-        sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
-        sandbox.stub(configClient, 'encrypt').rejects(new Error('Encryption failed'));
-        const appendLineStub = sandbox.stub(outputChannel, 'appendLine');
-        const showStub = sandbox.stub(outputChannel, 'show');
-        const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
+	test('handles encryption error', async () => {
+		const mockEditor = createMockEditor(sandbox, {
+			getText: sandbox.stub().returns('plaintext'),
+			selections: [new vscode.Selection(0, 0, 0, 9)]
+		});
+		sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
+		sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+		sandbox.stub(configClient, 'encrypt').rejects(new Error('Encryption failed'));
+		const errorStub = sandbox.stub(logger, 'error');
+		const showStub = sandbox.stub(logger, 'show');
+		const showWarningStub = sandbox.stub(vscode.window, 'showWarningMessage');
 
-        await handleCipherCommand('encrypt');
+		await handleCipherCommand('encrypt');
 
-        assert.strictEqual(appendLineStub.calledOnce, true);
-        assert.strictEqual(showStub.calledOnce, true);
-        assert.strictEqual(showInfoStub.calledWith('No values found'), true);
-    });
+		assert.strictEqual(errorStub.calledOnce, true);
+		assert.strictEqual(showStub.calledOnce, true);
+		assert.strictEqual(showWarningStub.calledWith('0/1 (1 failed) 😅'), true);
+	});
 
-    test('decrypts cipher text and applies edits', async () => {
-        const mockDocument = {
-            getText: sandbox.stub().returns("'{cipher}encrypted123'"),
-            uri: 'test-uri',
-            offsetAt: sandbox.stub().returns(0),
-            positionAt: sandbox.stub().returns(new vscode.Position(0, 0))
-        };
-        const mockEditor = {
-            document: mockDocument,
-            selection: new vscode.Selection(0, 0, 0, 0),
-            selections: [new vscode.Selection(0, 0, 0, 0)]
-        };
-        sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
-        sandbox.stub(configClient, 'decrypt').resolves('decrypted');
-        const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
-        const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
+	test('decrypts cipher text and applies edits', async () => {
+		const mockEditor = createMockEditor(sandbox, {
+			getText: "'{cipher}encrypted123'",
+			selections: [new vscode.Selection(0, 0, 0, 0)]
+		});
+		sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
+		sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+		sandbox.stub(configClient, 'decrypt').resolves('decrypted');
+		const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
+		const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
 
-        await handleCipherCommand('decrypt');
+		await handleCipherCommand('decrypt');
 
-        assert.strictEqual(applyEditStub.calledOnce, true);
-        assert.strictEqual(showInfoStub.calledWith('Processed 1 value(s)'), true);
-    });
+		assert.strictEqual(applyEditStub.calledOnce, true);
+		assert.strictEqual(showInfoStub.calledWith('Done! 1/1 ✨'), true);
+	});
 
-    test('decrypts cipher text with various quote patterns', async () => {
-        const testCases = [
-            '{cipher}encrypted',
-            "'{cipher}encrypted'",
-            '"{cipher}encrypted"'
-        ];
+	test('decrypts cipher text with various quote patterns', async () => {
+		const testCases = [
+			'{cipher}encrypted',
+			"'{cipher}encrypted'",
+			'"{cipher}encrypted"'
+		];
 
-        for (const input of testCases) {
-            const mockDocument = {
-                getText: sandbox.stub().returns(input),
-                uri: 'test-uri',
-                offsetAt: sandbox.stub().returns(0),
-                positionAt: sandbox.stub().returns(new vscode.Position(0, 0))
-            };
-            const mockEditor = {
-                document: mockDocument,
-                selection: new vscode.Selection(0, 0, 0, 0),
-                selections: [new vscode.Selection(0, 0, 0, 0)]
-            };
-            sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-            sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
-            sandbox.stub(configClient, 'decrypt').resolves('decrypted');
-            const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
-            const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
+		for (const input of testCases) {
+			sandbox.restore();
+			sandbox = sinon.createSandbox();
+			stubCipherUi(sandbox);
 
-            await handleCipherCommand('decrypt');
+			const mockEditor = createMockEditor(sandbox, {
+				getText: input,
+				selections: [new vscode.Selection(0, 0, 0, 0)]
+			});
+			sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
+			sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+			sandbox.stub(configClient, 'decrypt').resolves('decrypted');
+			const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
+			const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
 
-            assert.strictEqual(applyEditStub.calledOnce, true, `Failed for case: ${input}`);
-            assert.strictEqual(showInfoStub.calledWith('Processed 1 value(s)'), true);
-            sandbox.restore();
-            sandbox = sinon.createSandbox();
-        }
-    });
+			await handleCipherCommand('decrypt');
 
-    test('processes multiple cipher patterns', async () => {
-        const mockDocument = {
-            getText: sandbox.stub().returns("'{cipher}enc1' and '{cipher}enc2'"),
-            uri: 'test-uri',
-            offsetAt: sandbox.stub().returns(0),
-            positionAt: sandbox.stub().returns(new vscode.Position(0, 0))
-        };
-        const mockEditor = {
-            document: mockDocument,
-            selection: new vscode.Selection(0, 0, 0, 0),
-            selections: [new vscode.Selection(0, 0, 0, 0)]
-        };
-        sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
-        sandbox.stub(configClient, 'decrypt').resolves('decrypted');
-        const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
-        const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
+			assert.strictEqual(applyEditStub.calledOnce, true, `Failed for case: ${input}`);
+			assert.strictEqual(showInfoStub.calledWith('Done! 1/1 ✨'), true);
+		}
+	});
 
-        await handleCipherCommand('decrypt');
+	test('processes multiple cipher patterns', async () => {
+		const mockEditor = createMockEditor(sandbox, {
+			getText: "'{cipher}enc1' and '{cipher}enc2'",
+			selections: [new vscode.Selection(0, 0, 0, 0)]
+		});
+		sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
+		sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+		sandbox.stub(configClient, 'decrypt').resolves('decrypted');
+		const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
+		const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
 
-        assert.strictEqual(applyEditStub.calledOnce, true);
-        assert.strictEqual(showInfoStub.calledWith('Processed 2 value(s)'), true);
-    });
+		await handleCipherCommand('decrypt');
 
-    test('handles decryption error', async () => {
-        const mockDocument = {
-            getText: sandbox.stub().returns("'{cipher}encrypted123'"),
-            uri: 'test-uri',
-            offsetAt: sandbox.stub().returns(0),
-            positionAt: sandbox.stub().returns(new vscode.Position(0, 0)),
-            fileName: 'test.ts'
-        };
-        const mockEditor = {
-            document: mockDocument,
-            selection: new vscode.Selection(0, 0, 0, 0),
-            selections: [new vscode.Selection(0, 0, 0, 0)]
-        };
-        sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
-        sandbox.stub(configClient, 'decrypt').rejects(new Error('Decryption failed'));
-        const appendLineStub = sandbox.stub(outputChannel, 'appendLine');
-        const showStub = sandbox.stub(outputChannel, 'show');
-        const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
+		assert.strictEqual(applyEditStub.callCount, 2);
+		assert.strictEqual(showInfoStub.calledWith('Done! 2/2 ✨'), true);
+	});
 
-        await handleCipherCommand('decrypt');
+	test('handles decryption error', async () => {
+		const mockEditor = createMockEditor(sandbox, {
+			getText: "'{cipher}encrypted123'",
+			selections: [new vscode.Selection(0, 0, 0, 0)]
+		});
+		sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
+		sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+		sandbox.stub(configClient, 'decrypt').rejects(new Error('Decryption failed'));
+		const errorStub = sandbox.stub(logger, 'error');
+		const showStub = sandbox.stub(logger, 'show');
+		const showWarningStub = sandbox.stub(vscode.window, 'showWarningMessage');
 
-        assert.strictEqual(appendLineStub.calledOnce, true);
-        assert.strictEqual(showStub.calledOnce, true);
-        assert.strictEqual(showInfoStub.calledWith('No values found'), true);
-    });
+		await handleCipherCommand('decrypt');
 
-    test('processes selected text for decryption when selection is not empty', async () => {
-        const mockDocument = {
-            getText: sandbox.stub().returns("'{cipher}encrypted123'"),
-            uri: 'test-uri',
-            offsetAt: sandbox.stub().returns(5),
-            positionAt: sandbox.stub().returns(new vscode.Position(0, 5))
-        };
-        const mockEditor = {
-            document: mockDocument,
-            selection: new vscode.Selection(0, 5, 0, 25),
-            selections: [new vscode.Selection(0, 5, 0, 25)]
-        };
-        sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
-        sandbox.stub(configClient, 'decrypt').resolves('decrypted');
-        const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
-        const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
+		assert.strictEqual(errorStub.calledOnce, true);
+		assert.strictEqual(showStub.calledOnce, true);
+		assert.strictEqual(showWarningStub.calledWith('0/1 (1 failed) 😅'), true);
+	});
 
-        await handleCipherCommand('decrypt');
+	test('processes selected text for decryption when selection is not empty', async () => {
+		const mockEditor = createMockEditor(sandbox, {
+			getText: sandbox.stub().returns("'{cipher}encrypted123'"),
+			selections: [new vscode.Selection(0, 5, 0, 25)]
+		});
+		sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
+		sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+		sandbox.stub(configClient, 'decrypt').resolves('decrypted');
+		const applyEditStub = sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
+		const showInfoStub = sandbox.stub(vscode.window, 'showInformationMessage');
 
-        assert.strictEqual(applyEditStub.calledOnce, true);
-        assert.strictEqual(showInfoStub.calledWith('Processed 1 value(s)'), true);
-    });
+		await handleCipherCommand('decrypt');
 
-    test('updates selections after applying edits', async () => {
-        const mockDocument = {
-            getText: sandbox.stub().returns('plaintext'),
-            uri: 'test-uri',
-            offsetAt: sandbox.stub().returns(10),
-            positionAt: sandbox.stub().returns(new vscode.Position(0, 10))
-        };
-        const mockEditor = {
-            document: mockDocument,
-            selections: [new vscode.Selection(0, 0, 0, 9)]
-        };
-        sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
-        sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
-        sandbox.stub(configClient, 'encrypt').resolves('encrypted123');
-        sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
-        sandbox.stub(vscode.window, 'showInformationMessage');
+		assert.strictEqual(applyEditStub.calledOnce, true);
+		assert.strictEqual(showInfoStub.calledWith('Done! 1/1 ✨'), true);
+	});
 
-        await handleCipherCommand('encrypt');
+	test('updates selections after applying edits', async () => {
+		const mockEditor = createMockEditor(sandbox, {
+			getText: sandbox.stub().returns('plaintext'),
+			selections: [new vscode.Selection(0, 0, 0, 9)]
+		});
+		sandbox.stub(vscode.window, 'activeTextEditor').value(mockEditor);
+		sandbox.stub(ServerManager.getInstance(), 'getCurrentServer').returns('test-server');
+		sandbox.stub(configClient, 'encrypt').resolves('encrypted123');
+		sandbox.stub(vscode.workspace, 'applyEdit').resolves(true);
+		sandbox.stub(vscode.window, 'showInformationMessage');
 
-        assert.strictEqual(mockEditor.selections.length, 1);
-    });
+		await handleCipherCommand('encrypt');
+
+		assert.strictEqual(mockEditor.selections.length, 1);
+	});
 });
