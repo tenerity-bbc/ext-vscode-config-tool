@@ -28,7 +28,7 @@
 	},
 	"extensions": {
 		"recommendations": [
-			"open-bbc.config-tool"
+			"open-bbc.spring-config-cipher"
 		]
 	}
 }

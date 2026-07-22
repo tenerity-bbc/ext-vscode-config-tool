@@ -1,10 +1,10 @@
 # Config Tool
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/open-bbc/ext-vscode-config-tool/release.yml?branch=master)](https://github.com/open-bbc/ext-vscode-config-tool/actions)
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/open-bbc.config-tool)](https://marketplace.visualstudio.com/items?itemName=open-bbc.config-tool)
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/open-bbc.spring-config-cipher)](https://marketplace.visualstudio.com/items?itemName=open-bbc.spring-config-cipher)
 [![License](https://img.shields.io/github/license/open-bbc/ext-vscode-config-tool)](LICENSE)
 [![Issues](https://img.shields.io/github/issues/open-bbc/ext-vscode-config-tool)](https://github.com/open-bbc/ext-vscode-config-tool/issues)
-<!-- [![Downloads](https://img.shields.io/visual-studio-marketplace/d/open-bbc.config-tool)](https://marketplace.visualstudio.com/items?itemName=open-bbc.config-tool) -->
+<!-- [![Downloads](https://img.shields.io/visual-studio-marketplace/d/open-bbc.spring-config-cipher)](https://marketplace.visualstudio.com/items?itemName=open-bbc.spring-config-cipher) -->
 
 A VS Code extension for encrypting and decrypting configuration values using Spring Boot Config Server. Features automatic server selection and batch processing to help manage your configuration secrets.
 

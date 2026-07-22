@@ -1,5 +1,5 @@
 {
-  "name": "config-tool",
+  "name": "spring-config-cipher",
   "displayName": "Config Tool",
   "description": "Encrypt/decrypt configuration values using Spring Boot Config Server with intelligent server management",
   "version": "1.5.2",
