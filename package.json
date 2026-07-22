@@ -1,6 +1,6 @@
 {
   "name": "spring-config-cipher",
-  "displayName": "Config Tool",
+  "displayName": "Spring Config Cipher",
   "description": "Encrypt/decrypt configuration values using Spring Boot Config Server with intelligent server management",
   "version": "1.5.2",
   "publisher": "open-bbc",
@@ -105,7 +105,7 @@
       }
     ],
     "configuration": {
-      "title": "Config Tool",
+      "title": "Spring Config Cipher",
       "properties": {
         "configTool.servers": {
           "type": "object",
