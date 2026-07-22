@@ -1,3 +1,16 @@
+# [1.6.0](https://github.com/open-bbc/ext-vscode-config-tool/compare/v1.5.2...v1.6.0) (2026-07-22)
+
+
+### Bug Fixes
+
+* rename marketplace extension id to spring-config-cipher ([76af946](https://github.com/open-bbc/ext-vscode-config-tool/commit/76af946432d29715c857be2c9969439972bc8ce0))
+* use unique marketplace display name Spring Config Cipher ([97947f8](https://github.com/open-bbc/ext-vscode-config-tool/commit/97947f84dd52768bb65ead9e91a3b2797d938f53))
+
+
+### Features
+
+* rebrand extension under open-bbc publisher ([2d71358](https://github.com/open-bbc/ext-vscode-config-tool/commit/2d713583b4ff7af4ef8702ca06e7c562abd78903))
+
 ## [1.5.2](https://github.com/tenerity-bbc/ext-vscode-config-tool/compare/v1.5.1...v1.5.2) (2026-07-08)
 
 
