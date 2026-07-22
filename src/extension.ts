@@ -4,15 +4,15 @@ import { ServerManager } from './service/serverManager';
 import { logger } from './shared/logger';
 
 export function activate(context: vscode.ExtensionContext) {
-	logger.info('Config Tool extension starting up - preparing encryption magic...');
+	logger.info('Spring Config Cipher extension starting up - preparing encryption magic...');
 	const serverManager = ServerManager.getInstance();
 	
 	registerCommands(context);
 	context.subscriptions.push(serverManager);
 	
-	logger.info('Config Tool extension ready to encrypt/decrypt your secrets!');
+	logger.info('Spring Config Cipher extension ready to encrypt/decrypt your secrets!');
 }
 
 export function deactivate() {
-	logger.info('Config Tool extension deactivated - your secrets are safe with us!');
+	logger.info('Spring Config Cipher extension deactivated - your secrets are safe with us!');
 }

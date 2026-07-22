@@ -2,7 +2,7 @@
 
 ## Reporting Security Vulnerabilities
 
-We take the security of Config Tool seriously. If you discover a security vulnerability, please report it by creating a GitHub issue.
+We take the security of Spring Config Cipher seriously. If you discover a security vulnerability, please report it by creating a GitHub issue.
 
 ### What to Include
 
@@ -22,11 +22,11 @@ When reporting a security issue, please include:
 
 ## Supported Versions
 
-We provide security updates for the latest version of Config Tool. Please ensure you're using the most recent version available on the VS Code Marketplace.
+We provide security updates for the latest version of Spring Config Cipher. Please ensure you're using the most recent version available on the VS Code Marketplace.
 
 ## Security Best Practices
 
-When using Config Tool:
+When using Spring Config Cipher:
 
 - Only connect to trusted Spring Boot Config Servers
 - Use HTTPS endpoints when possible

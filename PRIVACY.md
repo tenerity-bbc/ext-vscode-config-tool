@@ -1,12 +1,12 @@
 # Privacy Policy 🔒
 
 **Effective Date:** January 2025  
-**Extension:** Config Tool for VS Code  
+**Extension:** Spring Config Cipher for VS Code  
 **Publisher:** Open BBC
 
 ## Overview
 
-The Config Tool extension helps developers encrypt and decrypt configuration values using Spring Boot Config Server. This privacy policy explains how we handle your data (spoiler: we barely touch it! 🙌).
+The Spring Config Cipher extension helps developers encrypt and decrypt configuration values using Spring Boot Config Server. This privacy policy explains how we handle your data (spoiler: we barely touch it! 🙌).
 
 ## Data Collection
 
@@ -82,7 +82,7 @@ The Config Tool extension helps developers encrypt and decrypt configuration val
 ## Contact Information
 
 For privacy-related questions or concerns:
-- **GitHub Issues**: [Config Tool Repository](https://github.com/open-bbc/ext-vscode-config-tool/issues)
+- **GitHub Issues**: [Spring Config Cipher Repository](https://github.com/open-bbc/ext-vscode-config-tool/issues)
 - **Email**: Contact through GitHub repository
 
 ## Compliance
@@ -95,4 +95,4 @@ This extension:
 
 ---
 
-**TL;DR**: Config Tool works entirely on your machine and only talks to servers you tell it to. We don't collect, store, or share your data with anyone. Your secrets stay secret! 🤐
+**TL;DR**: Spring Config Cipher works entirely on your machine and only talks to servers you tell it to. We don't collect, store, or share your data with anyone. Your secrets stay secret! 🤐

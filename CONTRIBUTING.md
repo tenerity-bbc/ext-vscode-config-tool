@@ -1,6 +1,6 @@
-# Contributing to Config Tool 🤝
+# Contributing to Spring Config Cipher 🤝
 
-Thanks for wanting to make Config Tool even better! Here's how to get started without pulling your hair out.
+Thanks for wanting to make Spring Config Cipher even better! Here's how to get started without pulling your hair out.
 
 ## Development Setup 🛠️
 

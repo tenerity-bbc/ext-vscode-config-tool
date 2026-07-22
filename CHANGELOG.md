@@ -140,7 +140,7 @@
 
 # Change Log
 
-All notable changes to the Config Tool extension will be documented in this file. This extension provides encrypt/decrypt functionality for Spring Boot Config Server with intelligent server management.
+All notable changes to the Spring Config Cipher extension will be documented in this file. This extension provides encrypt/decrypt functionality for Spring Boot Config Server with intelligent server management.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 

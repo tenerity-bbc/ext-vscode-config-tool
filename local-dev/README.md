@@ -1,6 +1,6 @@
-# Config Tool Local Development Setup 🚀
+# Spring Config Cipher Local Development Setup 🚀
 
-Your local playground for testing the Config Tool extension! Complete with Spring Boot Config Servers and sample configurations that actually make sense.
+Your local playground for testing the Spring Config Cipher extension! Complete with Spring Boot Config Servers and sample configurations that actually make sense.
 
 ## Quick Start
 
@@ -19,7 +19,7 @@ Your local playground for testing the Config Tool extension! Complete with Sprin
    ```bash
    # Press F5 to debug - workspace opens automatically!
    # Or manually open the workspace:
-   code local-dev/config-tool-dev.code-workspace
+   code local-dev/spring-config-cipher-dev.code-workspace
    ```
 
 3. **Watch the Magic Happen** ✨:

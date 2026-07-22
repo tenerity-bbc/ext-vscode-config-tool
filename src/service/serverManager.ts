@@ -104,11 +104,11 @@ export class ServerManager {
 		}
 		items.push({
 			label: '$(settings-gear) Open Settings',
-			description: 'Configure all Config Tool settings'
+			description: 'Configure all Spring Config Cipher settings'
 		});
 
 		const selected = await vscode.window.showQuickPick(items, {
-			placeHolder: serverKeys.length === 0 ? 'Setup Config Tool' : 'Select config server or configure settings'
+			placeHolder: serverKeys.length === 0 ? 'Setup Spring Config Cipher' : 'Select config server or configure settings'
 		});
 
 		if (selected) {

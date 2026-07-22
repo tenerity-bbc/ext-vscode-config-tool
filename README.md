@@ -1,4 +1,4 @@
-# Config Tool
+# Spring Config Cipher
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/open-bbc/ext-vscode-config-tool/release.yml?branch=master)](https://github.com/open-bbc/ext-vscode-config-tool/actions)
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/open-bbc.spring-config-cipher)](https://marketplace.visualstudio.com/items?itemName=open-bbc.spring-config-cipher)
@@ -8,11 +8,15 @@
 
 A VS Code extension for encrypting and decrypting configuration values using Spring Boot Config Server. Features automatic server selection and batch processing to help manage your configuration secrets.
 
-![Config Tool Demo](https://github.com/open-bbc/ext-vscode-config-tool/raw/master/demo.gif)
+**Install:** `ext install open-bbc.spring-config-cipher`
+
+> **Migrating from the old Config Tool extension** (`bibekbc.config-tool`): uninstall the old extension and install `open-bbc.spring-config-cipher` above. Your existing `configTool.*` settings continue to work unchanged.
+
+![Spring Config Cipher Demo](https://github.com/open-bbc/ext-vscode-config-tool/raw/master/demo.gif)
 
 ## Table of Contents
 
-- [Config Tool](#config-tool)
+- [Spring Config Cipher](#spring-config-cipher)
   - [Table of Contents](#table-of-contents)
   - [Features ✨](#features-)
   - [Usage](#usage)
@@ -64,7 +68,7 @@ The status bar shows the current server with icons, background colors, and detai
 ### Decrypting Values
 
 1. Open a file containing encrypted values in the format `{cipher}EncryptedValue`
-2. Run the command **Config Tool: Decrypt** or press `Ctrl+Alt+D` (`Cmd+Alt+D` on Mac)
+2. Run the command **Spring Config Cipher: Decrypt** or press `Ctrl+Alt+D` (`Cmd+Alt+D` on Mac)
 3. The extension will find and decrypt all cipher values in the document (or selection if text is selected)
 4. Progress is shown in the status bar with visual highlighting of values being processed
 5. Press `ESC` to cancel the operation if needed
@@ -72,7 +76,7 @@ The status bar shows the current server with icons, background colors, and detai
 ### Encrypting Values
 
 1. Select the plain text you want to encrypt (multiple selections supported)
-2. Run the command **Config Tool: Encrypt** or press `Ctrl+Alt+E` (`Cmd+Alt+E` on Mac)
+2. Run the command **Spring Config Cipher: Encrypt** or press `Ctrl+Alt+E` (`Cmd+Alt+E` on Mac)
 3. Selected text is highlighted and replaced with `'{cipher}EncryptedValue'` format
 4. Press `ESC` to cancel the operation if needed
 
@@ -82,16 +86,16 @@ The status bar shows the current server with icons, background colors, and detai
 
 | Command | Keyboard Shortcut | Description |
 |---------|-------------------|-------------|
-| `Config Tool: Decrypt` | `Ctrl+Alt+D` / `Cmd+Alt+D` | Decrypt all {cipher} values in the current document or selection |
-| `Config Tool: Encrypt` | `Ctrl+Alt+E` / `Cmd+Alt+E` | Encrypt selected text using the config server |
-| `Config Tool: Select Server` | `Ctrl+Alt+S` / `Cmd+Alt+S` | Manually choose a config server |
-| `Config Tool: Pin Current Server` | `Ctrl+Alt+P` / `Cmd+Alt+P` | Pin the current server to prevent auto-switching |
-| `Config Tool: Unpin Server` | `Ctrl+Alt+U` / `Cmd+Alt+U` | Allow automatic server detection |
-| `Config Tool: Cancel Operation` | `ESC` | Cancel ongoing encrypt/decrypt operations |
+| `Spring Config Cipher: Decrypt` | `Ctrl+Alt+D` / `Cmd+Alt+D` | Decrypt all {cipher} values in the current document or selection |
+| `Spring Config Cipher: Encrypt` | `Ctrl+Alt+E` / `Cmd+Alt+E` | Encrypt selected text using the config server |
+| `Spring Config Cipher: Select Server` | `Ctrl+Alt+S` / `Cmd+Alt+S` | Manually choose a config server |
+| `Spring Config Cipher: Pin Current Server` | `Ctrl+Alt+P` / `Cmd+Alt+P` | Pin the current server to prevent auto-switching |
+| `Spring Config Cipher: Unpin Server` | `Ctrl+Alt+U` / `Cmd+Alt+U` | Allow automatic server detection |
+| `Spring Config Cipher: Cancel Operation` | `ESC` | Cancel ongoing encrypt/decrypt operations |
 
 ## Settings
 
-**Quick Setup:** Open Settings (`Ctrl+,`) and search for "Config Tool" to configure your servers and selection rules.
+**Quick Setup:** Open Settings (`Ctrl+,`) and search for "Spring Config Cipher" to configure your servers and selection rules.
 
 ### Server Configuration
 
@@ -140,7 +144,7 @@ The status bar shows the current server with icons, background colors, and detai
 
 ## Troubleshooting 🔧
 
-**Check the Logs:** If something goes wrong, check the **Output** panel (`View > Output`) and select **"Config Tool - Encrypt/Decrypt"** from the dropdown. The extension logs all operations, errors, and debug information there.
+**Check the Logs:** If something goes wrong, check the **Output** panel (`View > Output`) and select **"Spring Config Cipher - Encrypt/Decrypt"** from the dropdown. The extension logs all operations, errors, and debug information there.
 
 **Need More Details?** Set VS Code's log level to Debug (`Developer > Set Log Level > Debug`) for extra verbose logging.
 

@@ -33,29 +33,29 @@
     "commands": [
       {
         "command": "config-tool.decrypt",
-        "title": "Config Tool: Decrypt",
+        "title": "Spring Config Cipher: Decrypt",
         "enablement": "config-tool.serverSelected"
       },
       {
         "command": "config-tool.encrypt",
-        "title": "Config Tool: Encrypt",
+        "title": "Spring Config Cipher: Encrypt",
         "enablement": "editorHasSelection && config-tool.serverSelected"
       },
       {
         "command": "config-tool.selectServer",
-        "title": "Config Tool: Select Server"
+        "title": "Spring Config Cipher: Select Server"
       },
       {
         "command": "config-tool.pinServer",
-        "title": "Config Tool: Pin Current Server"
+        "title": "Spring Config Cipher: Pin Current Server"
       },
       {
         "command": "config-tool.unpinServer",
-        "title": "Config Tool: Unpin Server"
+        "title": "Spring Config Cipher: Unpin Server"
       },
       {
         "command": "config-tool.cancel",
-        "title": "Config Tool: Cancel Operation"
+        "title": "Spring Config Cipher: Cancel Operation"
       }
     ],
     "menus": {
