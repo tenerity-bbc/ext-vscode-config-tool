@@ -22,9 +22,7 @@ yarn-debug.log*
 yarn-error.log*
 .DS_Store
 Thumbs.db
-# Exclude unwanted images
-tenerity-bbc-publisher-icon-no-bg.png
-tenerity-logo.ai
+# Exclude source assets not needed in the VSIX
 demo.gif
 # Development and documentation
 local-dev/**

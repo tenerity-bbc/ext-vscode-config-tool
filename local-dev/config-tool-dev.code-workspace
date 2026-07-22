@@ -28,7 +28,7 @@
 	},
 	"extensions": {
 		"recommendations": [
-			"bibekbc.config-tool"
+			"open-bbc.config-tool"
 		]
 	}
 }

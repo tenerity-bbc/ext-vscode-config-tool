@@ -2,7 +2,7 @@
 
 **Effective Date:** January 2025  
 **Extension:** Config Tool for VS Code  
-**Publisher:** Tenerity BBC
+**Publisher:** Open BBC
 
 ## Overview
 
@@ -14,7 +14,7 @@ The Config Tool extension helps developers encrypt and decrypt configuration val
 - **No personal information** is collected or transmitted
 - **No usage analytics** or telemetry data is gathered (we're not watching you!)
 - **No user accounts** or authentication data is stored
-- **No data is sent to Tenerity BBC** or any third-party services
+- **No data is sent to Open BBC** or any third-party services
 
 ### What Data the Extension Accesses
 - **Configuration files** in your workspace (YAML/properties files)
@@ -82,7 +82,7 @@ The Config Tool extension helps developers encrypt and decrypt configuration val
 ## Contact Information
 
 For privacy-related questions or concerns:
-- **GitHub Issues**: [Config Tool Repository](https://github.com/tenerity-bbc/ext-vscode-config-tool/issues)
+- **GitHub Issues**: [Config Tool Repository](https://github.com/open-bbc/ext-vscode-config-tool/issues)
 - **Email**: Contact through GitHub repository
 
 ## Compliance

@@ -3,7 +3,7 @@
   "displayName": "Config Tool",
   "description": "Encrypt/decrypt configuration values using Spring Boot Config Server with intelligent server management",
   "version": "1.5.2",
-  "publisher": "bibekbc",
+  "publisher": "open-bbc",
   "icon": "icon.png",
   "keywords": [
     "config",
@@ -15,10 +15,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tenerity-bbc/ext-vscode-config-tool"
+    "url": "https://github.com/open-bbc/ext-vscode-config-tool"
   },
-  "qna": "https://github.com/tenerity-bbc/ext-vscode-config-tool/issues",
-  "homepage": "https://github.com/tenerity-bbc/ext-vscode-config-tool#readme",
+  "qna": "https://github.com/open-bbc/ext-vscode-config-tool/issues",
+  "homepage": "https://github.com/open-bbc/ext-vscode-config-tool#readme",
   "engines": {
     "vscode": "^1.125.0"
   },

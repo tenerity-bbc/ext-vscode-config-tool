@@ -1,14 +1,14 @@
 # Config Tool
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/tenerity-bbc/ext-vscode-config-tool/release.yml?branch=master)](https://github.com/tenerity-bbc/ext-vscode-config-tool/actions)
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/bibekbc.config-tool)](https://marketplace.visualstudio.com/items?itemName=bibekbc.config-tool)
-[![License](https://img.shields.io/github/license/tenerity-bbc/ext-vscode-config-tool)](LICENSE)
-[![Issues](https://img.shields.io/github/issues/tenerity-bbc/ext-vscode-config-tool)](https://github.com/tenerity-bbc/ext-vscode-config-tool/issues)
-<!-- [![Downloads](https://img.shields.io/visual-studio-marketplace/d/bibekbc.config-tool)](https://marketplace.visualstudio.com/items?itemName=bibekbc.config-tool) -->
+[![Build Status](https://img.shields.io/github/actions/workflow/status/open-bbc/ext-vscode-config-tool/release.yml?branch=master)](https://github.com/open-bbc/ext-vscode-config-tool/actions)
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/open-bbc.config-tool)](https://marketplace.visualstudio.com/items?itemName=open-bbc.config-tool)
+[![License](https://img.shields.io/github/license/open-bbc/ext-vscode-config-tool)](LICENSE)
+[![Issues](https://img.shields.io/github/issues/open-bbc/ext-vscode-config-tool)](https://github.com/open-bbc/ext-vscode-config-tool/issues)
+<!-- [![Downloads](https://img.shields.io/visual-studio-marketplace/d/open-bbc.config-tool)](https://marketplace.visualstudio.com/items?itemName=open-bbc.config-tool) -->
 
 A VS Code extension for encrypting and decrypting configuration values using Spring Boot Config Server. Features automatic server selection and batch processing to help manage your configuration secrets.
 
-![Config Tool Demo](https://github.com/tenerity-bbc/ext-vscode-config-tool/raw/master/demo.gif)
+![Config Tool Demo](https://github.com/open-bbc/ext-vscode-config-tool/raw/master/demo.gif)
 
 ## Table of Contents
 
@@ -178,4 +178,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and contribution gu
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for detailed release history and [GitHub Releases](https://github.com/tenerity-bbc/ext-vscode-config-tool/releases) for downloadable packages.
+See [CHANGELOG.md](CHANGELOG.md) for detailed release history and [GitHub Releases](https://github.com/open-bbc/ext-vscode-config-tool/releases) for downloadable packages.
