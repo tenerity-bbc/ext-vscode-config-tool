@@ -2,7 +2,7 @@
   "name": "spring-config-cipher",
   "displayName": "Spring Config Cipher",
   "description": "Encrypt/decrypt configuration values using Spring Boot Config Server with intelligent server management",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "publisher": "open-bbc",
   "icon": "icon.png",
   "keywords": [

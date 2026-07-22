@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/open-bbc/ext-vscode-config-tool/compare/v1.6.0...v1.6.1) (2026-07-22)
+
+
+### Bug Fixes
+
+* update extension icon ([413b43b](https://github.com/open-bbc/ext-vscode-config-tool/commit/413b43bbe2d14821021b822276cc73165da68864))
+
 # [1.6.0](https://github.com/open-bbc/ext-vscode-config-tool/compare/v1.5.2...v1.6.0) (2026-07-22)
 
 
